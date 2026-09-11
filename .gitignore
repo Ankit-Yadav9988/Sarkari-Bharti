@@ -1,0 +1,43 @@
+# ---- secrets / local config ----
+# .env.local currently holds the API URL and is the file most likely to grow
+# a real credential later. Never commit any of these.
+.env
+.env.*
+!.env.example
+!.env.*.example
+*.pem
+*.key
+
+# Spring profile files are a common place for a real DB password to land.
+application-local.properties
+application-prod.properties
+
+# ---- Node / Next (frontend) ----
+node_modules/
+.next/
+out/
+.vercel
+npm-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# ---- Java / Maven (backend) ----
+# backend/target is ~97 MB of build output; it must not enter git history.
+target/
+!.mvn/wrapper/maven-wrapper.jar
+*.class
+*.jar
+*.war
+
+# ---- logs ----
+*.log
+backend.log
+backend/*.log
+
+# ---- editors / OS ----
+.idea/
+.vscode/
+*.iml
+.DS_Store
+Thumbs.db
+desktop.ini
