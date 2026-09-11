@@ -68,7 +68,10 @@ export default function ManageNotices() {
                 <span className="muted" style={{ fontSize: '0.85rem', fontWeight: 400, marginLeft: 8 }}>{total}</span>
               )}
             </h1>
-            <Link href={`/admin/notices/new?type=${type}`} className="btn-primary">+ Post {noticeTypeLabel(type).toLowerCase()}</Link>
+            <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+              <Link href={`/admin/import-notices?type=${type}`} className="btn-ghost">Import CSV</Link>
+              <Link href={`/admin/notices/new?type=${type}`} className="btn-primary">+ Post {noticeTypeLabel(type).toLowerCase()}</Link>
+            </div>
           </div>
 
           {/* Type switcher */}

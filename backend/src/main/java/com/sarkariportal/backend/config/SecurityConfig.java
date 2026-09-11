@@ -91,6 +91,14 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.POST, "/api/jobs/*/view").permitAll()
                 .requestMatchers(HttpMethod.POST, "/api/subscribers").permitAll()
 
+                // Unsubscribe. Public because the person clicking has no
+                // account to log into -- the random token in the link is the
+                // whole credential. Listed as its own exact path: the rule
+                // above matches "/api/subscribers" and nothing beneath it, so
+                // POST /api/subscribers/broadcast still falls through to the
+                // admin-only rule at the bottom.
+                .requestMatchers(HttpMethod.POST, "/api/subscribers/unsubscribe").permitAll()
+
                 // Preflight. Without this, the browser's OPTIONS probe hits the
                 // authenticated branch and the real request never happens.
                 .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()

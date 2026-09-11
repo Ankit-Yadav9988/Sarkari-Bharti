@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
+import Link from 'next/link';
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 import AdminGuard from '../../components/AdminGuard';
@@ -98,11 +99,16 @@ export default function ManageSubscribers() {
           <AdminNav />
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', margin: '16px 0', gap: 10, flexWrap: 'wrap' }}>
             <h1 style={{ margin: 0 }}>Email Subscribers ({total})</h1>
-            {total > 0 && (
-              <button onClick={copyEmails} className="btn-primary" disabled={copying}>
-                {copying ? 'Copying…' : 'Copy all emails'}
-              </button>
-            )}
+            <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+              {total > 0 && (
+                <Link href="/admin/send-alert" className="btn-primary">Send alert</Link>
+              )}
+              {total > 0 && (
+                <button onClick={copyEmails} className="btn-ghost" disabled={copying}>
+                  {copying ? 'Copying…' : 'Copy all emails'}
+                </button>
+              )}
+            </div>
           </div>
 
           {error && (

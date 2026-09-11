@@ -72,6 +72,17 @@
             <scope>runtime</scope>
         </dependency>
 
+        <!-- Outgoing mail (job alerts to subscribers), over plain SMTP.
+
+             A starter rather than a provider SDK on purpose: the sending
+             account is configured entirely by environment variables, so
+             switching from Brevo to anything else is a dashboard change and
+             not a redeploy. Nothing here sends unless MAIL_HOST is set. -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-mail</artifactId>
+        </dependency>
+
         <!-- Flyway: owns the database schema. Hibernate is set to "validate" so
              it only checks that the entities match what Flyway built, and never
              alters a live table itself. Version is managed by the Spring Boot

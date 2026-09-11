@@ -95,6 +95,26 @@ public class SubscriberService {
         subscriberRepository.deleteById(id);
     }
 
+    /**
+     * Removes whoever holds this unsubscribe token.
+     *
+     * Returns void and never throws for a bad token, on purpose. The page that
+     * calls this says "you have been unsubscribed" either way: a token that has
+     * already been used is the normal case when someone clicks the link twice
+     * or a mail client prefetches it, and showing an error there reads as "it
+     * did not work" to a person who is already annoyed enough to be leaving.
+     * An identical answer also means the endpoint cannot be used to discover
+     * which tokens are real.
+     */
+    @Transactional
+    public void unsubscribeByToken(String token) {
+        if (token == null || token.isBlank()) {
+            return;
+        }
+        subscriberRepository.findByUnsubscribeToken(token.trim())
+                .ifPresent(subscriberRepository::delete);
+    }
+
     // ---- helpers ----
 
     private static String normaliseEmail(String email) {

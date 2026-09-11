@@ -144,8 +144,8 @@ const STRINGS = {
     // site — hands Google an English title and description, which is exactly
     // the signal that makes it rank the English page instead.
     // Used verbatim, not suffixed with the site name, since it already carries it.
-    'seo.default.title': 'RojgarHub — Sarkari Jobs, Results & Admit Cards',
-    'seo.default.desc': 'RojgarHub: latest government and private job notifications, admit cards, results and answer keys for India. Updated daily.',
+    'seo.default.title': 'Sarkari Bharti — Sarkari Result, Govt Jobs, Admit Card',
+    'seo.default.desc': 'Sarkari Bharti: latest sarkari result, government job notifications, admit cards, answer keys and exam dates for India. Updated every day.',
     'seo.latest.title': 'Latest Government Jobs',
     'seo.latest.desc': 'Government and private jobs open for application right now. Apply before the last date.',
     'seo.upcoming.title': 'Upcoming Government Jobs',
@@ -244,6 +244,17 @@ const STRINGS = {
     'subscribe.button': 'Subscribe',
     'subscribe.done': 'Subscribed! You will get new job alerts by email.',
     'subscribe.error': "Couldn't subscribe right now — please try again.",
+
+    'unsub.title': 'Unsubscribe from job alerts',
+    'unsub.confirm': 'Click below to stop receiving job alert emails from us.',
+    'unsub.button': 'Yes, unsubscribe me',
+    'unsub.working': 'Removing you from the list…',
+    'unsub.done': 'Done. You will not get any more job alerts from us.',
+    'unsub.doneNote': 'Changed your mind? You can subscribe again any time from the homepage.',
+    'unsub.error': "Couldn't reach the server. Please try again in a moment.",
+    'unsub.noToken': 'This link is incomplete. Please open the unsubscribe link directly from one of our emails.',
+    'unsub.retry': 'Try again',
+    'unsub.home': 'Back to homepage',
 
     // Shown when the backend is unreachable. Same wording on every listing
     // page so a returning visitor recognises it instead of reading it again.
@@ -391,8 +402,8 @@ const STRINGS = {
     // "सरकारी नौकरी" is the term people actually type; it stays in the title
     // even though the brand name is Latin, because the brand is not what wins
     // the search.
-    'seo.default.title': 'RojgarHub — सरकारी नौकरी, रिज़ल्ट और एडमिट कार्ड',
-    'seo.default.desc': 'RojgarHub: भारत की ताज़ा सरकारी और प्राइवेट भर्तियाँ, एडमिट कार्ड, रिज़ल्ट और आंसर की। रोज़ अपडेट।',
+    'seo.default.title': 'सरकारी भर्ती — सरकारी रिजल्ट, नौकरी, एडमिट कार्ड',
+    'seo.default.desc': 'सरकारी भर्ती (Sarkari Bharti): भारत की ताज़ा सरकारी नौकरी, सरकारी रिजल्ट, एडमिट कार्ड, आंसर की और परीक्षा तिथि। रोज़ अपडेट।',
     'seo.latest.title': 'नई सरकारी भर्तियाँ',
     'seo.latest.desc': 'जिन सरकारी और प्राइवेट भर्तियों के आवेदन अभी खुले हैं — अंतिम तिथि से पहले आवेदन करें।',
     'seo.upcoming.title': 'आने वाली सरकारी भर्तियाँ',
@@ -486,6 +497,17 @@ const STRINGS = {
     'subscribe.button': 'सब्सक्राइब करें',
     'subscribe.done': 'सब्सक्राइब हो गया! नई भर्तियों की जानकारी ईमेल पर मिलेगी।',
     'subscribe.error': 'अभी सब्सक्राइब नहीं हो सका — कृपया फिर कोशिश करें।',
+
+    'unsub.title': 'जॉब अलर्ट अनसब्सक्राइब करें',
+    'unsub.confirm': 'हमारे जॉब अलर्ट ईमेल बंद करने के लिए नीचे क्लिक करें।',
+    'unsub.button': 'हाँ, मुझे अनसब्सक्राइब करें',
+    'unsub.working': 'आपको सूची से हटाया जा रहा है…',
+    'unsub.done': 'हो गया। अब आपको हमारे जॉब अलर्ट नहीं मिलेंगे।',
+    'unsub.doneNote': 'मन बदल गया? आप होमपेज से कभी भी दोबारा सब्सक्राइब कर सकते हैं।',
+    'unsub.error': 'सर्वर से संपर्क नहीं हो सका। कृपया थोड़ी देर बाद कोशिश करें।',
+    'unsub.noToken': 'यह लिंक अधूरा है। कृपया हमारे ईमेल में दिए अनसब्सक्राइब लिंक से ही खोलें।',
+    'unsub.retry': 'फिर कोशिश करें',
+    'unsub.home': 'होमपेज पर जाएँ',
 
     'error.listings': 'सूची अभी लोड नहीं हो रही है। कृपया थोड़ी देर में रिफ्रेश करें।',
     'error.listingsShort': 'सूची सेवा जवाब नहीं दे रही है। कृपया थोड़ी देर में फिर कोशिश करें।',

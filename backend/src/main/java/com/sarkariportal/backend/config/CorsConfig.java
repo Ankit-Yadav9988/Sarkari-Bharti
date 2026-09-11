@@ -32,7 +32,7 @@ public class CorsConfig {
         if (originsCsv == null || originsCsv.isBlank()) {
             throw new IllegalStateException(
                     "CORS_ALLOWED_ORIGINS is empty. Set it to your frontend origin, "
-                            + "e.g. https://rojgarhub.in");
+                            + "e.g. https://sarkari-bharti.vercel.app");
         }
 
         List<String> origins = Arrays.stream(originsCsv.split(","))
@@ -55,7 +55,8 @@ public class CorsConfig {
             }
             if (!origin.startsWith("http://") && !origin.startsWith("https://")) {
                 throw new IllegalStateException(
-                        "CORS origin must include the scheme, e.g. https://rojgarhub.in. "
+                        "CORS origin must include the scheme, e.g. "
+                                + "https://sarkari-bharti.vercel.app. "
                                 + "Offending value: " + origin);
             }
             if (origin.endsWith("/")) {

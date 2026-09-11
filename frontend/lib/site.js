@@ -12,19 +12,24 @@
  *
  * A trailing slash is stripped rather than tolerated. Every caller composes
  * `${SITE_URL}${path}` where path already starts with "/", so a value ending
- * in "/" would emit https://rojgarhub.in//jobs/x — a different URL to the one
- * in the sitemap, which is exactly the kind of duplicate a canonical tag is
- * supposed to prevent.
+ * in "/" would emit https://sarkari-bharti.vercel.app//jobs/x — a different URL
+ * to the one in the sitemap, which is exactly the kind of duplicate a canonical
+ * tag is supposed to prevent.
+ *
+ * The fallback is the live Vercel address, not a domain that has not been
+ * bought. A fallback naming a domain nobody owns is worse than no fallback:
+ * every canonical tag on a misconfigured build would point at someone else's
+ * future site, and Google would follow it.
  */
 export const SITE_URL =
-  (process.env.NEXT_PUBLIC_SITE_URL || 'https://rojgarhub.in').replace(/\/+$/, '');
+  (process.env.NEXT_PUBLIC_SITE_URL || 'https://sarkari-bharti.vercel.app').replace(/\/+$/, '');
 
 /** True only when this build is the real site, not a local run or a preview. */
 export const IS_PRODUCTION_SITE =
   process.env.NODE_ENV === 'production' && !/localhost|127\.0\.0\.1/.test(SITE_URL);
 
 export const SITE = {
-  name: 'RojgarHub',
+  name: 'Sarkari Bharti',
   tagline: "Every vacancy. One place.",
 
   // e.g. 'https://whatsapp.com/channel/0029VaXXXXXXXXX'
@@ -60,8 +65,9 @@ export const ANALYTICS = {
  *
  * A bare "/" resolves to the origin with no trailing slash, because
  * next.config.js sets trailingSlash: false — the homepage is served at
- * https://rojgarhub.in, so a canonical tag claiming https://rojgarhub.in/ would
- * name a URL that redirects, which is the one thing a canonical must not do.
+ * https://sarkari-bharti.vercel.app, so a canonical tag claiming
+ * https://sarkari-bharti.vercel.app/ would name a URL that redirects, which is
+ * the one thing a canonical must not do.
  */
 export function absoluteUrl(path = '/') {
   if (!path || path === '/') return SITE_URL;

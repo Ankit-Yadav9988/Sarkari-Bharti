@@ -55,7 +55,7 @@ export default function ImportJobs() {
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = 'rojgarhub-jobs-template.csv';
+    a.download = 'sarkari-bharti-jobs-template.csv';
     a.click();
     URL.revokeObjectURL(url);
   }

@@ -81,8 +81,8 @@ export function noticeTypeLabel(value) {
  * ("sbi-clerk-recruitment-2026-5"), and resolves either form, so a bare id URL
  * that was already shared keeps working. Everything this site *emits* should use
  * the slug: it is the difference between a search result reading
- * "rojgarhub.in/jobs/5" and one reading the name of the exam, and the words in
- * the URL are a ranking signal on top of that.
+ * "sarkari-bharti.vercel.app/jobs/5" and one reading the name of the exam, and
+ * the words in the URL are a ranking signal on top of that.
  *
  * Falls back to the id when the field is absent -- an older backend, or a
  * response shape that predates it -- because a link that is ugly still works and

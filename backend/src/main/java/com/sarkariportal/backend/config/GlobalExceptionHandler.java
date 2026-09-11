@@ -1,5 +1,6 @@
 package com.sarkariportal.backend.config;
 
+import com.sarkariportal.backend.util.LogSafe;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -57,7 +58,11 @@ public class GlobalExceptionHandler {
     /** A unique constraint or a not-null column, e.g. two subscribers racing on one email. */
     @ExceptionHandler(DataIntegrityViolationException.class)
     public ResponseEntity<Map<String, String>> handleConflict(DataIntegrityViolationException e) {
-        log.warn("Data integrity violation: {}", e.getMostSpecificCause().getMessage());
+        // Redacted because PostgreSQL names the offending value in the message:
+        // `Detail: Key (email)=(someone@gmail.com) already exists.` The constraint
+        // name is the useful half and it survives.
+        log.warn("Data integrity violation: {}",
+                LogSafe.redactEmails(e.getMostSpecificCause().getMessage()));
         return ResponseEntity.status(HttpStatus.CONFLICT)
                 .body(Map.of("error", "That value is already in use"));
     }

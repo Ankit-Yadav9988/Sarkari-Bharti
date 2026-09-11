@@ -55,6 +55,14 @@ Disallow: /api/
 Disallow: /*?q=
 Disallow: /*&q=
 
+# The unsubscribe link from an email alert. The token in it is the only
+# credential that page has, so it should not be fetched by anything that was not
+# handed it deliberately -- and there is nothing on it worth crawling either.
+# The page sends X-Robots-Tag: noindex as well, because a rule here is a request
+# and a header is not.
+Disallow: /unsubscribe
+Disallow: /hi/unsubscribe
+
 # Filtered listings are left crawlable on purpose: they carry a canonical tag
 # pointing at the landing page that covers the same set, which tells a crawler
 # which of the two to keep without hiding either from it.
