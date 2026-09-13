@@ -200,6 +200,7 @@ step 4 need setting.
 | `MAIL_MAX_RECIPIENTS` | `2000` | Refuses an absurdly large send rather than discovering the problem 400 messages in. Raise it if the list genuinely grows. |
 | `MAIL_SEND_DELAY_MS` | `200` | Pause between messages. Providers throttle bursts, and a throttled burst looks to the admin like a total failure. |
 | `SITE_PUBLIC_URL` | first CORS origin | Base URL for the unsubscribe link. |
+| `SITE_NAME` | `Sarkari Bharti` | The site name used inside the message body and subject. Separate from `MAIL_FROM_NAME`, which is the sender name the inbox shows — set both if you rename the site, or the email will introduce itself as one name and arrive from another. |
 
 Connection and read timeouts are fixed in `application.properties` at 10s and
 15s, so a provider that stops responding mid-handshake cannot hang the sending

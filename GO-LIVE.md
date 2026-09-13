@@ -1,9 +1,15 @@
-# Go live — every command, and a free server that never sleeps
+# Go live — every command, and how the live site is put together
 
 This is the practical companion to `DEPLOY.md`. Same project, different goal:
-`DEPLOY.md` explains how each piece works. This one is a checklist you can follow
-top to bottom with copy-paste commands, ending with the site live on the internet
-and submitted to Google Search Console.
+`DEPLOY.md` explains how each piece works and walks through a deploy from
+scratch. This one is the copy-paste command reference, plus what the live setup
+actually is, ending with the site submitted to Google Search Console.
+
+**The site is already live**, at <https://sarkari-bharti.vercel.app>. So most of
+this document is now a reference for changing something rather than a build
+order. Part 4 describes the hosting as it really is — if you are deploying the
+backend again from nothing, follow `DEPLOY.md` Part 4 instead, which is the
+step-by-step version and is kept as the single source of truth for it.
 
 Read Part 0 once. After that you can jump to whichever part you need.
 
@@ -14,15 +20,14 @@ Read Part 0 once. After that you can jump to whichever part you need.
 | 0 | The rules, and what "free forever" really means |
 | 1 | Every command, with demo values you can copy |
 | 2 | Put the code on GitHub |
-| 3 | The architecture, and why this one never sleeps |
-| 4 | The backend server (Oracle Cloud Always Free) |
+| 3 | The architecture as deployed |
+| 4 | The backend and database (Render + Supabase) |
 | 5 | The frontend (Vercel free) |
 | 6 | Connecting the two (CORS) |
 | 7 | Google Search Console |
-| 8 | Renaming the site |
-| 9 | Name ideas |
-| 10 | When something breaks |
-| 11 | Honest caveats — read before you trust anything here |
+| 8 | The rename, and moving to a real domain |
+| 9 | When something breaks |
+| 10 | Honest caveats — read before you trust anything here |
 
 ---
 
@@ -67,21 +72,27 @@ is on that reject list. Copy them to see the shape, not to use.
 | Piece | Provider | Free? | Sleeps? |
 |---|---|---|---|
 | Frontend | Vercel Hobby | Yes, no card | No — static/CDN, always warm |
-| Backend | Oracle Cloud Always Free VM | Yes, card for identity check only | No — it is your own Linux machine |
-| Database | PostgreSQL installed on that same VM | Yes | No — no 30/90-day expiry, no idle suspend |
-| HTTPS certificate | Let's Encrypt via certbot | Yes | Auto-renews |
-| API hostname | DuckDNS subdomain | Yes | No |
+| Backend | Render free web service | Yes, no card | **Yes** — after ~15 idle minutes |
+| Database | Supabase free project | Yes, no card | **Yes** — paused after ~a week idle |
+| HTTPS certificates | Managed by Vercel and Render | Yes | Renewed for you |
+| API hostname | `<service>.onrender.com` | Yes | — |
 
-This is the combination that satisfies your two hard requirements — the backend
-must not shut down, and the database must not expire. Render's and Railway's free
-tiers fail one or both: Render sleeps a free web service after inactivity and
-expires free Postgres, Railway's free credit runs out monthly. Running your own
-always-free VM removes both problems, at the cost of doing the Linux setup once.
+Two of those sleep, and that is the honest trade for paying nothing. What it
+means in practice: the first visitor after a quiet spell waits 30–60 seconds for
+the backend to wake, and a project nobody has queried for a week needs a click in
+the Supabase dashboard to come back. Part 4.4 covers keeping the backend warm and
+why it is not obviously worth doing yet.
 
-> Oracle reclaims **idle** Always Free compute instances (roughly: under 20% CPU,
-> low network, for 7 days). Part 4.12 sets up an uptime monitor that pings the
-> health endpoint every 5 minutes, which keeps the instance in use and gives you
-> downtime alerts at the same time.
+The pairing is deliberate. Render's own free Postgres expires after 90 days and
+takes the data with it, so the database lives on Supabase instead, where there is
+no such clock. That also means the backend service can be rebuilt, renamed or
+moved without touching the data.
+
+> **If sleeping is unacceptable**, the fix is a paid instance on Render (the
+> cheapest tier removes the sleep), not a free VM elsewhere. An always-free VM
+> from a cloud provider avoids the sleep but hands you Linux patching, your own
+> TLS certificates and your own backups — and providers reclaim instances they
+> consider idle, so even that is not unconditional.
 
 ---
 
@@ -94,14 +105,13 @@ Substitute your own. These are written to be obviously fake.
 | Placeholder | Demo value used in this document |
 |---|---|
 | Admin username | `ankit` |
-| Admin password | `Rojgar@2026#Live` |
+| Admin password | `Sarkari@2026#Live` |
 | Postgres password | `Str0ng-Local-Pg-Pass` |
 | Database name | `sarkari_portal` |
 | JWT secret | `EXAMPLE-ONLY-DO-NOT-USE-ThisIsNotRandomGenerateYourOwnWithOpenssl` |
 | Password hash | `$2a$12$EXAMPLEonlyEXAMPLEonlyNotARealHashDoNotUseThisValue00` |
-| Server public IP | `132.145.10.42` |
-| API hostname | `rojgarhub-api.duckdns.org` |
-| Frontend URL | `https://rojgarhub.vercel.app` |
+| API hostname | `sarkari-bharti-api.onrender.com` |
+| Frontend URL | `https://sarkari-bharti.vercel.app` |
 
 Two paths appear constantly:
 
@@ -135,7 +145,7 @@ EXAMPLE-ONLY-DO-NOT-USE-ThisIsNotRandomGenerateYourOwnWithOpenssl
 ```
 
 Save it in a password manager. You will paste it in two places only: your local
-shell, and the server's environment file.
+shell, and the Environment tab of the Render service.
 
 ## 1.2 Generate the admin password hash
 
@@ -148,7 +158,7 @@ hash from the password you chose:
 cd backend
 mvn -q compile exec:java `
   -Dexec.mainClass=com.sarkariportal.backend.tool.HashPassword `
-  -Dexec.args="Rojgar@2026#Live"
+  -Dexec.args="Sarkari@2026#Live"
 ```
 
 **Linux / macOS**
@@ -157,7 +167,7 @@ mvn -q compile exec:java `
 cd backend
 mvn -q compile exec:java \
   -Dexec.mainClass=com.sarkariportal.backend.tool.HashPassword \
-  -Dexec.args="Rojgar@2026#Live"
+  -Dexec.args="Sarkari@2026#Live"
 ```
 
 It prints a 60-character string starting with `$2a$12$`, shaped like:
@@ -195,12 +205,9 @@ setx ADMIN_USERNAME "ankit"
 export ADMIN_USERNAME='ankit'
 ```
 
-**On the live server** (full context in Part 4.8):
-
-```bash
-sudo nano /etc/rojgarhub/backend.env      # edit the ADMIN_USERNAME= line
-sudo systemctl restart rojgarhub-api
-```
+**On the live site:** Render → your service → **Environment** → edit
+`ADMIN_USERNAME` → *Save changes*. Render restarts the service itself; there is
+no file to edit and no shell to edit it from.
 
 Notes that matter:
 
@@ -239,18 +246,16 @@ Locally, Linux / macOS:
 export ADMIN_PASSWORD_HASH='$2a$12$EXAMPLEonlyEXAMPLEonlyNotARealHashDoNotUseThisValue00'
 ```
 
-On the live server:
-
-```bash
-sudo nano /etc/rojgarhub/backend.env      # replace the ADMIN_PASSWORD_HASH= line
-```
+On the live site: Render → your service → **Environment** → replace
+`ADMIN_PASSWORD_HASH`. Paste it carefully — a BCrypt hash is exactly 60
+characters, starts `$2a$12$`, and a trailing space is enough to make every login
+fail.
 
 **Step 3 — restart**
 
-```bash
-sudo systemctl restart rojgarhub-api      # server
-# locally: stop mvn spring-boot:run with Ctrl+C and start it again
-```
+Saving the variable on Render restarts the service for you, so there is nothing
+to do there. Locally: stop `mvn spring-boot:run` with Ctrl+C and start it again —
+variables are read once at boot.
 
 The thing that surprises people: **any admin browser session created before the
 change still works** until the token expires (24 hours by default). The token is
@@ -354,7 +359,7 @@ the problem is the backend or the frontend.
 ```bash
 curl -X POST http://localhost:8080/api/auth/login \
   -H "Content-Type: application/json" \
-  -d '{"username":"ankit","password":"Rojgar@2026#Live"}'
+  -d '{"username":"ankit","password":"Sarkari@2026#Live"}'
 ```
 
 Success returns `{"token":"eyJhbGciOi..."}`. Then use that token:
@@ -376,15 +381,15 @@ curl http://localhost:8080/api/subscribers -H "Authorization: Bearer $TOKEN"
 | Variable | Required | Default | Demo value |
 |---|---|---|---|
 | `DB_URL` | no | `jdbc:postgresql://localhost:5432/sarkari_portal` | same |
-| `DB_USERNAME` | no | `postgres` | `rojgarhub` |
+| `DB_USERNAME` | no | `postgres` | `postgres.abcdefghijklm` (Supabase pooler form) |
 | `DB_PASSWORD` | **yes** | — | `Str0ng-Local-Pg-Pass` |
 | `JWT_SECRET` | **yes** | — | output of `openssl rand -base64 48` |
 | `ADMIN_USERNAME` | no | `admin` | `ankit` |
 | `ADMIN_PASSWORD_HASH` | **yes** | — | `$2a$12$…` |
-| `CORS_ALLOWED_ORIGINS` | **yes in production** | `http://localhost:3000` | `https://rojgarhub.vercel.app` |
-| `PORT` / `SERVER_PORT` | no | `8080` | `8080` |
+| `CORS_ALLOWED_ORIGINS` | **yes in production** | `http://localhost:3000` | `https://sarkari-bharti.vercel.app` |
+| `PORT` / `SERVER_PORT` | no | `8080` | injected by Render — do not set it |
 | `JWT_EXPIRATION_MS` | no | `86400000` (24h) | `86400000` |
-| `DB_POOL_SIZE` | no | `10` | `5` on a 1 GB server |
+| `DB_POOL_SIZE` | no | `10` | `5` on the free tier |
 | `LOG_LEVEL` | no | `INFO` | `INFO` |
 | `RATELIMIT_LOGIN_MAX` | no | `5` | `5` |
 | `RATELIMIT_LOGIN_WINDOW` | no | `900` | `900` |
@@ -392,13 +397,19 @@ curl http://localhost:8080/api/subscribers -H "Authorization: Bearer $TOKEN"
 | `RATELIMIT_SUBSCRIBE_WINDOW` | no | `3600` | `3600` |
 | `VIEWCOUNT_DEDUP_SECONDS` | no | `21600` (6h) | `21600` |
 
+The email variables (`MAIL_ENABLED`, `MAIL_HOST`, `MAIL_PORT`, `MAIL_USERNAME`,
+`MAIL_PASSWORD`, `MAIL_FROM_ADDRESS` and the rest) are deliberately not repeated
+here — they have their own table, with defaults and demo values, in
+[`SETUP-EMAIL.md`](SETUP-EMAIL.md). Email is off until `MAIL_ENABLED=true` and the
+site runs exactly as normal without any of them set.
+
 Frontend variables (all are baked into the browser bundle at **build** time — a
 change needs a redeploy, not a restart, and none of them can hold a secret):
 
 | Variable | Required | Demo value |
 |---|---|---|
-| `NEXT_PUBLIC_API_URL` | **yes** | `https://rojgarhub-api.duckdns.org/api` |
-| `NEXT_PUBLIC_SITE_URL` | **yes in production** | `https://rojgarhub.vercel.app` |
+| `NEXT_PUBLIC_API_URL` | **yes** | `https://sarkari-bharti-api.onrender.com/api` |
+| `NEXT_PUBLIC_SITE_URL` | **yes in production** | `https://sarkari-bharti.vercel.app` |
 | `NEXT_PUBLIC_GSC_VERIFICATION` | no | `AbCdEf1234567890_exampleTokenOnly` |
 | `NEXT_PUBLIC_GA_ID` | no | `G-EXAMPLE1234` |
 | `NEXT_PUBLIC_BING_VERIFICATION` | no | — |
@@ -407,10 +418,12 @@ change needs a redeploy, not a restart, and none of them can hold a secret):
 ## 1.10 Rotate the JWT secret (kick every session out now)
 
 ```bash
-openssl rand -base64 48                    # 1. generate
-sudo nano /etc/rojgarhub/backend.env       # 2. replace JWT_SECRET=
-sudo systemctl restart rojgarhub-api       # 3. restart
+openssl rand -base64 48     # 1. generate a new one
 ```
+
+Then: Render → your service → **Environment** → replace `JWT_SECRET` → *Save
+changes*, which restarts the service. Locally, set the variable again and restart
+`mvn spring-boot:run`.
 
 Every existing admin token becomes unverifiable immediately. Do this if the
 secret was ever committed, pasted into a chat, or you suspect any compromise.
@@ -451,500 +464,211 @@ above one more time before pushing.
 
 ---
 
-# Part 3 — The architecture
+# Part 3 — The architecture as deployed
 
 ```
    Visitor's browser
           |
-          |  https://rojgarhub.vercel.app
+          |  https://sarkari-bharti.vercel.app
           v
    +--------------------------+
    |  Vercel (free)           |   Next.js — pages, SEO, sitemap, robots
    |  global CDN, never idle  |   Rebuilds automatically on git push
    +--------------------------+
           |
-          |  https://rojgarhub-api.duckdns.org/api
+          |  https://<your-service>.onrender.com/api
           v
    +--------------------------+
-   |  Oracle Cloud VM (free)  |
-   |                          |
-   |   nginx :443  --TLS----> |   Let's Encrypt certificate, auto-renewed
-   |     |                    |
-   |     v                    |
-   |   Spring Boot :8080      |   systemd keeps it running and restarts it
-   |     |                    |
-   |     v                    |
-   |   PostgreSQL :5432       |   on the same machine, listening on localhost only
+   |  Render (free)           |   Spring Boot in a container
+   |  HTTPS terminated for    |   Restarted automatically on git push
+   |  you; sleeps when idle   |   Binds the PORT Render injects
+   +--------------------------+
+          |
+          |  TLS over the internet, port 5432/6543
+          v
+   +--------------------------+
+   |  Supabase (free)         |   PostgreSQL — Flyway owns the schema
    +--------------------------+
 ```
 
-Three design points worth understanding before you build it:
+Four things worth understanding about this shape:
 
-**Why HTTPS on the backend is not optional.** Vercel serves the site over HTTPS.
-A browser on an HTTPS page refuses to call a plain `http://` API — it blocks it
-as mixed content, with no visible error to the user. The pages themselves would
-still load, because Next fetches those on the server, but the view counter, the
-subscribe form and the entire admin area call the API from the browser and would
-all silently fail. Hence nginx + certbot in Part 4.
+**HTTPS is not optional, and you get it for free here.** Vercel serves the site
+over HTTPS, and a browser on an HTTPS page refuses to call a plain `http://` API
+— it blocks it as mixed content, usually with nothing visible to the user. The
+pages themselves would still load, because Next fetches those on the server, but
+the view counter, the subscribe form and the whole admin area call the API from
+the browser and would all fail silently. Render gives every service an
+`https://….onrender.com` address with a managed certificate, so there is no nginx
+and no certbot in this setup — that is the main reason it is simpler than running
+your own server.
 
-**Why nginx at all**, rather than exposing Java directly: certbot integrates with
-it in one command, it terminates TLS so the JVM never handles certificates, and
-it means only ports 80 and 443 are ever open to the internet.
+**The backend sleeps; the frontend does not.** Render's free tier stops your
+service after about 15 minutes with no requests, and the next request has to wait
+30–60 seconds for it to start again. Vercel never sleeps, and every public page
+is server-rendered *on Vercel*, calling the API — so a cold backend shows up as
+one slow page load for whoever is unlucky, not as a broken site. Part 4.4 covers
+whether to bother fighting this.
 
-**Why Postgres on the same box.** Every free managed Postgres has an expiry or an
-idle-suspend attached to it. A database you install yourself has neither. The
-cost is that backups are your job — Part 4.13.
+**The database is separate from the backend, on purpose.** Render's own free
+Postgres expires after 90 days and then the data is gone. Supabase's free tier
+has no such clock, so the database outlives the backend service and you can
+rebuild or move the backend without touching the data. The cost of separating
+them is one network hop per query and a connection string you have to keep right
+— see 4.2.
+
+**Nothing here holds files.** Render's free instances have no persistent disk, and
+anything written inside the container is lost on the next deploy or sleep. That is
+fine, because this app stores no files: notification PDFs are linked by URL to the
+official site rather than uploaded. Keep it that way, or you will need object
+storage as well.
 
 ---
 
-# Part 4 — The backend server (Oracle Cloud Always Free)
+# Part 4 — The backend and database (Render + Supabase)
 
-Budget about 90 minutes the first time. Everything here is a one-off; after this,
-deploying an update is three commands.
+This is what the live site actually runs on, and this part is written as a
+description of it rather than a build order. **To deploy the backend from
+scratch, follow `DEPLOY.md` Part 4** — it is the step-by-step version, and
+duplicating it here would just give the two documents a chance to disagree. What
+follows is the Render- and Supabase-specific knowledge that does not fit there:
+the settings that matter, the two that break the deploy if they are wrong, and
+what to expect from the free tier.
 
-## 4.1 Create the account
+## 4.1 The Render service
 
-1. Go to <https://www.oracle.com/cloud/free/> → **Start for free**.
-2. Country: India. You need a credit or debit card. It is used to verify identity
-   — Oracle places a small temporary hold (usually refunded within days) and does
-   not charge for Always Free resources.
-3. **Choose your home region carefully: it cannot be changed later.** Pick
-   `India South (Hyderabad)` or `India West (Mumbai)`. Always Free resources only
-   exist in the home region.
-4. You get a 30-day trial with credits *plus* Always Free resources. When the
-   trial ends the account drops to Free Tier and the Always Free resources keep
-   running. Do not let the account be "upgraded" unless you intend to pay.
+Created with *New* → *Web Service*, pointed at the GitHub repository from Part 2.
+The settings that matter:
 
-If card verification fails — a common problem with Indian cards — try a different
-card, or a different browser with no ad-blocker. Some banks block the
-international verification attempt; a UPI-linked card usually does not work.
+| Setting | Value | Why |
+|---|---|---|
+| Root Directory | `backend` | The repo holds `backend/` and `frontend/` side by side. Left blank, Render finds no project to build. |
+| Runtime | Docker | `backend/Dockerfile` is committed, and it pins Maven 3.9.9 and Java 17, so the build does not drift with whatever Render's native builder defaults to. |
+| Branch | `main` | Every push here redeploys. |
+| Health check path | `/api/health` | Optional but worth setting. See 4.3. |
+| Instance type | Free | |
 
-## 4.2 Create the virtual machine
+The port needs no configuration at all. Render injects `PORT` and expects the
+process to bind it, and `application.properties` reads
+`server.port=${PORT:${SERVER_PORT:8080}}` — `PORT` first, then `SERVER_PORT`,
+then 8080 for local runs. The `EXPOSE 8080` line in the Dockerfile is
+documentation and does not override this. Getting this wrong is a nasty failure:
+the container starts, logs a healthy Spring banner, and is killed a minute later
+for not answering on the port the platform is watching.
 
-Menu → **Compute** → **Instances** → **Create instance**.
+Environment variables go in *Environment* on the service page. The full list is
+in 1.9; the ones without which it will not start are `DB_URL`, `DB_USERNAME`,
+`DB_PASSWORD`, `JWT_SECRET`, `ADMIN_PASSWORD_HASH` and `CORS_ALLOWED_ORIGINS`.
+Render restarts the service when you save them.
 
-| Setting | Choose |
-|---|---|
-| Name | `rojgarhub-api` |
-| Image | **Canonical Ubuntu 22.04** |
-| Shape | `VM.Standard.A1.Flex` — **2 OCPU, 12 GB memory** |
-| Boot volume | 50 GB (the free minimum) |
-| SSH keys | **Save the private key file.** It is shown once. |
+## 4.2 The Supabase connection string
 
-Every option marked *Always Free eligible* is free. Anything else is not.
+This is the one setting most likely to be wrong, and the failure is confusing
+because it looks like the database is down.
 
-**"Out of host capacity for shape VM.Standard.A1.Flex"** is the single most common
-blocker. The ARM instances are heavily oversubscribed. Options, in order:
+Get it from the Supabase dashboard: *Project Settings* → *Database* → *Connection
+string* → the **JDBC** tab. It looks like:
 
-1. Try a different Availability Domain in the same region (AD-1, AD-2, AD-3).
-2. Lower the request to 1 OCPU / 6 GB.
-3. Retry at a different time of day. It often frees up overnight.
-4. **Fall back to `VM.Standard.E2.1.Micro`** (AMD, 1 OCPU, 1 GB RAM). Always
-   available, never capacity-blocked, and it does run this stack — but 1 GB is
-   tight. See the note at the end of 4.5.
+```
+jdbc:postgresql://aws-0-ap-south-1.pooler.supabase.com:5432/postgres?user=postgres.abcdefghijklm&password=...
+```
 
-**Reserve the public IP** so it survives a stop/start: on the instance page →
-*Attached VNICs* → the VNIC → *IPv4 Addresses* → edit the primary → change
-*Ephemeral* to *Reserved*. Skipping this means your IP changes and the API
-hostname points at nothing.
+Two details to get right:
 
-Connect:
+- **Use the pooler address, not the direct one.** Supabase offers a direct
+  connection (`db.<ref>.supabase.co`) and a pooled one
+  (`…pooler.supabase.com`). On newer projects the direct address resolves to
+  IPv6 only, and a platform without IPv6 egress cannot reach it at all — the
+  backend just fails to connect, with a timeout rather than a useful error. The
+  pooler answers on IPv4. It is also the right choice on its own merits: a
+  pool-in-front-of-a-pool caps how many connections the free database sees.
+- **Keep the username and password out of the URL** if you can, and put them in
+  `DB_USERNAME` and `DB_PASSWORD` instead. The Supabase pooler username has the
+  project ref in it (`postgres.abcdefghijklm`), which is easy to mistake for a
+  typo and easy to truncate. Splitting them means the URL in `DB_URL` is
+  shareable in a screenshot and the secret is only in one place.
+
+`DB_POOL_SIZE` is worth setting to `5` on the free tier. The default is 10, and
+ten connections from one small service is more than a free database wants to
+hold open when it is mostly idle.
+
+Flyway runs on first boot and creates the schema. Hibernate then runs with
+`ddl-auto=validate`, so if the database and the entities disagree the service
+refuses to start rather than quietly altering a live table — that is the
+`Flyway … Validate failed` row in Part 9.
+
+## 4.3 Confirm it is actually up
 
 ```bash
-chmod 600 ~/Downloads/ssh-key-2026.key
-ssh -i ~/Downloads/ssh-key-2026.key ubuntu@132.145.10.42
-```
-
-On Windows use the same command in PowerShell, or PuTTY with the `.ppk`
-conversion. The username is `ubuntu` for Ubuntu images (`opc` for Oracle Linux).
-
-## 4.3 Firewall layer 1 — the VCN security list
-
-**Oracle has two firewalls and you must open both.** Missing this is why "the
-server is running but nothing loads" is the most-reported Oracle problem.
-
-Menu → **Networking** → **Virtual Cloud Networks** → your VCN → **Security Lists**
-→ *Default Security List* → **Add Ingress Rules**:
-
-| Source CIDR | Protocol | Destination port | For |
-|---|---|---|---|
-| `0.0.0.0/0` | TCP | `80` | HTTP — certbot needs this to issue the certificate |
-| `0.0.0.0/0` | TCP | `443` | HTTPS — the actual API traffic |
-
-Leave the existing rule for port 22 alone. Do **not** open 8080 or 5432 — nginx
-is the only thing that should be reachable, and Postgres must never be.
-
-## 4.4 Firewall layer 2 — iptables on the machine itself
-
-Oracle's Ubuntu images ship with iptables rules already loaded, ending in a REJECT
-rule. A new ACCEPT rule appended at the end never runs, so it must be inserted
-*before* the REJECT.
-
-```bash
-sudo iptables -L INPUT --line-numbers -n
-```
-
-Find the line number of the first `REJECT` rule — commonly 6. Insert at that
-number:
-
-```bash
-sudo iptables -I INPUT 6 -m state --state NEW -p tcp --dport 80 -j ACCEPT
-sudo iptables -I INPUT 6 -m state --state NEW -p tcp --dport 443 -j ACCEPT
-sudo netfilter-persistent save
-```
-
-Check they landed above the REJECT:
-
-```bash
-sudo iptables -L INPUT --line-numbers -n
-```
-
-> Do not `ufw enable` on an Oracle instance. It replaces the existing rules,
-> including the one allowing SSH, and locks you out of your own server. If that
-> happens, the only recovery is Oracle's serial console.
-
-## 4.5 Install everything
-
-```bash
-sudo apt update && sudo apt upgrade -y
-sudo apt install -y openjdk-17-jdk maven git nginx postgresql postgresql-contrib \
-                    certbot python3-certbot-nginx unzip
-
-java -version      # expect openjdk version "17.x"
-```
-
-**On a 1 GB micro instance, add swap first** or the build and the JVM will be
-killed by the kernel:
-
-```bash
-sudo fallocate -l 2G /swapfile
-sudo chmod 600 /swapfile
-sudo mkswap /swapfile
-sudo swapon /swapfile
-echo '/swapfile none swap sw 0 0' | sudo tee -a /etc/fstab
-free -h
-```
-
-On 1 GB, also lower the JVM heap to `-Xmx384m` in the systemd unit (4.9), set
-`DB_POOL_SIZE=5`, and build the jar on your own PC and copy it up with `scp`
-rather than running Maven on the server.
-
-## 4.6 Create the database
-
-```bash
-sudo -u postgres psql <<'SQL'
-CREATE DATABASE sarkari_portal;
-CREATE USER rojgarhub WITH PASSWORD 'put-a-strong-password-here';
-GRANT ALL PRIVILEGES ON DATABASE sarkari_portal TO rojgarhub;
-\c sarkari_portal
-GRANT ALL ON SCHEMA public TO rojgarhub;
-SQL
-```
-
-The last line matters on PostgreSQL 15 and newer, where the `public` schema no
-longer grants create rights automatically — without it Flyway fails on the first
-migration with a permission error. It is harmless on older versions.
-
-Confirm Postgres is listening on localhost only (the default, and what you want):
-
-```bash
-sudo ss -ltnp | grep 5432      # should show 127.0.0.1:5432, not 0.0.0.0:5432
-```
-
-## 4.7 Build the application
-
-```bash
-sudo mkdir -p /opt/rojgarhub
-sudo useradd --system --no-create-home --shell /usr/sbin/nologin rojgarhub
-
-cd ~
-git clone https://github.com/<your-username>/<repo-name>.git app
-cd app/backend
-mvn clean package -DskipTests
-
-sudo cp target/backend-0.0.1-SNAPSHOT.jar /opt/rojgarhub/backend.jar
-sudo chown rojgarhub:rojgarhub /opt/rojgarhub/backend.jar
-```
-
-Building from your own PC instead? `mvn clean package -DskipTests` locally, then:
-
-```bash
-scp -i ~/Downloads/ssh-key-2026.key \
-    backend/target/backend-0.0.1-SNAPSHOT.jar ubuntu@132.145.10.42:/tmp/backend.jar
-ssh -i ~/Downloads/ssh-key-2026.key ubuntu@132.145.10.42 \
-    'sudo mv /tmp/backend.jar /opt/rojgarhub/backend.jar && sudo chown rojgarhub:rojgarhub /opt/rojgarhub/backend.jar'
-```
-
-## 4.8 The environment file
-
-Secrets go in a file readable only by root, not in the systemd unit — a unit file
-is world-readable and `systemctl cat` prints it.
-
-```bash
-sudo mkdir -p /etc/rojgarhub
-sudo nano /etc/rojgarhub/backend.env
-```
-
-```ini
-DB_URL=jdbc:postgresql://localhost:5432/sarkari_portal
-DB_USERNAME=rojgarhub
-DB_PASSWORD=put-a-strong-password-here
-DB_POOL_SIZE=10
-
-JWT_SECRET=paste-the-openssl-rand-base64-48-output-here
-
-ADMIN_USERNAME=ankit
-ADMIN_PASSWORD_HASH=$2a$12$EXAMPLEonlyEXAMPLEonlyNotARealHashDoNotUseThisValue00
-
-CORS_ALLOWED_ORIGINS=https://rojgarhub.vercel.app
-
-SERVER_PORT=8080
-LOG_LEVEL=INFO
-```
-
-```bash
-sudo chmod 600 /etc/rojgarhub/backend.env
-sudo chown root:root /etc/rojgarhub/backend.env
-```
-
-Format rules for this file, all of which cause silent failures if broken:
-
-- No `export`, no spaces around `=`, one variable per line.
-- **No quotes around the values.** systemd keeps quotes as part of the value, so
-  `JWT_SECRET="abc"` sets the secret to `"abc"` including the quote marks.
-- The `$` characters in the BCrypt hash are safe here — systemd does not expand
-  variables inside an `EnvironmentFile`. They are *not* safe on an interactive
-  shell line, where single quotes are required.
-- No trailing spaces. A trailing space becomes part of the password hash and
-  every login fails.
-
-Verify the hash survived intact — it must be exactly 60 characters and start with
-`$2a$`:
-
-```bash
-sudo grep ADMIN_PASSWORD_HASH /etc/rojgarhub/backend.env | cut -d= -f2- | wc -c
-# 61  (60 characters plus the newline)
-```
-
-## 4.9 Run it as a service
-
-```bash
-sudo nano /etc/systemd/system/rojgarhub-api.service
-```
-
-```ini
-[Unit]
-Description=RojgarHub API
-After=network-online.target postgresql.service
-Wants=network-online.target postgresql.service
-
-[Service]
-Type=simple
-User=rojgarhub
-WorkingDirectory=/opt/rojgarhub
-EnvironmentFile=/etc/rojgarhub/backend.env
-ExecStart=/usr/bin/java -Xms256m -Xmx768m -jar /opt/rojgarhub/backend.jar
-SuccessExitStatus=143
-Restart=always
-RestartSec=10
-
-# Hardening: the process only needs to read its jar and reach Postgres.
-NoNewPrivileges=true
-PrivateTmp=true
-ProtectSystem=full
-ProtectHome=true
-
-[Install]
-WantedBy=multi-user.target
-```
-
-```bash
-sudo systemctl daemon-reload
-sudo systemctl enable --now rojgarhub-api
-sudo systemctl status rojgarhub-api
-```
-
-`Restart=always` plus `enable` is what makes this never shut down: the service
-comes back after a crash, and after a reboot of the machine.
-
-Watch the first start — Flyway builds the schema here:
-
-```bash
-sudo journalctl -u rojgarhub-api -f
-```
-
-Then, from the server itself:
-
-```bash
-curl http://127.0.0.1:8080/api/health
+curl https://<your-service>.onrender.com/api/health
 # {"status":"ok","db":"up"}
+
+curl https://<your-service>.onrender.com/api/jobs
+# {"content":[],"page":0,...}   <- empty is correct if there is no data yet
 ```
 
-If that fails, read Part 10 before changing anything.
+`/api/health` checks the database, not just the JVM, which is the point of it: a
+process that is alive but cannot reach Postgres serves errors on every page, and
+a health check that calls that "ok" stays quiet through exactly the outage it
+exists to catch. If it answers `{"status":"down"…}`, the problem is 4.2.
 
-## 4.10 nginx in front
+The first of those two calls may take 30–60 seconds if the service was asleep.
+That is not a fault.
+
+## 4.4 Sleep, and whether to fight it
+
+Render's free tier stops the service after roughly 15 minutes of no requests.
+The free allowance is a pool of instance-hours per month, so a service that is
+awake constantly can exhaust it and be stopped until the month rolls over.
+
+You can keep it warm by pointing a free uptime monitor (UptimeRobot and
+Better Stack both have free tiers) at `/api/health` every few minutes. Before
+doing that, know what you are trading:
+
+- It burns the monthly hour allowance whether or not anyone visits.
+- It is polling a cheap endpoint on purpose — never point a keep-alive monitor at
+  a listing page, which is a database query and a JSON render several hundred
+  times a day so a robot can be told "yes".
+
+For a site with no traffic yet, leaving it to sleep is the more sensible default,
+because the only person who meets the cold start is you. Once real visitors
+arrive, the calculation changes — and at that point a paid instance is a better
+answer than a keep-alive ping, since it fixes the cold start instead of hiding it.
+
+## 4.5 Backups are still your job
+
+Supabase's free plan does not include the automatic daily backups or
+point-in-time recovery the paid plans do — confirm the current terms on their
+pricing page, because this is exactly the kind of thing that changes. Until you
+have checked, assume there is no backup and take your own:
 
 ```bash
-sudo nano /etc/nginx/sites-available/rojgarhub-api
+pg_dump "postgresql://<user>:<password>@<pooler-host>:5432/postgres" \
+  --no-owner --no-privileges -f backup-$(date +%F).sql
 ```
 
-```nginx
-server {
-    listen 80;
-    server_name rojgarhub-api.duckdns.org;
+Run it from your own machine, not the server — there is no shell on a Render free
+instance. Keep a few of these somewhere that is not the same account as the
+database. Every job you have ever posted is in that one file.
 
-    # Do not advertise the nginx version.
-    server_tokens off;
+A free Supabase project is also **paused after about a week with no queries**, and
+restoring it is a manual click in the dashboard. If the backend sleeps and nobody
+visits for a week, expect to wake both.
 
-    location / {
-        proxy_pass http://127.0.0.1:8080;
-        proxy_http_version 1.1;
-
-        # The backend reads these to see the real visitor IP rather than
-        # nginx's. Rate limiting and the view counter both depend on it --
-        # application.properties already sets forward-headers-strategy=framework.
-        proxy_set_header Host              $host;
-        proxy_set_header X-Real-IP         $remote_addr;
-        proxy_set_header X-Forwarded-For   $proxy_add_x_forwarded_for;
-        proxy_set_header X-Forwarded-Proto $scheme;
-
-        proxy_connect_timeout 10s;
-        proxy_read_timeout    60s;
-    }
-}
-```
+## 4.6 Deploying a backend update later
 
 ```bash
-sudo ln -s /etc/nginx/sites-available/rojgarhub-api /etc/nginx/sites-enabled/
-sudo rm -f /etc/nginx/sites-enabled/default
-sudo nginx -t && sudo systemctl reload nginx
+git add -A && git commit -m "..." && git push
 ```
 
-## 4.11 A free hostname and free HTTPS
+Render builds the Docker image and swaps the service over when the build
+succeeds; a failed build leaves the previous version running. Watch it in
+*Events* → the running deploy, or *Logs* for the application output.
 
-You need a hostname before you can have a certificate — Let's Encrypt will not
-issue one for a bare IP address.
-
-**DuckDNS** gives you one free, permanently:
-
-1. <https://www.duckdns.org> → sign in with Google or GitHub.
-2. Create the subdomain `rojgarhub-api` → you get `rojgarhub-api.duckdns.org`.
-3. Put your server's public IP (`132.145.10.42`) in the IP box and click update.
-4. Copy your account token from the top of the page.
-
-Check it resolves before continuing — DNS can take a couple of minutes:
-
-```bash
-dig +short rojgarhub-api.duckdns.org      # must print your server IP
-```
-
-Keep it pointed at the server even if the IP ever changes:
-
-```bash
-mkdir -p ~/duckdns
-cat > ~/duckdns/duck.sh <<'EOF'
-#!/bin/bash
-curl -k -s "https://www.duckdns.org/update?domains=rojgarhub-api&token=YOUR-DUCKDNS-TOKEN&ip=" -o ~/duckdns/duck.log
-EOF
-chmod 700 ~/duckdns/duck.sh
-( crontab -l 2>/dev/null; echo "*/5 * * * * ~/duckdns/duck.sh >/dev/null 2>&1" ) | crontab -
-```
-
-**Then get the certificate:**
-
-```bash
-sudo certbot --nginx -d rojgarhub-api.duckdns.org
-```
-
-Answer the email prompt, agree to the terms, and choose the redirect option when
-asked. Certbot edits the nginx config in place, adds the `listen 443 ssl` block,
-and installs a renewal timer.
-
-```bash
-sudo systemctl list-timers | grep certbot     # renewal is scheduled
-sudo certbot renew --dry-run                  # renewal actually works
-```
-
-Now check from your own computer, not the server:
-
-```bash
-curl https://rojgarhub-api.duckdns.org/api/health
-# {"status":"ok","db":"up"}
-```
-
-If this times out, the problem is a firewall — go back to 4.3 and 4.4. Port 80
-must stay open afterwards too, or renewal fails in 90 days and the site breaks
-with an expired-certificate warning.
-
-## 4.12 Keep it alive, and know when it is not
-
-Oracle reclaims Always Free compute instances that stay idle — roughly under 20%
-CPU with low network activity for 7 days. An uptime monitor solves that and tells
-you about outages in the same move.
-
-Sign up at <https://uptimerobot.com> (free plan, 50 monitors, 5-minute checks):
-
-| Field | Value |
-|---|---|
-| Monitor type | HTTP(s) |
-| URL | `https://rojgarhub-api.duckdns.org/api/health` |
-| Interval | 5 minutes |
-| Alert | your email |
-
-`/api/health` exists for exactly this. It is public, needs no token, checks that
-the database actually answers, returns 503 when it does not, and returns nothing
-else — no version, no hostname, no stack trace.
-
-Add a second monitor on `https://rojgarhub.vercel.app` so you also hear about
-frontend problems.
-
-## 4.13 Backups
-
-A self-hosted database has no automatic backups. Fifteen minutes now:
-
-```bash
-sudo mkdir -p /var/backups/rojgarhub
-sudo chown ubuntu:ubuntu /var/backups/rojgarhub
-
-cat > ~/backup-db.sh <<'EOF'
-#!/bin/bash
-set -e
-STAMP=$(date +%F)
-PGPASSWORD='put-a-strong-password-here' pg_dump -U rojgarhub -h 127.0.0.1 \
-  sarkari_portal | gzip > /var/backups/rojgarhub/db-$STAMP.sql.gz
-find /var/backups/rojgarhub -name 'db-*.sql.gz' -mtime +14 -delete
-EOF
-
-chmod 700 ~/backup-db.sh
-~/backup-db.sh && ls -lh /var/backups/rojgarhub
-
-( crontab -l 2>/dev/null; echo "0 2 * * * ~/backup-db.sh >/dev/null 2>&1" ) | crontab -
-```
-
-Daily at 2am, two weeks kept. **A backup on the same machine is not a backup** —
-download one to your PC every so often:
-
-```bash
-scp -i ~/Downloads/ssh-key-2026.key \
-    ubuntu@132.145.10.42:/var/backups/rojgarhub/db-2026-09-09.sql.gz .
-```
-
-Restore, if you ever need it:
-
-```bash
-gunzip -c db-2026-09-09.sql.gz | psql -U rojgarhub -h 127.0.0.1 sarkari_portal
-```
-
-## 4.14 Deploying a backend update later
-
-```bash
-ssh -i ~/Downloads/ssh-key-2026.key ubuntu@132.145.10.42
-cd ~/app && git pull
-cd backend && mvn clean package -DskipTests
-sudo cp target/backend-0.0.1-SNAPSHOT.jar /opt/rojgarhub/backend.jar
-sudo systemctl restart rojgarhub-api
-sudo journalctl -u rojgarhub-api -n 40
-```
+One caveat specific to this app: **a redeploy mid-send loses an email broadcast.**
+Progress is held in memory, so a deploy while alerts are going out stops the send
+part-way and leaves `email_broadcasts.finished_at` null on that row. Check the
+admin subscribers page is idle before pushing.
 
 ---
 
@@ -971,37 +695,44 @@ environment:
 
 | Name | Value |
 |---|---|
-| `NEXT_PUBLIC_API_URL` | `https://rojgarhub-api.duckdns.org/api` |
-| `NEXT_PUBLIC_SITE_URL` | `https://rojgarhub.vercel.app` |
+| `NEXT_PUBLIC_API_URL` | `https://sarkari-bharti-api.onrender.com/api` |
+| `NEXT_PUBLIC_SITE_URL` | `https://sarkari-bharti.vercel.app` |
 
 Note the `/api` suffix on the first one and its absence on the second. Neither has
 a trailing slash.
 
-There is a chicken-and-egg problem: you do not know your Vercel URL until the
-first deploy. So:
+**Both values are compiled into the JavaScript bundle at build time.** Changing
+either one in the dashboard does nothing at all until a new build runs —
+*Deployments → ⋯ → Redeploy*. This is the single most common way to spend an hour
+confused by this setup, and it applies every time you touch a `NEXT_PUBLIC_*`
+value, including when the name or domain changes (8.3).
+
+On a first deploy there is a chicken-and-egg problem, because you do not know the
+Vercel URL until it exists:
 
 1. Deploy once with only `NEXT_PUBLIC_API_URL` set.
-2. Read the production URL off the dashboard — the clean one, `rojgarhub.vercel.app`,
-   not the long per-deployment one with a hash in it.
+2. Read the production URL off the dashboard — the clean one,
+   `sarkari-bharti.vercel.app`, not the long per-deployment one with a hash in it.
 3. Add `NEXT_PUBLIC_SITE_URL` with that value.
-4. **Redeploy.** Every `NEXT_PUBLIC_*` value is compiled into the JavaScript bundle
-   at build time. Changing it in the dashboard does nothing until a new build runs.
-   *Deployments → ⋯ → Redeploy.*
+4. Redeploy.
 
 Getting `NEXT_PUBLIC_SITE_URL` wrong is not cosmetic: it is the value behind every
-canonical tag, every Open Graph URL, the sitemap, and the hreflang pairs. Unset,
-they all claim to be `https://rojgarhub.in`, a domain you do not own.
+canonical tag, every Open Graph URL, the sitemap and the `hreflang` pairs. Left
+unset it falls back to the origin hard-coded in `frontend/lib/site.js`, which is
+the deployed address — correct today, and exactly the kind of thing that stops
+being correct the moment you buy a domain. Set it explicitly rather than relying
+on the fallback.
 
 ## 5.3 Confirm the deploy is crawlable
 
-Open `https://rojgarhub.vercel.app/robots.txt`. It must start:
+Open `https://sarkari-bharti.vercel.app/robots.txt`. It must start:
 
 ```
 User-agent: *
 Allow: /
 ```
 
-and end with `Sitemap: https://rojgarhub.vercel.app/sitemap.xml`.
+and end with `Sitemap: https://sarkari-bharti.vercel.app/sitemap.xml`.
 
 If it says `Disallow: /` instead, the site is invisible to Google and nothing in
 Part 7 will work. Causes, in order of likelihood:
@@ -1013,7 +744,7 @@ Part 7 will work. Causes, in order of likelihood:
   do not compete with the real one in search results. Vercel sets `VERCEL_ENV`
   itself; there is nothing to configure.
 
-Then open `https://rojgarhub.vercel.app/sitemap.xml` and check it lists real URLs.
+Then open `https://sarkari-bharti.vercel.app/sitemap.xml` and check it lists real URLs.
 It is generated from the live job list, so it needs the backend reachable — an
 empty sitemap usually means the API call failed, not that the sitemap is broken.
 
@@ -1030,48 +761,55 @@ build succeeds; a failed build leaves the old version serving.
 
 # Part 6 — Connect the two (CORS)
 
-The browser will refuse to let `rojgarhub.vercel.app` read responses from
-`rojgarhub-api.duckdns.org` unless the API says that origin is allowed.
+The browser will refuse to let `sarkari-bharti.vercel.app` read responses from
+`<your-service>.onrender.com` unless the API says that origin is allowed.
 
-```bash
-sudo nano /etc/rojgarhub/backend.env
-```
+On Render: the service → **Environment** → add or edit
 
 ```ini
-CORS_ALLOWED_ORIGINS=https://rojgarhub.vercel.app
+CORS_ALLOWED_ORIGINS=https://sarkari-bharti.vercel.app
 ```
 
-```bash
-sudo systemctl restart rojgarhub-api
-```
+Saving it restarts the service, which takes a minute or two. There is no file to
+edit and no shell to edit it from — the dashboard is the only place this value
+lives.
 
 Rules the application enforces at startup, each of which is a real mistake it is
 catching:
 
 - **Exact origins only.** `*` is rejected — a wildcard would let any website on
   the internet read your API through a visitor's browser.
-- **Scheme required.** `rojgarhub.vercel.app` is rejected; `https://rojgarhub.vercel.app` is right.
-- **No trailing slash.** The browser sends `Origin: https://rojgarhub.vercel.app`
-  without one, so a configured value ending in `/` matches nothing — and it fails
-  as a confusing browser error rather than a server error.
+- **Scheme required.** `sarkari-bharti.vercel.app` is rejected;
+  `https://sarkari-bharti.vercel.app` is right.
+- **No trailing slash.** The browser sends
+  `Origin: https://sarkari-bharti.vercel.app` without one, so a configured value
+  ending in `/` matches nothing — and it fails as a confusing browser error
+  rather than a server error.
 - Multiple origins are comma-separated:
-  `https://rojgarhub.vercel.app,http://localhost:3000`.
+  `https://sarkari-bharti.vercel.app,http://localhost:3000`.
+
+A `*.vercel.app` address has no `www` variant, so production needs exactly one
+entry. Adding `http://localhost:3000` as a second is convenient while developing
+against the live API, and harmless — it only means a browser on your own machine
+is also allowed to call it.
 
 Verify from your own machine that the API returns the header:
 
 ```bash
 curl -s -o /dev/null -D - \
-  -H "Origin: https://rojgarhub.vercel.app" \
-  https://rojgarhub-api.duckdns.org/api/jobs | grep -i access-control
-# access-control-allow-origin: https://rojgarhub.vercel.app
+  -H "Origin: https://sarkari-bharti.vercel.app" \
+  https://<your-service>.onrender.com/api/jobs | grep -i access-control
+# access-control-allow-origin: https://sarkari-bharti.vercel.app
 ```
 
-No such header means the restart did not happen or the value has a typo.
+No such header means the restart has not finished yet or the value has a typo. An
+empty reply with no headers at all usually means the service is asleep — run it
+again.
 
 **The real test** is the browser: open the live site, press F12 → Console, and
 visit a job page. If you see `blocked by CORS policy`, the origin does not match.
-If you see `Mixed Content: ... requested an insecure resource`, your
-`NEXT_PUBLIC_API_URL` is still `http://` — go back to 4.11.
+If you see `Mixed Content: … requested an insecure resource`, your
+`NEXT_PUBLIC_API_URL` is `http://` where it should be `https://`.
 
 ---
 
@@ -1080,10 +818,27 @@ If you see `Mixed Content: ... requested an insecure resource`, your
 Do this only after Part 5.3 confirms `Allow: /`. Submitting a site that answers
 `Disallow: /` teaches Google to ignore it and wastes weeks.
 
+> **If you already added a property under the old name**, it is now pointing at an
+> address that is not yours and nothing will ever be reported for it. A Search
+> Console property is tied to an exact URL prefix, so a renamed site needs a new
+> property — verification does not follow the rename. Add the current address as
+> below, then delete the old property so the two do not sit side by side with one
+> permanently empty. There is nothing to migrate: a `vercel.app` property has no
+> history worth keeping, and *Change of Address* is for a domain move (8.3), not
+> this.
+>
+> Before adding it, confirm `NEXT_PUBLIC_SITE_URL` in Vercel is
+> `https://sarkari-bharti.vercel.app` **and that a build has run since you set
+> it.** Every canonical tag, every `hreflang` pair and every URL inside
+> `sitemap.xml` is built from that value, so if it is stale or unset, Search
+> Console will read a sitemap full of URLs on a domain you do not own and index
+> none of them. `curl -s https://sarkari-bharti.vercel.app/sitemap.xml | head -5`
+> settles it in one command.
+
 ## 7.1 Add the property
 
 <https://search.google.com/search-console> → **Add property** → **URL prefix**
-(the left box, not "Domain") → `https://rojgarhub.vercel.app`.
+(the left box, not "Domain") → `https://sarkari-bharti.vercel.app`.
 
 The *Domain* option needs a DNS record, which you cannot add on a `vercel.app`
 subdomain. URL prefix is the correct choice until you buy a real domain.
@@ -1113,7 +868,7 @@ instead of the content value.
 Search Console → **Sitemaps** → enter `sitemap.xml` → Submit.
 
 Status goes to "Success" with a URL count within a day or so. "Couldn't fetch"
-usually means the sitemap 404s — confirm `https://rojgarhub.vercel.app/sitemap.xml`
+usually means the sitemap 404s — confirm `https://sarkari-bharti.vercel.app/sitemap.xml`
 loads in your browser first. (It is generated at `/api/sitemap` and served at
 `/sitemap.xml` by a rewrite, so both should work.)
 
@@ -1152,253 +907,218 @@ go back to 5.3.
 
 ---
 
-# Part 8 — Renaming the site
+# Part 8 — The rename, and moving to a real domain
 
-`RojgarHub` is taken, so this will need doing. The name lives in fewer places than
-you would expect.
+The site was called **RojgarHub** while it was being built. That name was already
+taken by someone else, so it is now **Sarkari Bharti** everywhere in the code.
+This part is kept for two reasons: 8.1 is the map of where a name lives, which is
+what you need if you ever change it again, and 8.3 is the one you will actually
+use, when you buy a domain.
 
-## 8.1 The one that matters
+## 8.1 Where the name lives — all of it
 
-`frontend/lib/site.js`:
+Done already, listed so a future rename takes ten minutes instead of an
+afternoon.
+
+`frontend/lib/site.js` is the one that matters:
 
 ```js
 export const SITE = {
-  name: 'RojgarHub',                        // <- change this
-  tagline: "Every vacancy. One place.",     // <- and probably this
+  name: 'Sarkari Bharti',
+  tagline: "Every vacancy. One place.",
   ...
 };
 ```
 
 That single value drives the header wordmark, the footer line, every page title,
-the `og:site_name` used in WhatsApp and Facebook previews, and the About, Contact,
-Privacy and Disclaimer pages. Change it and 90% of the rename is done.
+the `og:site_name` used in WhatsApp and Facebook previews, and the About,
+Contact, Privacy and Disclaimer pages. Change it and most of a rename is done.
 
-While you are in the file, the fallback on line 20 also names the old domain:
+The rest, in rough order of how much they matter:
 
-```js
-export const SITE_URL =
-  (process.env.NEXT_PUBLIC_SITE_URL || 'https://rojgarhub.in').replace(/\/+$/, '');
-```
-
-That fallback only applies when `NEXT_PUBLIC_SITE_URL` is unset, but it should not
-be a domain someone else owns.
-
-## 8.2 The rest
-
-| File | What to change | Matters? |
+| File | What it holds | Matters? |
 |---|---|---|
-| `frontend/lib/i18n.js` lines 147–148 | `seo.default.title`, `seo.default.desc` — English | **Yes** — this is your Google result text |
-| `frontend/lib/i18n.js` lines 394–395 | the same two keys in Hindi | **Yes** |
-| `frontend/public/og-default.png` | the social share image has the name drawn into it | Yes, visible on every WhatsApp share |
+| `frontend/lib/i18n.js` — `seo.default.title`, `seo.default.desc` | the brand, hard-coded separately from `SITE.name`, in **both** the English and Hindi dictionaries | **Yes** — this is your Google result text |
+| `frontend/lib/site.js` — `SITE_URL` fallback | the origin used when `NEXT_PUBLIC_SITE_URL` is unset | **Yes** — it must never be a domain someone else owns |
+| `frontend/public/og-default.png` | the share image, with the name drawn into it | Yes, visible on every WhatsApp share |
 | `frontend/public/favicon.ico`, `icon-512.png`, `apple-touch-icon.png` | the logo | Cosmetic but obvious |
-| `frontend/pages/admin/import.js` line 58 | the CSV template's download filename | Cosmetic, admin-only |
-| `frontend/public/robots.txt` | dead file — `/robots.txt` is generated now and a rewrite bypasses this one. Safe to delete. | Delete it, it is only confusing |
-| `frontend/styles/globals.css` line 2 | a comment | No |
-| `backend/.../application.properties` line 72 | `jwt.issuer=rojgarhub` | See warning below |
+| `backend/…/application.properties` — `jwt.issuer` | written into every token | See the warning below |
+| `backend/…/application.properties` — `site.name`, `mail.from-name` | the name on outgoing email | Yes, if email alerts are on |
+| `frontend/pages/admin/import.js` | the CSV template's download filename | Cosmetic, admin-only |
+| `frontend/styles/globals.css` | a comment | No |
 
 > **`jwt.issuer` is not cosmetic.** The issuer is written into every token and
-> checked on the way back in. Change it and every existing admin session is
-> rejected instantly. That is harmless — log in again — but do it deliberately,
-> not in the middle of adding jobs.
+> checked on the way back in, so changing it rejects every admin session that
+> already exists. It is now `sarkari-bharti`, which means **the first admin login
+> after the rename deploy will need doing again** — log in and carry on. Harmless,
+> but do it deliberately rather than in the middle of adding jobs.
 
-After editing, run the frontend build to make sure nothing broke:
+Two related things that are *not* part of a rename but get mistaken for one: the
+Vercel project name (which is what makes the address `sarkari-bharti.vercel.app`,
+and is changed in Vercel's settings, not in the code), and the Render service
+name (which makes the API hostname). Renaming either changes a URL, so both have
+the same consequences as 8.3 below.
+
+After editing, build the frontend to be sure nothing broke:
 
 ```bash
 cd frontend && npm run build
 ```
 
-## 8.3 When you later buy a real domain
+## 8.2 If you change the name again
+
+Do it in this order, because two of these invalidate things:
+
+1. Edit the files in 8.1, redraw the images, commit and push.
+2. Update `SITE_NAME` and `MAIL_FROM_NAME` on Render if email is on.
+3. Expect one forced admin re-login if `jwt.issuer` changed.
+4. Only then tell Search Console, and only if the *address* changed too — a
+   rename with the same URL needs nothing there.
+
+## 8.3 When you buy a real domain
 
 Four things change together, and missing one breaks the site quietly:
 
-1. **Vercel** → Settings → Domains → add `yournewname.in` and follow the DNS
-   instructions at your registrar.
-2. **Vercel env** → `NEXT_PUBLIC_SITE_URL=https://yournewname.in` → **redeploy**.
-   Until you redeploy, every canonical tag still points at the vercel.app address
-   and Google keeps indexing the old one.
-3. **Server** → `CORS_ALLOWED_ORIGINS=https://yournewname.in` in
-   `/etc/rojgarhub/backend.env` → `sudo systemctl restart rojgarhub-api`. Miss
-   this and the site loads but the admin panel and view counter stop working.
-4. **Search Console** → add the new property, verify it, submit the sitemap again.
-   Optionally use the *Change of Address* tool to move the old property's history
-   over.
+1. **Vercel** → Settings → Domains → add `yournewname.in`, then follow the DNS
+   instructions at your registrar. Vercel issues the certificate itself.
+2. **Vercel env** → `NEXT_PUBLIC_SITE_URL=https://yournewname.in` → **redeploy.**
+   Until you redeploy, every canonical tag still points at the `vercel.app`
+   address and Google keeps indexing that one. `NEXT_PUBLIC_*` values are
+   compiled into the bundle at build time; changing one in the dashboard does
+   nothing on its own.
+3. **Render** → the service → Environment →
+   `CORS_ALLOWED_ORIGINS=https://yournewname.in`. Keep the old `vercel.app`
+   origin in the list as a second entry while DNS propagates, then remove it.
+   Miss this step and the site loads but the admin panel, the subscribe form and
+   the view counter all stop working.
+4. **Search Console** → add the new property, verify it, submit the sitemap
+   again, and use the *Change of Address* tool to move the old property's history
+   across.
 
-Optional but tidy: point the API at a subdomain of your own
-(`api.yournewname.in`) instead of DuckDNS, re-run `sudo certbot --nginx -d
-api.yournewname.in`, and update `NEXT_PUBLIC_API_URL`.
+The API hostname can stay on `onrender.com` indefinitely — visitors never see it.
+If you would rather it were `api.yournewname.in`, Render supports a custom domain
+on the service; add it there, point a CNAME at it, and update
+`NEXT_PUBLIC_API_URL` in Vercel followed by a redeploy.
 
----
-
-# Part 9 — Name ideas
-
-Five candidates, chosen so the name is easy to say out loud, easy to spell after
-hearing it once, and close to the words the audience already uses. Availability is
-your job to check — see the checklist at the end.
-
-### 1. NaukriNama — नौकरीनामा
-
-The strongest brand of the five. `-nama` is a familiar Hindi/Urdu suffix meaning a
-record or chronicle (*roznama*, *safarnama*, *Akbarnama*), so "NaukriNama" reads
-as "the register of jobs" without anyone having to be told. It sounds like a
-publication rather than a database, which is the right feeling for a site people
-check daily. Four syllables, one obvious spelling, works in both scripts.
-
-### 2. PakkiNaukri — पक्की नौकरी
-
-The highest word-of-mouth score, because it is not a coined brand at all — it is
-the exact phrase this audience already says. *Pakki naukri* means the secure,
-permanent government job, and that is precisely the thing every visitor is
-chasing. A name that is already in someone's vocabulary is the one they repeat
-without effort. The risk is the flip side: a common phrase is harder to trademark
-and harder to own in search results.
-
-### 3. BhartiKhabar — भर्ती खबर
-
-The best pure-SEO pick. *Bharti* (recruitment) and *khabar* (news) are two of the
-highest-volume Hindi query words in this category, and having them in the domain
-and the title tag is a small but real advantage on exactly the searches you want.
-Less distinctive as a brand than NaukriNama, more findable.
-
-### 4. SarkariPath — सरकारी पथ
-
-Closest in feel to *Sarkari Result*, and that similarity is the point: this
-audience scans for the word "Sarkari" and trusts it. *Path* (पथ) means the way or
-the route, so it reads as "the path to a government job". Be aware the "Sarkari…"
-space is extremely crowded — SarkariResult, SarkariExam, SarkariNaukri, SarkariJob
-all exist — so you inherit familiarity and competition in the same move.
-
-### 5. NaukriMitra — नौकरी मित्र
-
-The warmest of the five. *Mitra* (friend) positions the site as a helper rather
-than a listing board, which fits a site that also carries syllabus, cut-off and
-previous-paper content. It is the best of the five for WhatsApp and Telegram
-sharing, where the message is usually "yaar, yahan dekh" — a friendly name suits
-that context.
-
-**Also worth considering:** AapkiNaukri (आपकी नौकरी), RojgarNama, Naukri24,
-BhartiPoint, NaukriLive.
-
-### Before you commit to a name
-
-1. **Domain.** Check `.in` and `.com` at any registrar. `.in` is fine and often
-   better for this audience; `.com` is worth having if it is cheap.
-2. **Trademark.** Free public search at <https://ipindia.gov.in> → Trade Marks →
-   Public Search. Check class 35 and class 41. This is the check that stops a
-   takedown two years in.
-3. **Plain Google search** for the exact name, and for the name plus "sarkari".
-   If page one is already someone else's site with the same name, pick another —
-   you will never outrank them for your own brand.
-4. **Social handles**, all at once: YouTube, Instagram, Telegram, a WhatsApp
-   channel. Grab them the same day even if you do not use them yet.
-5. **The Vercel project name**, which becomes `thatname.vercel.app`.
-6. **Say it on the phone.** If you have to spell it, drop it.
-
-Two things to avoid outright:
-
-- **Anything that implies you are the government.** Names containing *official*,
-  *gov*, *NIC*, or a ministry's name invite a legal problem and cost user trust
-  when the disclaimer contradicts the name. The site already carries a
-  not-affiliated disclaimer; the name should not fight it.
-- **Reusing a real government scheme name.** *Rojgar Setu*, for instance, is an
-  actual Madhya Pradesh government scheme. Check any candidate against that too.
+One easily-missed file: `frontend/public/robots.txt` hard-codes the domain in its
+`Sitemap:` line. It is **not** the file normally served — `/robots.txt` is
+generated by `pages/api/robots.js` and routed there by a rewrite in
+`next.config.js`, which is what makes the sitemap line follow
+`NEXT_PUBLIC_SITE_URL` and lets preview deployments answer `Disallow: /`. The
+static file is kept only as a fallback for the day that rewrite is removed or
+breaks. Update it when you move domains anyway: a fallback that advertises a
+sitemap on the previous address is worse than no fallback, because it fails
+silently and looks fine.
 
 ---
 
-# Part 10 — When something breaks
+# Part 9 — When something breaks
 
-Start here every time:
-
-```bash
-sudo systemctl status rojgarhub-api
-sudo journalctl -u rojgarhub-api -n 100 --no-pager
-```
+Start with the log. On Render: the service → **Logs** for application output,
+**Events** for deploy and restart history. There is no shell and no
+`journalctl` — the dashboard is the whole toolkit.
 
 The application is built to fail loudly with a readable message, so the log
 usually names the problem outright.
 
 | Symptom | Cause | Fix |
 |---|---|---|
-| `JWT_SECRET is not set` | variable missing from the env file, or the file is not being read | check `EnvironmentFile=` path and `chmod 600` ownership |
-| `JWT_SECRET is a known placeholder value` | you copied a demo value | generate a real one: `openssl rand -base64 48` |
-| `ADMIN_PASSWORD_HASH does not look like a BCrypt hash` | you set the password instead of the hash | run the HashPassword tool (1.2) |
+| `JWT_SECRET is not set` | the variable is missing from the service's Environment | add it on Render; saving restarts the service |
+| `JWT_SECRET is a known placeholder value` | you copied a demo value out of a document | generate a real one: `openssl rand -base64 48` |
+| `JWT_SECRET must be at least 32 characters` | too short | same command; do not trim its output |
+| `ADMIN_PASSWORD_HASH does not look like a BCrypt hash` | you set the password itself instead of the hash | run the HashPassword tool (1.2) |
 | `CORS_ALLOWED_ORIGINS must list exact origins` | a `*` in the value | list the exact frontend origin |
 | `CORS origin must not end with a slash` | trailing `/` | remove it |
-| Starts, but every login says invalid credentials | the hash was mangled by quotes or a trailing space | `sudo grep ADMIN_PASSWORD_HASH /etc/rojgarhub/backend.env \| cut -d= -f2- \| wc -c` must print 61 |
-| `502 Bad Gateway` from nginx | the jar is not running, or not on 8080 | `sudo systemctl status rojgarhub-api`; `curl http://127.0.0.1:8080/api/health` |
-| `curl https://…/api/health` times out from outside, works on the server | a firewall layer | both 4.3 (VCN) **and** 4.4 (iptables) |
-| Site loads, admin login and view counter dead | CORS or mixed content | F12 → Console; see Part 6 |
-| `Flyway ... Validate failed` | the database schema does not match the code | usually an older database; check which migrations ran in the `flyway_schema_history` table |
+| Starts, but every login says invalid credentials | the hash was mangled by quotes or a trailing space when pasted | re-paste it; a BCrypt hash is exactly 60 characters and starts `$2a$12$` |
+| Deploy succeeds, then the service is killed a minute later | it is not listening on the injected `PORT` | nothing to configure — but check nobody has hard-coded `server.port`; see 4.1 |
+| `Connection refused` / connect timeout to the database | the direct Supabase host is IPv6-only | use the pooler address, 4.2 |
+| `password authentication failed for user "postgres"` | the pooler needs the `postgres.<project-ref>` form of the username | copy it from the Supabase connection-string panel |
+| `FATAL: Max client connections reached` | too many connections for the free database | set `DB_POOL_SIZE=5` |
+| Database unreachable after a quiet week | a free Supabase project pauses when idle | restore it from the Supabase dashboard, 4.5 |
+| `Flyway … Validate failed` | the schema does not match the code | check which migrations ran in the `flyway_schema_history` table; usually an older database |
+| First request after a while takes 30–60 seconds | the free instance was asleep | expected, 4.4 |
+| `/api/health` says `{"status":"down"}` | the process is up but cannot reach Postgres | the database rows above |
+| Site loads, but admin login and view counter are dead | CORS or mixed content | F12 → Console; see Part 6 |
 | Vercel build: "No Next.js version detected" | Root Directory not set to `frontend` | Settings → General → Root Directory |
+| Canonical tags point at the wrong domain | `NEXT_PUBLIC_SITE_URL` changed without a redeploy | Deployments → ⋯ → Redeploy |
 | Google: "Blocked by robots.txt" | the deploy is answering `Disallow: /` | Part 5.3 |
-| Certificate expired warning after ~90 days | port 80 was closed after issuance, so renewal failed | reopen 80 in both firewalls, then `sudo certbot renew` |
-| Everything stops after a stop/start | the public IP changed | reserve the IP (4.2), update DuckDNS |
-| Backend killed at random on a 1 GB instance | out of memory | add swap (4.5), set `-Xmx384m`, `DB_POOL_SIZE=5` |
-| `429 Too many login attempts` | 5 failures in 15 minutes from your IP | wait, or `sudo systemctl restart rojgarhub-api` — the counter is in memory |
-| Instance vanished after a few weeks | Oracle reclaimed it as idle | this is what the uptime monitor in 4.12 prevents |
+| `429 Too many login attempts` | 5 failures in 15 minutes from your IP | wait it out; the counter is in memory, so a restart also clears it |
+| An email broadcast stopped half-way | the service restarted or was redeployed mid-send | progress is in memory and is not resumable; see `SETUP-EMAIL.md` |
 
-Useful one-liners:
+Two checks worth running before assuming the backend is at fault:
 
 ```bash
-sudo journalctl -u rojgarhub-api -f          # follow the log live
-sudo journalctl -u rojgarhub-api -p err      # errors only
-sudo tail -f /var/log/nginx/error.log        # nginx side
-free -h && df -h                             # memory and disk
-sudo systemctl restart rojgarhub-api nginx   # restart both
+curl https://<your-service>.onrender.com/api/health   # {"status":"ok","db":"up"}
+curl -s https://sarkari-bharti.vercel.app/robots.txt | head -3
 ```
+
+If the first answers and the second says `Allow: /`, both halves are working and
+the problem is between them — which is almost always CORS.
 
 ---
 
-# Part 11 — Honest caveats
+# Part 10 — Honest caveats
 
 Read this part. Everything above is written to be correct, but some of it depends
-on things I could not check and some of it has not been run.
+on things I could not check, and some of it has not been run.
 
 **Free-tier terms were not verified.** I had no web access while writing this, so
-every claim about what Oracle, Vercel, DuckDNS and UptimeRobot include for free is
-from prior knowledge, not from their pricing pages today. Providers change these
-terms. Confirm each one before you depend on it — especially Oracle's Always Free
-compute allowance and its idle-reclamation policy.
+every claim about what Render, Supabase, Vercel and the uptime monitors include
+for free is from prior knowledge, not from their pricing pages today. Providers
+change these terms, and the ones that matter most here are the two that would
+cost you data or uptime: Render's monthly free instance-hours and idle-sleep
+window, and whether Supabase's free plan includes any backup or point-in-time
+recovery. Confirm both before you depend on them.
 
 **Vercel's Hobby plan is for non-commercial use.** If you intend to run ads on
 this site — which is how sites in this category normally earn — check Vercel's
-current Hobby terms before launch, because you may need their paid plan. This is
-worth checking early rather than after the site has traffic. If it turns out to be
-a problem, the frontend can also be served from the same Oracle VM behind the same
-nginx; you lose the CDN, not the site.
+current Hobby terms before launch, because you may need their paid plan. Worth
+checking early rather than after the site has traffic.
 
-**Two things in this project have never been compiled or built.** I could not run
-`mvn`, `javac` or `npm run build` in the environment I was working in. Specifically,
-`HealthController.java` is new — the endpoint that 4.12 points the uptime monitor
-at — and the indexing rule in `frontend/pages/api/robots.js` is new. Both were
-checked with the project's own test harnesses: the frontend renders all 32 pages
-cleanly, and the API-route harness passes all 98 of its assertions, including a
-group covering exactly the rule this launch depends on — a *production* deploy on
-a `vercel.app` address stays crawlable, a branch preview does not, localhost never
-does, and `NEXT_PUBLIC_ALLOW_INDEXING=false` overrides all of it. A harness is not
-a compiler, though, so the first thing to do on your Windows machine is:
+**Backups are entirely your responsibility.** Assume nothing is snapshotting the
+database for you until you have checked. If you skip 4.5 and the project is lost,
+so is every job you ever posted.
+
+**The backend changes from the most recent working session have never been
+compiled.** No `mvn` or `javac` was available in the environment I worked in, so
+the following are reviewed-by-reading only: the job-status fix in
+`JobService.computeStatus()` and `JobSpecifications.hasStatus()`, the new
+`util/LogSafe.java`, and the three places that now call it
+(`MailService`, `GlobalExceptionHandler`, `BroadcastService`). The status logic
+was additionally cross-checked by transcribing both implementations to Python and
+running every combination of listing section and date pair against each other,
+which is how I know the Java and the SQL agree — but a logic check is not a
+compiler. Before you trust a deploy:
 
 ```bash
 cd backend  && mvn clean package
 cd frontend && npm run build
 ```
 
-Both must succeed before you deploy anything.
+Both must succeed. The frontend half *is* covered by harnesses that parse every
+source file, server-render every page and exercise the API routes, but the same
+caveat applies: a harness is not a build.
 
-**Oracle A1 capacity is a real risk.** "Out of host capacity" is common and can
-persist for days. Have the `E2.1.Micro` fallback in mind (4.2) rather than
-treating a capacity error as a dead end.
+**The job-status fix changes what the live site shows.** Applications whose last
+date has passed are now reported as closed even if they were pinned to "Latest
+jobs" — previously a pinned job stayed "Active" forever, which is the bug you
+reported. The visible consequence is that expired postings will drop out of the
+homepage "Latest jobs" box and out of the `?status=ACTIVE` filter. If everything
+currently in the database is expired, that box will render its empty-state message
+until you post something current. That is correct behaviour, not a regression.
 
-**Backups are entirely your responsibility.** There is no managed provider taking
-snapshots. If you skip 4.13 and the instance is lost, so is every job you ever
-posted.
+**Email sending is not restart-safe.** A broadcast holds its progress in memory,
+so a redeploy or a sleeping instance mid-send stops it part-way and leaves the row
+in `email_broadcasts` unfinished. There is no resume. Send when you are not about
+to push, and see `SETUP-EMAIL.md` for the rest of the email caveats.
 
-**Rate limits are per-process and in memory.** They reset on restart, and they
-would not be shared if you ever ran two copies of the backend. That is fine for
-one server and worth remembering if you ever scale.
+**Rate limits and the view-counter dedup are per-process and in memory.** They
+reset on every restart — which on a free instance means every time it wakes up —
+and they would not be shared if you ever ran two copies of the backend. Fine for
+one service, worth remembering if you ever scale.
 
 **Legal posture.** The site aggregates public government notifications and links
 out to the official source on every row. Keep it that way: link out rather than
 mirroring PDFs, keep the disclaimer page reachable from the footer, and do not
 adopt a name or design that suggests official status. That combination is what
 keeps an aggregator on the right side of the line.
-

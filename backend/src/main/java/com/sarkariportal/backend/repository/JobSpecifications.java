@@ -66,8 +66,11 @@ public final class JobSpecifications {
     /**
      * Translates a computed status into the conditions that produce it.
      *
-     * An explicit listing section always wins over the dates, so each status is
-     * "forced into this section" OR "left on AUTO and the dates say so".
+     * The last date wins over everything: a job whose form has closed is CLOSED
+     * whether or not the admin pinned it to a section. Within the jobs that are
+     * still open, a pin decides the answer, and a job left on AUTO is read from
+     * its start date. This mirrors JobService.computeStatus() clause for clause —
+     * the two have to move together.
      */
     public static Specification<Job> hasStatus(JobStatus status) {
         if (status == null) {
@@ -81,25 +84,28 @@ public final class JobSpecifications {
             Predicate onAuto = cb.or(
                     cb.isNull(root.get("listingSection")),
                     cb.equal(root.get("listingSection"), ListingSection.AUTO));
+            // The guard computeStatus applies first, as a reusable predicate.
+            Predicate stillOpen = cb.greaterThanOrEqualTo(root.get("lastDate"), today);
 
             switch (status) {
                 case ACTIVE:
-                    return cb.or(
+                    return cb.and(stillOpen, cb.or(
                             cb.equal(root.get("listingSection"), ListingSection.LATEST),
                             cb.and(onAuto,
-                                    cb.lessThanOrEqualTo(root.get("applicationStartDate"), today),
-                                    cb.greaterThanOrEqualTo(root.get("lastDate"), today)));
+                                    cb.lessThanOrEqualTo(root.get("applicationStartDate"), today))));
 
                 case UPCOMING:
-                    return cb.or(
+                    return cb.and(stillOpen, cb.or(
                             cb.equal(root.get("listingSection"), ListingSection.UPCOMING),
                             cb.and(onAuto,
-                                    cb.greaterThan(root.get("applicationStartDate"), today)));
+                                    cb.greaterThan(root.get("applicationStartDate"), today))));
 
                 case CLOSED:
-                    // A job the admin pinned to LATEST or UPCOMING is never
-                    // reported closed, however old its dates are.
-                    return cb.and(onAuto, cb.lessThan(root.get("lastDate"), today));
+                    // No onAuto here, and no pin exemption: the last date having
+                    // passed is the whole condition. A job pinned to LATEST used
+                    // to be excluded from this and reported ACTIVE forever, which
+                    // sent students to forms that shut months ago.
+                    return cb.lessThan(root.get("lastDate"), today);
 
                 default:
                     return cb.conjunction();

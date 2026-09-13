@@ -1,8 +1,11 @@
-# RojgarHub
+# Sarkari Bharti
 
 A government-job portal for Indian aspirants — notifications, admit cards,
 results, answer keys, syllabi, cut-offs, an exam calendar and previous-year
 papers, in English and Hindi.
+
+Live at <https://sarkari-bharti.vercel.app> — frontend on Vercel, backend on
+Render, PostgreSQL on Supabase.
 
 Two projects that talk to each other over HTTP:
 
@@ -15,6 +18,9 @@ Two projects that talk to each other over HTTP:
 [DEPLOY.md](DEPLOY.md).** Read that rather than improvising from this file — every
 credential is an environment variable with no fallback, and the application
 refuses to start if one is missing or looks like a placeholder.
+
+Turning on subscriber email alerts is a separate, optional step:
+[SETUP-EMAIL.md](SETUP-EMAIL.md).
 
 The short version, once the prerequisites in DEPLOY.md are installed and
 `DB_PASSWORD`, `JWT_SECRET` and `ADMIN_PASSWORD_HASH` are set:

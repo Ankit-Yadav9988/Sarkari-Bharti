@@ -1,0 +1,20 @@
+# Files that must keep LF endings regardless of the platform they are edited on.
+#
+# Scoped deliberately rather than using `* text=auto`. A blanket rule would
+# renormalise every tracked file on the next commit, which buries a real change
+# in a thousand-line whitespace diff. These are the files where CRLF is not
+# cosmetic:
+#
+#   Dockerfile  -- built on Linux by the host. A CRLF line ending becomes part
+#                  of the command, so `RUN foo` runs `foo\r` and fails with a
+#                  "not found" that names a command that looks correct.
+#   *.sh        -- same problem, worse error: the shebang becomes `/bin/sh\r`.
+#   *.yml/*.yaml -- CI and host config files, read on Linux.
+#
+# Editing the Dockerfile on Windows is what introduced the CRLF churn this rule
+# now prevents.
+
+Dockerfile      text eol=lf
+*.sh            text eol=lf
+*.yml           text eol=lf
+*.yaml          text eol=lf

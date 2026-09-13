@@ -1,4 +1,4 @@
-# RojgarHub — run it, change the admin password, deploy it live
+# Sarkari Bharti — run it, change the admin password, deploy it live
 
 Everything needed to take this repository from a fresh clone to a public site.
 Three independent things live in here, so jump to the one you need:
@@ -279,11 +279,14 @@ for DNS.
 Almost every deployment problem in this stack is a mismatch between three values
 that all have to agree. Write them down before you start:
 
-| | Example |
+| | This deployment |
 |---|---|
-| Frontend origin | `https://rojgarhub.in` |
-| Backend origin | `https://rojgarhub-api.onrender.com` |
-| API base URL | `https://rojgarhub-api.onrender.com/api` |
+| Frontend origin | `https://sarkari-bharti.vercel.app` |
+| Backend origin | `https://<your-service>.onrender.com` |
+| API base URL | `https://<your-service>.onrender.com/api` |
+
+Replace `<your-service>` with the name Render gave your backend — it is at the top
+of the service page in the Render dashboard.
 
 The rules that trip people up: the API base URL **includes** `/api`; neither
 origin has a trailing slash; and both must be `https`, because an https page is
@@ -382,7 +385,7 @@ Set the environment variables before the first deploy:
 | Variable | Value |
 |---|---|
 | `NEXT_PUBLIC_API_URL` | `https://your-backend.onrender.com/api` |
-| `NEXT_PUBLIC_SITE_URL` | `https://rojgarhub.in` |
+| `NEXT_PUBLIC_SITE_URL` | `https://sarkari-bharti.vercel.app` |
 | `NEXT_PUBLIC_GA_ID` | `G-…` if you want analytics, else leave empty |
 | `NEXT_PUBLIC_GSC_VERIFICATION` | from Search Console, later — see 4.7 |
 | `NEXT_PUBLIC_ALLOW_INDEXING` | `true` on the real site only |
@@ -411,10 +414,12 @@ the console that reads like a frontend bug.
 Go back to the backend's environment and set:
 
 ```
-CORS_ALLOWED_ORIGINS=https://rojgarhub.in,https://www.rojgarhub.in
+CORS_ALLOWED_ORIGINS=https://sarkari-bharti.vercel.app
 ```
 
-Exact origins, comma-separated. Include the `www` variant if it resolves. No
+Exact origins, comma-separated. A `*.vercel.app` subdomain has no `www` variant,
+so there is one entry. Once you move to a real domain, include the `www` form too
+if it resolves — `https://example.in,https://www.example.in`. No
 wildcards, no trailing slashes, scheme always included — all three are rejected at
 startup with a message naming the offending value, rather than failing later as a
 browser error nobody can trace.
@@ -428,7 +433,7 @@ Point the domain at the frontend host (Vercel → *Settings* → *Domains*, then
 CNAME or A record it gives you at your registrar). Certificates are issued
 automatically; allow up to an hour for DNS and the certificate.
 
-Optionally give the backend a subdomain of its own — `api.rojgarhub.in` — which
+Optionally give the backend a subdomain of its own — `api.example.in` — which
 means the API keeps working if you ever move hosts. If you do, remember it changes
 two things: `NEXT_PUBLIC_API_URL` on the frontend (and a redeploy), and nothing on
 the backend, since `CORS_ALLOWED_ORIGINS` lists the *frontend* origin, not its own.
@@ -439,7 +444,7 @@ localhost and starts protecting the moment you are live.
 
 ## 4.6 First login on production
 
-Go to `https://rojgarhub.in/admin/login` and sign in with the production password
+Go to `https://sarkari-bharti.vercel.app/admin/login` and sign in with the production password
 from 4.2. If it fails, check in this order:
 
 1. Does `curl https://your-backend.onrender.com/api/jobs` answer? If not, the
@@ -460,8 +465,8 @@ CORS and the frontend together — it is the real smoke test.
 The site generates its own sitemap from the live database, so there is nothing to
 regenerate by hand as content grows.
 
-1. Confirm both feeds answer: `https://rojgarhub.in/sitemap.xml` and
-   `https://rojgarhub.in/robots.txt`. The sitemap should list the static pages, the
+1. Confirm both feeds answer: `https://sarkari-bharti.vercel.app/sitemap.xml` and
+   `https://sarkari-bharti.vercel.app/robots.txt`. The sitemap should list the static pages, the
    category and state landing pages, and every job — each in both English and
    Hindi, with `hreflang` annotations.
 2. Google Search Console → *Add property* → *Domain* and verify by DNS if you can
@@ -550,7 +555,7 @@ insecurely or against the wrong schema.
 | `does not look like a BCrypt hash` | You set the password instead of its hash. | Run the hash tool and use its output. |
 | `CORS_ALLOWED_ORIGINS is empty` | Set to a blank string. | List your frontend origin. |
 | `must list exact origins, not wildcards` | A `*` in the value. | Spell the origins out. |
-| `CORS origin must include the scheme` | `rojgarhub.in` instead of `https://rojgarhub.in`. | Add `https://`. |
+| `CORS origin must include the scheme` | `sarkari-bharti.vercel.app` instead of `https://sarkari-bharti.vercel.app`. | Add `https://`. |
 | `CORS origin must not end with a slash` | Trailing `/`. | Remove it. Browsers send `Origin` without one, so it would match nothing. |
 | `Schema-validation: missing table` / `missing column` | Flyway did not run, or is pointing at a different database than the entities expect. | Check `DB_URL`; confirm `flyway_schema_history` exists and lists all four versions. |
 | `password authentication failed` | Wrong `DB_PASSWORD`, or PowerShell expanded a `$` in a double-quoted value. | Re-set it with single quotes. |

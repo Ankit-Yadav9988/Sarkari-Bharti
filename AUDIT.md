@@ -1,4 +1,19 @@
-# RojgarHub — audit and improvement plan
+# Sarkari Bharti — audit and improvement plan
+
+> **Historical record, reviewed 3 September 2026.** Kept as written so the
+> findings stay auditable. Several have since been fixed, and the site was called
+> **RojgarHub** at the time — that name was already taken, and it is now **Sarkari
+> Bharti**. Where this document says `rojgarhub.in`, read
+> `sarkari-bharti.vercel.app`.
+>
+> Fixed since this was written: the JWT placeholder secret (finding 1) and the
+> rest of the security list — see the security notes in the repo; the sitemap
+> being unreachable (the `next.config.js` rewrite is in place); and
+> `NEXT_PUBLIC_SITE_URL`, whose fallback in `lib/site.js` is now the real
+> deployed origin. **Still open:** caching (finding 2), incomplete Hindi coverage
+> of the public UI, and analytics/ad instrumentation. Publishing speed (finding 3)
+> is now partly addressed by CSV import for jobs *and* for results, admit cards
+> and answer keys.
 
 Reviewed 3 September 2026. Covers the whole repo: 47 frontend source files, the
 Spring Boot backend, and the deployment config. The frontend look was rebuilt in

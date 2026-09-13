@@ -21,7 +21,7 @@ export const CATEGORIES = [
 // How the admin can place a job in the listings.
 export const SECTIONS = [
   { value: 'AUTO', label: 'Auto (decide from dates) — recommended' },
-  { value: 'LATEST', label: 'Latest jobs (applications open now)' },
+  { value: 'LATEST', label: 'Latest jobs (pin here while open)' },
   { value: 'UPCOMING', label: 'Upcoming (notification out, not open yet)' },
 ];
 

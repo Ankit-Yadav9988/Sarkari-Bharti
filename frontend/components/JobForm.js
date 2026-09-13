@@ -167,7 +167,9 @@ export default function JobForm({ initialData, onSubmit, submitLabel }) {
         </div>
         <p className="field-hint">
           "Auto" moves the job to Latest once applications open and to Closed after the last date.
-          Choose Latest or Upcoming to place it manually. It appears under "All jobs" either way.
+          Choose Latest or Upcoming to place it manually. Either way, the job is marked Closed once
+          the last date has passed — pinning controls placement, not whether the form is still open.
+          It appears under "All jobs" throughout.
         </p>
 
         <label className="field-label">State (leave blank for Central / all-India jobs)</label>

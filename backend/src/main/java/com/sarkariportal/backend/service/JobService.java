@@ -239,13 +239,30 @@ public class JobService {
 
     /**
      * Derives the status from today's date and the job's own dates, so the admin
-     * never has to remember to mark a posting closed. An explicit listing
-     * section chosen in the form always wins.
+     * never has to remember to mark a posting closed.
+     *
+     * The last date is the one fact no override beats. An explicit listing
+     * section says *where* a job should appear, and the admin who picks "Latest
+     * jobs" is usually reaching for placement on the homepage -- they are not
+     * asserting that a form which shut a year ago is still accepting
+     * applications. Treating the pin as a status override made every pinned job
+     * permanently ACTIVE, which is worse than useless: it points students at
+     * closed forms. So once the last date has passed the job is CLOSED, pinned or
+     * not, and the pin only decides placement among jobs that are still open.
      *
      * JobSpecifications.hasStatus is the SQL translation of this method. The two
      * have to move together; if this changes, that changes.
      */
     JobStatus computeStatus(Job job) {
+        LocalDate today = LocalDate.now();
+
+        // Checked before the overrides, deliberately. Both date columns are
+        // NOT NULL in the schema, but this also runs on entities that were just
+        // built from a request body, so the guards stay.
+        if (job.getLastDate() != null && today.isAfter(job.getLastDate())) {
+            return JobStatus.CLOSED;
+        }
+
         ListingSection section = job.getListingSection();
         if (section == ListingSection.LATEST) {
             return JobStatus.ACTIVE;
@@ -254,12 +271,8 @@ public class JobService {
             return JobStatus.UPCOMING;
         }
 
-        LocalDate today = LocalDate.now();
         if (job.getApplicationStartDate() != null && today.isBefore(job.getApplicationStartDate())) {
             return JobStatus.UPCOMING;
-        }
-        if (job.getLastDate() != null && today.isAfter(job.getLastDate())) {
-            return JobStatus.CLOSED;
         }
         return JobStatus.ACTIVE;
     }
