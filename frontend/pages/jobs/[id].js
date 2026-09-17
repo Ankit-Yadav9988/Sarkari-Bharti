@@ -5,11 +5,12 @@ import SeoHead from '../../components/SeoHead';
 import Link from 'next/link';
 import { NoticeRow, SyllabusRow, CutoffRow, PaperRow, CalendarTable } from '../../components/rows';
 import ShareButtons from '../../components/ShareButtons';
-import { API_URL, DATE_COLORS, formatDate, daysUntil, formatViews, jobHref } from '../../lib/api';
+import { API_URL, API_TIMEOUT, apiRequest, DATE_COLORS, formatDate, daysUntil, formatViews, jobHref } from '../../lib/api';
 import { setListingCache } from '../../lib/cache';
 import { landingForCategory, landingForState, landingText } from '../../lib/landings';
 import { useLang } from '../../lib/i18n';
 import { localeUrl } from '../../lib/site';
+import { ldScript } from '../../lib/jsonld';
 
 /**
  * Everything the exam-content endpoints expose for one posting, fetched together.
@@ -27,7 +28,7 @@ import { localeUrl } from '../../lib/site';
 async function fetchForJob(jobId) {
   const one = async path => {
     try {
-      const res = await fetch(`${API_URL}/${path}/for-job/${jobId}`);
+      const res = await fetch(`${API_URL}/${path}/for-job/${jobId}`, apiRequest(API_TIMEOUT.secondary));
       if (!res.ok) return [];
       const data = await res.json();
       // The route returns a bare array; tolerate a Page body so switching one of
@@ -54,7 +55,7 @@ export async function getServerSideProps({ params, res }) {
   const empty = { notices: [], syllabi: [], cutoffs: [], calendar: [], papers: [] };
   try {
     const requested = String(params.id);
-    const apiRes = await fetch(`${API_URL}/jobs/${encodeURIComponent(requested)}`);
+    const apiRes = await fetch(`${API_URL}/jobs/${encodeURIComponent(requested)}`, apiRequest(API_TIMEOUT.primary));
     if (apiRes.status === 404) return { notFound: true };
     if (!apiRes.ok) throw new Error('backend error');
     const job = await apiRes.json();
@@ -72,6 +73,11 @@ export async function getServerSideProps({ params, res }) {
     setListingCache(res, { detail: true });
     return { props: { job, ...related, backendError: false } };
   } catch (err) {
+    // The response has to say 503 here, and this is the page where it matters
+    // most. A sleeping backend is the normal state of a free-tier host, so
+    // without this the site's most valuable URLs periodically answer 200 OK
+    // with an empty body — which tells a crawler the posting is gone.
+    setListingCache(res, { backendError: true });
     return { props: { job: null, ...empty, backendError: true } };
   }
 }
@@ -178,10 +184,17 @@ export default function JobDetail({
   if (backendError) {
     return (
       <div>
+        {/* This branch used to render no SeoHead, so the response carried no
+            title, no description and no canonical — a browser tab showing a raw
+            URL, and a share preview with nothing in it. noIndex is not set: the
+            response is a 503, which already tells a crawler to keep what it has
+            and come back, and a noindex served during a few minutes of downtime
+            can outlive the outage. */}
+        <SeoHead title={t('error.pageTitle')} description={t('error.pageBody')} />
         <Header />
         <div className="container" style={{ paddingTop: 20 }}>
           <div className="panel">
-            <div className="panel-head">{t('error.pageTitle')}</div>
+            <h1 className="panel-head">{t('error.pageTitle')}</h1>
             <p style={{ padding: 14, margin: 0 }}>
               {t('error.pageBody')}{' '}
               <Link href="/latest-jobs">{t('error.browseLatest')}</Link>.
@@ -238,18 +251,62 @@ export default function JobDetail({
     : '/previous-year-papers';
   const byCategory = path => (job.category ? `${path}?category=${job.category}` : path);
 
+  // One factual line about the posting, built once and used by both the meta
+  // description and the JSON-LD description so the two cannot drift apart.
+  //
+  // It exists mainly to give the structured data a floor. The description used
+  // to be `[eligibility, selectionProcess].join() || postName`, and a row
+  // imported from a CSV without those two columns therefore described itself as
+  // nothing but its own title. Google reads a JobPosting description as the
+  // substance of the posting and rejects the thin ones from the jobs experience,
+  // so the fallback has to carry real facts — and organisation, vacancy count
+  // and closing date are three the row always has.
+  const summaryLine = `${job.organization} — ${job.totalPosts ? `${job.totalPosts} posts · ` : ''}${t('job.lastDate')}: ${formatDate(job.lastDate)}.`;
+  const metaDescription = `${summaryLine}${job.eligibility ? ` ${job.eligibility.slice(0, 120)}` : ''}`;
+
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'JobPosting',
     title: job.postName,
-    description: [job.eligibility, job.selectionProcess].filter(Boolean).join('\n\n') || job.postName,
-    hiringOrganization: { '@type': 'Organization', name: job.organization },
+    description: [summaryLine, job.eligibility, job.selectionProcess].filter(Boolean).join('\n\n'),
+    hiringOrganization: {
+      '@type': 'Organization',
+      name: job.organization,
+      // sameAs is how a search engine ties "Staff Selection Commission" here to
+      // the same body named on a hundred other sites instead of treating it as a
+      // string this site made up. officialSource is a bare domain the backend
+      // already derives from the notification link, so this is the row's own
+      // data and not a guess.
+      ...(job.officialSource && { sameAs: `https://${job.officialSource}` }),
+    },
     jobLocation: {
       '@type': 'Place',
       address: { '@type': 'PostalAddress', addressCountry: 'IN', ...(job.state && { addressRegion: job.state }) },
     },
+    // Who may apply, which is a separate claim from where the work is. Every
+    // posting on this site is an Indian government recruitment open to Indian
+    // applicants, so this is stated rather than left to be inferred from
+    // addressCountry — a reader in another country is told plainly.
+    applicantLocationRequirements: { '@type': 'Country', name: 'India' },
     datePosted: job.applicationStartDate || new Date().toISOString().split('T')[0],
-    validThrough: job.lastDate,
+    // End of the closing day, not the start of it.
+    //
+    // A date-only validThrough is read as midnight at the beginning of that
+    // date, so a form that accepts applications all day on the 30th would be
+    // dropped from Google's jobs experience for the whole of the 30th — the one
+    // day the listing matters most. The explicit time moves expiry to the end of
+    // that day, which is what "last date" means on the page.
+    //
+    // Guarded even though last_date is NOT NULL in the schema: the cost of the
+    // guard is nothing, and the cost of being wrong is the literal string
+    // "nullT23:59:59+05:30" in the structured data, which invalidates the whole
+    // block rather than just one field.
+    ...(job.lastDate && { validThrough: `${job.lastDate}T23:59:59+05:30` }),
+    // An assumption, and worth naming as one: most sarkari recruitment is
+    // permanent full-time, but apprentice and contract notices exist and the Job
+    // entity has no column that distinguishes them. FULL_TIME is the right
+    // default for the majority; it becomes a real field the day the schema gains
+    // one.
     employmentType: 'FULL_TIME',
     url: pageUrl,
     ...(job.totalPosts != null && { totalJobOpenings: job.totalPosts }),
@@ -257,10 +314,22 @@ export default function JobDetail({
     // passed, which is correct -- but it also wants to know the page is still
     // maintained, and dateModified is how that is stated.
     ...(job.updatedAt && { dateModified: job.updatedAt }),
-    ...(job.officialApplyLink && {
-      directApply: false,
-      identifier: { '@type': 'PropertyValue', name: job.organization, value: String(job.id) },
-    }),
+    // Unconditional, and it used to hang off officialApplyLink.
+    //
+    // directApply answers "does this URL land on the application form?", and for
+    // this site the answer is no on every posting — it is an information page
+    // that links out to the department's portal. Tying it to whether we happen to
+    // hold that outbound link meant a row without one asserted nothing, and a
+    // JobPosting with no directApply is treated as unknown.
+    directApply: false,
+    // The advertisement number is the identifier the notice itself uses and the
+    // one a candidate would quote, so it is preferred over this site's own
+    // primary key. The id remains the fallback so the field is never absent.
+    identifier: {
+      '@type': 'PropertyValue',
+      name: job.organization,
+      value: job.advertisementNo || String(job.id),
+    },
   };
 
   // Breadcrumb markup so the search result shows "Home › SSC Jobs › <post>"
@@ -285,11 +354,12 @@ export default function JobDetail({
       <Header />
       <SeoHead
         title={job.postName}
-        description={`${job.organization} — ${job.totalPosts ? job.totalPosts + ' posts · ' : ''}${t('job.lastDate')}: ${formatDate(job.lastDate)}. ${job.eligibility ? job.eligibility.slice(0, 120) : ''}`}
+        description={metaDescription}
         canonical={canonicalPath}
+        ogType="article"
       />
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: ldScript(jsonLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: ldScript(breadcrumbLd) }} />
 
       <div className="container" style={{ paddingBottom: 20 }}>
         <nav className="crumbs" aria-label="Breadcrumb">

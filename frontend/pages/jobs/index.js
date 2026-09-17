@@ -16,8 +16,11 @@ export async function getServerSideProps({ query, res }) {
   const { items, page, totalPages, totalItems, backendError } =
     await fetchJobs({ category, state, search, page: query.page });
   // A search URL is not worth edge-caching: the query string is unbounded, so
-  // each one is a cold entry that evicts something a real visitor wanted.
-  setListingCache(res, { backendError: backendError || Boolean(search) });
+  // each one is a cold entry that evicts something a real visitor wanted. That
+  // is `uncacheable` and not `backendError` — the results are correct, they just
+  // should not be stored. The two used to share one flag, which would now mean
+  // answering 503 to every search.
+  setListingCache(res, { backendError, uncacheable: Boolean(search) });
   return {
     props: {
       jobs: items, page, totalPages, total: totalItems,

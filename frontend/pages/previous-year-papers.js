@@ -7,6 +7,7 @@ import ListingFilters from '../components/ListingFilters';
 import { PaperRow } from '../components/rows';
 import { fetchPapers, fetchExamYears, CATEGORIES } from '../lib/api';
 import { setListingCache } from '../lib/cache';
+import { paginatedCanonical } from '../lib/site';
 import { useLang } from '../lib/i18n';
 
 export async function getServerSideProps({ query, res }) {
@@ -68,7 +69,7 @@ export default function PreviousYearPapersPage({
       <SeoHead
         title={title}
         description={t('seo.papers.desc')}
-        canonical="/previous-year-papers"
+        canonical={paginatedCanonical('/previous-year-papers', page)}
       />
       <Header />
       <div className="container" style={{ paddingTop: 10, paddingBottom: 20 }}>

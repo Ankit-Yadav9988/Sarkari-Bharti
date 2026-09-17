@@ -48,6 +48,12 @@ const STRINGS = {
     'home.viewAll': 'View all',
     'home.searchPlaceholder': 'Search post or organization…',
     'home.search': 'Search',
+    // The homepage had no h1 at all. Deliberately not the same string as
+    // seo.default.title: the <title> competes for a click in a results list and
+    // leads with the brand, while an h1 is read on the page and is better spent
+    // saying what the page is. Both carry the terms this audience searches for.
+    'home.h1': 'Latest Government Jobs, Sarkari Results and Admit Cards',
+    'home.h1sub': 'Every central and state government vacancy, exam result, admit card and answer key — updated daily.',
     'home.browseByCategory': 'Browse by category',
 
     'ticker.label': 'CLOSING SOON',
@@ -315,6 +321,8 @@ const STRINGS = {
     'home.viewAll': 'सभी देखें',
     'home.searchPlaceholder': 'पद या संस्था खोजें…',
     'home.search': 'खोजें',
+    'home.h1': 'ताज़ा सरकारी नौकरी, सरकारी रिजल्ट और एडमिट कार्ड',
+    'home.h1sub': 'केंद्र और राज्य सरकार की सभी भर्ती, परीक्षा परिणाम, एडमिट कार्ड और आंसर की — रोज़ अपडेट।',
     'home.browseByCategory': 'श्रेणी से देखें',
 
     'ticker.label': 'जल्द बंद',

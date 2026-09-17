@@ -2,6 +2,26 @@
 
 export const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080/api';
 
+/**
+ * Just the scheme and host of the API, for a `preconnect` hint.
+ *
+ * The browser talks to the API directly in two places -- the subscribe form and
+ * the view counter -- and both are on a different origin from the page, so the
+ * first one pays a DNS lookup, a TCP handshake and a TLS negotiation before the
+ * request is even sent. Warming that in the document head moves those round
+ * trips to page load, where nobody is waiting on them.
+ *
+ * `null` when the value is a relative path such as "/api", which means the API
+ * is same-origin and there is nothing to warm.
+ */
+export const API_ORIGIN = (() => {
+  try {
+    return new URL(API_URL).origin;
+  } catch {
+    return null;
+  }
+})();
+
 export const CATEGORIES = [
   { value: 'CENTRAL_GOVT', label: 'Central Govt' },
   { value: 'UPSC', label: 'UPSC' },
@@ -110,12 +130,54 @@ export function daysUntil(isoDate) {
   return Math.round((target - today) / (1000 * 60 * 60 * 24));
 }
 
-// "New" = posted on this site within the last 48 hours.
+/**
+ * How long the glowing NEW badge stays on a vacancy, in days.
+ *
+ * Counted from the day applications open, inclusive: a form that opened today is
+ * on day 0, and the badge is gone on day 10.
+ */
+export const NEW_BADGE_DAYS = 10;
+
+/**
+ * Does this vacancy get the glowing NEW badge?
+ *
+ * Driven by the job's own opening date, never by when the row was inserted.
+ *
+ * It used to be `createdAt` within 48 hours, and that broke the moment content
+ * arrived in bulk: a CSV import stamps every row with today, so a hundred
+ * vacancies -- including ones whose forms shut years ago -- all glowed NEW at
+ * once. The badge meant "we added this", but every reader reads it as "this just
+ * opened". A vacancy's own dates are the only thing that survives an import, a
+ * re-import, or a row being edited later.
+ *
+ * Three ways to not be new:
+ *
+ *   closed              the form has shut. Nothing shut is new, and a glowing
+ *                       badge over a dead link is the worst thing on the page.
+ *   not open yet        applications start in the future. Those rows already
+ *                       carry the amber "opens in N days" chip, which says more
+ *                       than NEW does -- and a vacancy announced three months
+ *                       ahead would otherwise glow for three months, which is
+ *                       the same failure in a different disguise.
+ *   opened too long ago past NEW_BADGE_DAYS.
+ */
 export function isNew(job) {
-  if (!job.createdAt) return false;
-  const created = new Date(job.createdAt);
-  if (isNaN(created)) return false;
-  return Date.now() - created.getTime() < 48 * 60 * 60 * 1000;
+  if (!job) return false;
+
+  // The status the backend computed, checked first: it is the same rule the
+  // CLOSED chip is drawn from, so the badge and the chip cannot contradict each
+  // other on one row.
+  if (job.status === 'CLOSED') return false;
+
+  // The dates checked independently, for any response shape that omits status.
+  const daysLeft = daysUntil(job.lastDate);
+  if (daysLeft !== null && daysLeft < 0) return false;
+
+  const opensIn = daysUntil(job.applicationStartDate);
+  if (opensIn === null) return false; // no opening date -- nothing to measure from
+  if (opensIn > 0) return false;      // not open yet
+
+  return -opensIn < NEW_BADGE_DAYS;   // -opensIn is days since it opened
 }
 
 // 2300 -> "2.3k", 1200000 -> "1.2M" (social-proof view counter)
@@ -257,6 +319,43 @@ function normaliseList(data, uiPage, pageSize) {
   };
 }
 
+// --- Request budgets -------------------------------------------------------
+// There was no timeout on any of these, and on a free-tier backend that is a
+// real failure mode rather than a theoretical one. A Render free service spins
+// down after about fifteen idle minutes; the next request pays a cold JVM start
+// of thirty to sixty seconds. With no limit the render simply waits, and the
+// hosting platform kills the function before the backend answers -- so the
+// visitor gets a platform error page instead of this site's own "could not
+// load" state, and nothing usable is cached behind it either.
+//
+// Bounded, the worst case becomes a fast page the site controls, which is both
+// nicer to look at and honest about what happened.
+//
+// The two numbers are sized so a page never exceeds the ten seconds a Vercel
+// Hobby function is given, including the job page, which makes two waves of
+// requests one after the other: 6s + 3s leaves a second of headroom.
+export const API_TIMEOUT = {
+  /** The one request a page cannot render without. */
+  primary: 6000,
+  /** Supporting blocks. The page is still worth serving with these missing. */
+  secondary: 3000,
+};
+
+/**
+ * Fetch options carrying an abort timeout, or `{}` where that is unavailable.
+ *
+ * AbortSignal.timeout needs Node 18 or a 2022-era browser. The server always
+ * has it, and the server is where this matters -- the only client-side callers
+ * are admin screens. So an old browser degrades to the previous behaviour
+ * rather than throwing on a missing API.
+ */
+export function apiRequest(ms = API_TIMEOUT.primary) {
+  if (typeof AbortSignal !== 'undefined' && typeof AbortSignal.timeout === 'function') {
+    return { signal: AbortSignal.timeout(ms) };
+  }
+  return {};
+}
+
 async function safeGet(path, params = {}) {
   const query = new URLSearchParams(
     Object.entries(params)
@@ -265,10 +364,12 @@ async function safeGet(path, params = {}) {
   ).toString();
 
   try {
-    const res = await fetch(`${API_URL}${path}${query ? `?${query}` : ''}`);
+    const res = await fetch(`${API_URL}${path}${query ? `?${query}` : ''}`, apiRequest());
     if (!res.ok) return { data: null, backendError: true };
     return { data: await res.json(), backendError: false };
   } catch {
+    // Includes the abort: a timeout is a backend that did not answer, which is
+    // the same thing to a visitor as one that answered badly.
     return { data: null, backendError: true };
   }
 }

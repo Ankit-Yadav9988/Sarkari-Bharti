@@ -5,6 +5,7 @@ import Pagination from '../components/Pagination';
 import { NoticeRow, SectionList } from '../components/rows';
 import { fetchNotices } from '../lib/api';
 import { setListingCache } from '../lib/cache';
+import { paginatedCanonical } from '../lib/site';
 import { useLang } from '../lib/i18n';
 
 export async function getServerSideProps({ query, res }) {
@@ -21,7 +22,7 @@ export default function AnswerKey({ notices, page, totalPages, backendError }) {
       <SeoHead
         title={t('seo.answerKey.title')}
         description={t('seo.answerKey.desc')}
-        canonical="/answer-key"
+        canonical={paginatedCanonical('/answer-key', page)}
       />
       <Header />
       <div className="container" style={{ paddingTop: 10, paddingBottom: 20 }}>

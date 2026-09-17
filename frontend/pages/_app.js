@@ -1,6 +1,7 @@
 import Head from 'next/head';
 import { LangProvider } from '../lib/i18n';
 import Analytics from '../components/Analytics';
+import { API_ORIGIN } from '../lib/api';
 import { SITE, ANALYTICS } from '../lib/site';
 import '../styles/globals.css';
 
@@ -33,7 +34,19 @@ export default function App({ Component, pageProps }) {
 
         {/* Warm up the connection to the API before the first fetch. On a slow
             mobile network the DNS + TLS handshake is a bigger share of
-            time-to-content than the query itself. */}
+            time-to-content than the query itself.
+
+            This comment used to sit alone above the googletagmanager hint,
+            promising an API warm-up that was never here. crossOrigin is what
+            makes the hint usable: the browser keeps separate connection pools
+            for plain and CORS requests, and every call this page makes to the
+            API is a cross-origin fetch, so a preconnect without it opens a
+            socket that is then not reused. */}
+        {API_ORIGIN && <link rel="preconnect" href={API_ORIGIN} crossOrigin="anonymous" />}
+        {API_ORIGIN && <link rel="dns-prefetch" href={API_ORIGIN} />}
+
+        {/* Analytics is loaded lazily and is nobody's critical path, so it gets
+            the cheap hint rather than a held-open connection. */}
         <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
       </Head>
       <Component {...pageProps} />

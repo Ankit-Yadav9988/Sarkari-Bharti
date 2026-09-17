@@ -76,6 +76,29 @@ export function absoluteUrl(path = '/') {
 }
 
 /**
+ * The canonical path for one page of a paginated listing.
+ *
+ * Page 2 and beyond canonicalise to themselves. Nine listing pages used to pass
+ * a bare literal here — `canonical="/latest-jobs"` on every page of the
+ * listing — which tells Google that page 4 is a duplicate of page 1 and that the
+ * postings only page 4 shows do not exist as far as this site is concerned.
+ * `pages/[landing].js` had already worked this out and fixed it locally; this is
+ * that fix, in one place, so the next paginated page added cannot miss it.
+ *
+ * Only the page number is carried, deliberately. Several of these listings also
+ * take filters (`?category=SSC`, `?examYear=2020`), and those views keep
+ * consolidating onto the unfiltered page: a filtered listing is a slice of the
+ * same rows, none of the filtered URLs are in sitemap.xml, and splitting one set
+ * of content across a dozen indexable filter combinations is how a site competes
+ * with itself. That is a judgement rather than a rule, and it is the same one
+ * pages/jobs/index.js already documents at length.
+ */
+export function paginatedCanonical(basePath, page) {
+  const n = Number(page);
+  return n > 1 ? `${basePath}?page=${n}` : basePath;
+}
+
+/**
  * The locales this site is served in, and the default one.
  *
  * These live here rather than in lib/i18n.js because i18n.js pulls in React and

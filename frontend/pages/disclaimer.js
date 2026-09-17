@@ -6,7 +6,17 @@ import { SITE } from '../lib/site';
 export default function Disclaimer() {
   return (
     <div>
-      <SeoHead title="Disclaimer" description={`Disclaimer for ${SITE.name}.`} canonical="/disclaimer" noIndex />
+      {/* Indexable — same reasoning as /privacy, and it applies harder here. This
+          page is where the site says plainly that it is not a government body and
+          that the department's own notification is the authority. That is the
+          single most important thing a visitor arriving from a search for
+          "sarkari result" could be told, and it was marked noindex while sitting
+          in sitemap.xml. */}
+      <SeoHead
+        title="Disclaimer"
+        description={`${SITE.name} is a private information website and is not affiliated with any government department. Always confirm details from the official notification before applying.`}
+        canonical="/disclaimer"
+      />
       <Header />
       <div className="container" style={{ paddingTop: 24, paddingBottom: 40, maxWidth: 720 }}>
         <h1>Disclaimer</h1>

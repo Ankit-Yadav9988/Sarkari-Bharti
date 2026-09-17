@@ -3,8 +3,10 @@ import Footer from '../components/Footer';
 import SeoHead from '../components/SeoHead';
 import Pagination from '../components/Pagination';
 import { LatestJobRow, SectionList } from '../components/rows';
-import { fetchJobs } from '../lib/api';
+import { fetchJobs, jobHref } from '../lib/api';
 import { setListingCache } from '../lib/cache';
+import { paginatedCanonical } from '../lib/site';
+import { collectionPageJsonLd, ldScript } from '../lib/jsonld';
 import { useLang } from '../lib/i18n';
 
 export async function getServerSideProps({ query, res }) {
@@ -15,13 +17,30 @@ export async function getServerSideProps({ query, res }) {
 }
 
 export default function LatestJobs({ jobs, page, totalPages, total, backendError }) {
-  const { t } = useLang();
+  const { t, lang } = useLang();
   return (
     <div>
       <SeoHead
         title={t('seo.latest.title')}
         description={t('seo.latest.desc')}
-        canonical="/latest-jobs"
+        canonical={paginatedCanonical('/latest-jobs', page)}
+      />
+      {/* Every posting in this listing has its own page on this site, so the
+          collection can name its first ten entries. The notice and syllabus
+          listings link out to department PDFs instead and deliberately get no
+          ItemList — see lib/jsonld.js. */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: ldScript(collectionPageJsonLd({
+            name: t('seo.latest.title'),
+            description: t('seo.latest.desc'),
+            path: paginatedCanonical('/latest-jobs', page),
+            lang,
+            total,
+            items: jobs.map(j => ({ name: j.postName, path: jobHref(j) })),
+          })),
+        }}
       />
       <Header />
       <div className="container" style={{ paddingTop: 10, paddingBottom: 20 }}>

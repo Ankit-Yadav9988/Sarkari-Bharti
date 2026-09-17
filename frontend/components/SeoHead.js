@@ -15,6 +15,7 @@ export default function SeoHead({
   canonical,
   ogImage = OG_IMAGE,
   noIndex = false,
+  ogType = 'website',
 }) {
   const router = useRouter();
   const { t, lang } = useLang();
@@ -44,6 +45,23 @@ export default function SeoHead({
       <link rel="canonical" href={url} />
       {noIndex && <meta name="robots" content="noindex,nofollow" />}
 
+      {/* Preview limits, which are opt-in: the defaults are a short text snippet
+          and a thumbnail-sized image. Neither is what this site wants.
+
+          max-image-preview:large is the one that pays — it is a precondition for
+          the large-image treatment in Google's mobile results and for image
+          previews in Discover, which is a real traffic source for exam news in
+          India. max-snippet:-1 lets Google quote as much of a posting's
+          eligibility line as it judges useful instead of truncating at its
+          default length.
+
+          Only emitted when the page is indexable. Sending both a noindex and a
+          set of preview instructions in the same directive is contradictory, and
+          which half a crawler honours is not worth relying on. */}
+      {!noIndex && (
+        <meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1" />
+      )}
+
       {/* hreflang. Every page declares both languages and each declaration is
           reciprocal, which is what Google requires before it will treat them as
           one page in two languages instead of two competing pages.
@@ -60,7 +78,12 @@ export default function SeoHead({
       <link rel="alternate" hrefLang="x-default" href={localeUrl(path, DEFAULT_LOCALE)} />
 
       {/* Open Graph — WhatsApp, Telegram, Facebook preview cards */}
-      <meta property="og:type" content="website" />
+      {/* og:type was hardcoded "website" on every page, including the postings.
+          "article" is the type that lets a share carry a published time and reads
+          as a dated document rather than a site front page, which is what a
+          vacancy notice is. Defaulted rather than required, so a listing page
+          that passes nothing still gets the correct "website". */}
+      <meta property="og:type" content={ogType} />
       <meta property="og:site_name" content={SITE.name} />
       <meta property="og:title" content={fullTitle} />
       <meta property="og:description" content={desc} />

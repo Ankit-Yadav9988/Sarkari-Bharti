@@ -17,7 +17,11 @@ export default function Contact() {
 
   return (
     <div>
-      <SeoHead title="Contact Us" description={`Get in touch with the ${SITE.name} team.`} canonical="/contact" />
+      <SeoHead
+        title="Contact Us"
+        description={`Get in touch with the ${SITE.name} team to report a wrong date or a broken notification link, or to ask for a vacancy to be added.`}
+        canonical="/contact"
+      />
       <Header />
       <div className="container" style={{ paddingTop: 24, paddingBottom: 40, maxWidth: 600 }}>
         <h1>Contact us</h1>

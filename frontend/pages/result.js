@@ -5,6 +5,7 @@ import Pagination from '../components/Pagination';
 import { NoticeRow, SectionList } from '../components/rows';
 import { fetchNotices } from '../lib/api';
 import { setListingCache } from '../lib/cache';
+import { paginatedCanonical } from '../lib/site';
 import { useLang } from '../lib/i18n';
 
 export async function getServerSideProps({ query, res }) {
@@ -33,7 +34,7 @@ export default function Result({ results, page, totalPages, answerKeys, backendE
       <SeoHead
         title={t('seo.result.title')}
         description={t('seo.result.desc')}
-        canonical="/result"
+        canonical={paginatedCanonical('/result', page)}
       />
       <Header />
       <div className="container" style={{ paddingTop: 10, paddingBottom: 20 }}>
@@ -53,7 +54,13 @@ export default function Result({ results, page, totalPages, answerKeys, backendE
         {answerKeys.length > 0 && (
           <>
             <div className="page-head" style={{ borderTopColor: 'var(--c-answer)', marginTop: 18 }}>
-              <h1 style={{ color: 'var(--c-answer)', fontSize: '1.15rem' }}>🗝️ {t('nav.answerKey')}</h1>
+              {/* h2, not h1. This page is about results; answer keys are a
+                  related block on it. Two h1s on one page leaves a crawler to
+                  guess which one names the page, and the guess is not always the
+                  first — the reliable version is one h1 and a subordinate
+                  heading. Visually identical: the size was already overridden
+                  here, so nothing moves. */}
+              <h2 style={{ color: 'var(--c-answer)', fontSize: '1.15rem' }}>🗝️ {t('nav.answerKey')}</h2>
               <p>{t('page.result.answerSub')}</p>
             </div>
             <SectionList emptyText="">

@@ -6,7 +6,11 @@ import { SITE } from '../lib/site';
 export default function About() {
   return (
     <div>
-      <SeoHead title="About Us" description={`About ${SITE.name} — India's job portal for government and private vacancies.`} canonical="/about" />
+      <SeoHead
+        title="About Us"
+        description={`What ${SITE.name} is, where its listings come from, and how each vacancy, result and admit card is checked against the department's own notification before it goes up.`}
+        canonical="/about"
+      />
       <Header />
       <div className="container" style={{ paddingTop: 24, paddingBottom: 40, maxWidth: 720 }}>
         <h1>About {SITE.name}</h1>

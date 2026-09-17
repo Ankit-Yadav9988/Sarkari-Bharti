@@ -4,7 +4,7 @@ import Link from 'next/link';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import SeoHead from '../components/SeoHead';
-import { API_URL } from '../lib/api';
+import { API_URL, API_TIMEOUT, apiRequest } from '../lib/api';
 import { useLang } from '../lib/i18n';
 
 /**
@@ -41,6 +41,7 @@ export async function getServerSideProps({ query, req, res }) {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ token }),
+        ...apiRequest(API_TIMEOUT.primary),
       });
       alreadyDone = apiRes.ok;
     } catch {
@@ -86,9 +87,14 @@ export default function Unsubscribe({ token, alreadyDone }) {
 
       <div className="container" style={{ paddingTop: 24, paddingBottom: 40, maxWidth: 560 }}>
         <div className="panel">
-          <div className="panel-head" style={{ background: 'var(--maroon)' }}>
+          {/* h1, not a div. This page is noindex, so nothing here is about
+              ranking — it is that a page with no heading at all gives a screen
+              reader nothing to jump to, and this is the page someone lands on
+              from an email when they are already mildly annoyed. The panel-head
+              class carries its own size and weight, so it looks unchanged. */}
+          <h1 className="panel-head" style={{ background: 'var(--maroon)' }}>
             {t('unsub.title')}
-          </div>
+          </h1>
           <div style={{ padding: 16, textAlign: 'center' }}>
             {!token && (
               <p className="small muted" style={{ margin: 0 }}>{t('unsub.noToken')}</p>

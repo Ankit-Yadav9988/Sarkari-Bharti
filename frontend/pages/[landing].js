@@ -7,7 +7,8 @@ import { AllJobsRow, SectionList } from '../components/rows';
 import { fetchJobs, jobHref } from '../lib/api';
 import { setListingCache } from '../lib/cache';
 import { findLanding, categoryLandings, stateLandings, landingText } from '../lib/landings';
-import { localeUrl, SITE } from '../lib/site';
+import { SITE } from '../lib/site';
+import { collectionPageJsonLd, ldScript } from '../lib/jsonld';
 import { useLang } from '../lib/i18n';
 
 /**
@@ -53,12 +54,13 @@ export default function Landing({ landing, jobs, page, totalPages, total, backen
   // at page 1 tells Google the postings on them do not exist.
   const canonicalPath = page > 1 ? `${path}?page=${page}` : path;
 
-  // Built through localeUrl so the JSON-LD url and the canonical tag are the
-  // same string on both languages. They used to be composed separately, which
-  // is how a Hindi page ends up with a canonical of /hi/ssc-jobs and structured
-  // data claiming to be /ssc-jobs -- two contradictory answers to "which page
-  // is this", and the crawler is under no obligation to pick the right one.
-  const canonicalUrl = localeUrl(canonicalPath, lang);
+  // The JSON-LD url and the canonical tag have to be the same string on both
+  // languages. They used to be composed separately here, which is how a Hindi
+  // page ends up with a canonical of /hi/ssc-jobs and structured data claiming to
+  // be /ssc-jobs -- two contradictory answers to "which page is this", and the
+  // crawler is under no obligation to pick the right one. Both are now derived
+  // from canonicalPath: SeoHead runs it through localeUrl, and so does
+  // collectionPageJsonLd, so there is no second composition to get wrong.
 
   // Sibling landings as a link grid at the bottom. Internal links are how these
   // pages get crawled at all -- a page reachable only from the sitemap tends to
@@ -70,26 +72,19 @@ export default function Landing({ landing, jobs, page, totalPages, total, backen
   // ItemList tells Google this page is a list of postings and lets it show the
   // count; the postings themselves carry their own JobPosting markup on the
   // detail pages, so this deliberately does not duplicate it here.
-  const jsonLd = {
-    '@context': 'https://schema.org',
-    '@type': 'CollectionPage',
+  // Built by the shared helper, which every other listing page now uses too.
+  // This block used to be written out longhand here and was the only
+  // CollectionPage on the site; when the other listings needed one, copying it
+  // ten times was the alternative. isPartOf and the numberOfItems fallback come
+  // free from moving it.
+  const jsonLd = collectionPageJsonLd({
     name: text.title,
     description: text.intro,
-    inLanguage: lang === 'hi' ? 'hi-IN' : 'en-IN',
-    url: canonicalUrl,
-    ...(total > 0 && {
-      mainEntity: {
-        '@type': 'ItemList',
-        numberOfItems: total,
-        itemListElement: jobs.slice(0, 10).map((j, i) => ({
-          '@type': 'ListItem',
-          position: i + 1,
-          name: j.postName,
-          url: localeUrl(jobHref(j), lang),
-        })),
-      },
-    }),
-  };
+    path: canonicalPath,
+    lang,
+    total,
+    items: jobs.map(j => ({ name: j.postName, path: jobHref(j) })),
+  });
 
   return (
     <div>
@@ -98,7 +93,7 @@ export default function Landing({ landing, jobs, page, totalPages, total, backen
         description={`${text.intro} ${t('landing.descSuffix')}`}
         canonical={canonicalPath}
       />
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: ldScript(jsonLd) }} />
       <Header />
 
       <div className="container" style={{ paddingTop: 10, paddingBottom: 20 }}>

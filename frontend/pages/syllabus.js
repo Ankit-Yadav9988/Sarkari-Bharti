@@ -7,6 +7,7 @@ import { SyllabusRow } from '../components/rows';
 import { fetchSyllabi, CATEGORIES } from '../lib/api';
 import { categoryName } from '../lib/landings';
 import { setListingCache } from '../lib/cache';
+import { paginatedCanonical } from '../lib/site';
 import { useLang } from '../lib/i18n';
 
 export async function getServerSideProps({ query, res }) {
@@ -32,7 +33,7 @@ export default function SyllabusPage({ syllabi, page, totalPages, backendError, 
       <SeoHead
         title={t('seo.syllabus.title')}
         description={t('seo.syllabus.desc')}
-        canonical="/syllabus"
+        canonical={paginatedCanonical('/syllabus', page)}
       />
       <Header />
       <div className="container" style={{ paddingTop: 10, paddingBottom: 20 }}>

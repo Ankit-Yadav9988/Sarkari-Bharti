@@ -3,8 +3,10 @@ import Footer from '../components/Footer';
 import SeoHead from '../components/SeoHead';
 import Pagination from '../components/Pagination';
 import { UpcomingJobRow, SectionList } from '../components/rows';
-import { fetchJobs } from '../lib/api';
+import { fetchJobs, jobHref } from '../lib/api';
 import { setListingCache } from '../lib/cache';
+import { paginatedCanonical } from '../lib/site';
+import { collectionPageJsonLd, ldScript } from '../lib/jsonld';
 import { useLang } from '../lib/i18n';
 
 export async function getServerSideProps({ query, res }) {
@@ -18,13 +20,26 @@ export async function getServerSideProps({ query, res }) {
 }
 
 export default function UpcomingJobs({ jobs, page, totalPages, total, backendError }) {
-  const { t } = useLang();
+  const { t, lang } = useLang();
   return (
     <div>
       <SeoHead
         title={t('seo.upcoming.title')}
         description={t('seo.upcoming.desc')}
-        canonical="/upcoming-jobs"
+        canonical={paginatedCanonical('/upcoming-jobs', page)}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: ldScript(collectionPageJsonLd({
+            name: t('seo.upcoming.title'),
+            description: t('seo.upcoming.desc'),
+            path: paginatedCanonical('/upcoming-jobs', page),
+            lang,
+            total,
+            items: jobs.map(j => ({ name: j.postName, path: jobHref(j) })),
+          })),
+        }}
       />
       <Header />
       <div className="container" style={{ paddingTop: 10, paddingBottom: 20 }}>

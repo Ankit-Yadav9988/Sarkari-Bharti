@@ -29,6 +29,10 @@ import { useLang } from '../lib/i18n';
 // host, and the date beside it, is what separates this from those. It is not
 // decoration and it is not optional per row -- SourceLine is used by all of them.
 
+// The glowing NEW badge. The rule lives in lib/api.js `isNew`: applications
+// opened within the last NEW_BADGE_DAYS days, and the form is not shut. Never
+// on a closed job, and never on one that has not opened yet -- those rows get
+// the amber "opens in N days" chip below instead.
 function NewTag({ job }) {
   const { t } = useLang();
   if (!isNew(job)) return null;

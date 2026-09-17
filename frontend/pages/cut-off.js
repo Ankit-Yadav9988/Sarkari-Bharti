@@ -7,6 +7,7 @@ import ListingFilters from '../components/ListingFilters';
 import { CutoffRow } from '../components/rows';
 import { fetchCutoffs, fetchExamYears, CATEGORIES } from '../lib/api';
 import { setListingCache } from '../lib/cache';
+import { paginatedCanonical } from '../lib/site';
 import { useLang } from '../lib/i18n';
 
 export async function getServerSideProps({ query, res }) {
@@ -64,7 +65,7 @@ export default function CutOffPage({ cutoffs, page, totalPages, backendError, ca
       <SeoHead
         title={title}
         description={t('seo.cutOff.desc')}
-        canonical="/cut-off"
+        canonical={paginatedCanonical('/cut-off', page)}
       />
       <Header />
       <div className="container" style={{ paddingTop: 10, paddingBottom: 20 }}>

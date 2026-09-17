@@ -8,7 +8,22 @@ const EFFECTIVE_DATE = '1 August 2025';
 export default function Privacy() {
   return (
     <div>
-      <SeoHead title="Privacy Policy" description={`Privacy policy for ${SITE.name}.`} canonical="/privacy" noIndex />
+      {/* Indexable, and it used to carry noIndex while also being listed in
+          sitemap.xml — a contradiction Search Console reports as "Submitted URL
+          marked noindex", which is an error against the property whether or not
+          anyone wanted the page indexed.
+
+          Resolved in favour of indexing rather than by dropping it from the
+          sitemap. A site that republishes government recruitment information is
+          judged partly on whether it is transparent about who runs it and what it
+          does with a visitor's email, and a policy page Google cannot read is a
+          trust signal thrown away. It is linked from the footer of every page, so
+          it was being crawled regardless; noindex only discarded the result. */}
+      <SeoHead
+        title="Privacy Policy"
+        description={`How ${SITE.name} handles your data: what the email alert list stores, how to unsubscribe at any time, and which third-party services the site uses.`}
+        canonical="/privacy"
+      />
       <Header />
       <div className="container" style={{ paddingTop: 24, paddingBottom: 40, maxWidth: 720 }}>
         <h1>Privacy Policy</h1>

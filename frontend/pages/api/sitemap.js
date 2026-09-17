@@ -3,6 +3,7 @@
 
 import { landingPaths } from '../../lib/landings';
 import { setFeedCache } from '../../lib/cache';
+import { API_TIMEOUT, apiRequest } from '../../lib/api';
 import { LOCALES, DEFAULT_LOCALE, localeUrl, hreflangFor } from '../../lib/site';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080/api';
@@ -27,6 +28,13 @@ const STATIC_PAGES = [
   { path: '/admission',     priority: '0.7', changefreq: 'daily'   },
   { path: '/about',         priority: '0.3', changefreq: 'monthly' },
   { path: '/contact',       priority: '0.3', changefreq: 'monthly' },
+  // These two were listed here while their pages emitted a noindex, which
+  // Search Console reports as "Submitted URL marked 'noindex'" — an error on the
+  // property that sits alongside the real ones and makes the report harder to
+  // read. Resolved by making the pages indexable rather than by dropping them
+  // from here: a site republishing government notices is judged partly on
+  // whether it says plainly who runs it and that it is not the government, so
+  // those two pages are worth having read. Priority stays lowest.
   { path: '/privacy',       priority: '0.2', changefreq: 'yearly'  },
   { path: '/disclaimer',    priority: '0.2', changefreq: 'yearly'  },
 ];
@@ -94,7 +102,11 @@ const MAX_JOB_PAGES = 20;
 
 async function getPage(page) {
   try {
-    const r = await fetch(`${API_URL}/jobs?page=${page}&size=${JOBS_PER_REQUEST}`);
+    // Bounded like every other server-side call. Up to twenty of these run in
+    // sequence, so an unbounded one turns a cold backend into a sitemap request
+    // that never returns -- and Search Console records that as a fetch error
+    // against the whole file, not as a slow one.
+    const r = await fetch(`${API_URL}/jobs?page=${page}&size=${JOBS_PER_REQUEST}`, apiRequest(API_TIMEOUT.primary));
     if (!r.ok) return null;
     return await r.json();
   } catch {

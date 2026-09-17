@@ -7,6 +7,7 @@ import ListingFilters from '../components/ListingFilters';
 import { CalendarTable } from '../components/rows';
 import { fetchExamCalendar, fetchExamYears, CATEGORIES } from '../lib/api';
 import { setListingCache } from '../lib/cache';
+import { paginatedCanonical } from '../lib/site';
 import { useLang } from '../lib/i18n';
 
 export async function getServerSideProps({ query, res }) {
@@ -63,7 +64,7 @@ export default function ExamCalendarPage({
       <SeoHead
         title={examYear ? `${t('seo.examCalendar.title')} ${examYear}` : t('seo.examCalendar.title')}
         description={t('seo.examCalendar.desc')}
-        canonical="/exam-calendar"
+        canonical={paginatedCanonical('/exam-calendar', page)}
       />
       <Header />
       <div className="container" style={{ paddingTop: 10, paddingBottom: 20 }}>

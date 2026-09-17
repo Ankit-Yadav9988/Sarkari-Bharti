@@ -3,8 +3,10 @@ import Footer from '../components/Footer';
 import SeoHead from '../components/SeoHead';
 import Pagination from '../components/Pagination';
 import { LatestJobRow, SectionList } from '../components/rows';
-import { fetchJobs } from '../lib/api';
+import { fetchJobs, jobHref } from '../lib/api';
 import { setListingCache } from '../lib/cache';
+import { paginatedCanonical } from '../lib/site';
+import { collectionPageJsonLd, ldScript } from '../lib/jsonld';
 import { useLang } from '../lib/i18n';
 
 // Admissions are posted as jobs with category=ADMISSION, so the admin uses
@@ -17,13 +19,27 @@ export async function getServerSideProps({ query, res }) {
 }
 
 export default function Admission({ jobs, page, totalPages, backendError }) {
-  const { t } = useLang();
+  const { t, lang } = useLang();
   return (
     <div>
       <SeoHead
         title={t('seo.admission.title')}
         description={t('seo.admission.desc')}
-        canonical="/admission"
+        canonical={paginatedCanonical('/admission', page)}
+      />
+      {/* No `total` prop on this page, so numberOfItems falls back to the number
+          of rows present. lib/jsonld.js does that rather than emitting a zero. */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: ldScript(collectionPageJsonLd({
+            name: t('seo.admission.title'),
+            description: t('seo.admission.desc'),
+            path: paginatedCanonical('/admission', page),
+            lang,
+            items: jobs.map(j => ({ name: j.postName, path: jobHref(j) })),
+          })),
+        }}
       />
       <Header />
       <div className="container" style={{ paddingTop: 10, paddingBottom: 20 }}>

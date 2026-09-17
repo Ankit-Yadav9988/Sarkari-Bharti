@@ -41,3 +41,10 @@ backend/*.log
 .DS_Store
 Thumbs.db
 desktop.ini
+
+# ---- Reticle ----
+# Written by `npx @reticlehq/server init` / `login`. cloud.json holds the link to
+# the Reticle Cloud workspace, so this is a credential directory and stays out of
+# a public repo. Added ahead of running init rather than after, because the
+# window in which it is untracked is the window in which it gets committed.
+.reticle/

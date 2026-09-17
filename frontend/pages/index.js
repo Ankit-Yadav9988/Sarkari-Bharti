@@ -10,6 +10,7 @@ import SubscribeBox from '../components/SubscribeBox';
 import { LatestJobRow, UpcomingJobRow, NoticeRow } from '../components/rows';
 import { fetchJobs, fetchNotices, fetchSyllabi, CATEGORIES, formatDate, daysUntil, jobHref } from '../lib/api';
 import { setListingCache } from '../lib/cache';
+import { siteJsonLd, ldScript } from '../lib/jsonld';
 import { useLang } from '../lib/i18n';
 
 // The homepage is the product. Someone arriving here should be able to reach
@@ -71,7 +72,7 @@ export default function Home({
   answerKeys, syllabi, admissions, backendError,
 }) {
   const router = useRouter();
-  const { t } = useLang();
+  const { t, lang } = useLang();
   const [query, setQuery] = useState('');
 
   // Ticker = things that expire. The backend already ordered these by deadline;
@@ -102,10 +103,27 @@ export default function Home({
   return (
     <div>
       <SeoHead canonical="/" />
+      {/* The homepage had no structured data at all — the one page on the site
+          where a search engine looks for who publishes it. Organization and
+          WebSite are site-level facts, so they are emitted here and nowhere
+          else. */}
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: ldScript(siteJsonLd(lang)) }} />
       <Header />
       <Ticker items={tickerItems} label={t('ticker.label')} />
 
       <div className="container" style={{ paddingTop: 10 }}>
+        {/* The site's only h1, and until now it did not exist.
+            Every listing page had one; the homepage — the page most likely to
+            rank for the site's own name and for "sarkari result" — went straight
+            from the ticker to the search box, leaving a crawler to infer the
+            subject from nav links. Placed above the search bar because that is
+            where a reader looks first anyway, and kept to two compact lines so
+            the boxes below stay above the fold on a phone. */}
+        <div className="home-head">
+          <h1>{t('home.h1')}</h1>
+          <p>{t('home.h1sub')}</p>
+        </div>
+
         <form onSubmit={handleSearch} className="searchbar" role="search">
           <input
             className="input"
