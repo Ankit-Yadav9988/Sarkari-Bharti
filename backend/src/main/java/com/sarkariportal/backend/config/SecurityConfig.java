@@ -1,7 +1,7 @@
 package com.sarkariportal.backend.config;
 
-import com.sarkariportal.backend.security.JwtAuthFilter;
-import jakarta.servlet.http.HttpServletResponse;
+import java.io.IOException;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -15,7 +15,9 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.header.writers.ReferrerPolicyHeaderWriter;
 
-import java.io.IOException;
+import com.sarkariportal.backend.security.JwtAuthFilter;
+
+import jakarta.servlet.http.HttpServletResponse;
 
 @Configuration
 @EnableWebSecurity
@@ -77,6 +79,7 @@ public class SecurityConfig {
                 // site is alive must not need the site's auth to be working. It
                 // returns "up" or "down" and nothing else; see HealthController.
                 .requestMatchers(HttpMethod.GET, "/api/health").permitAll()
+                 .requestMatchers(HttpMethod.HEAD, "/api/health").permitAll()
 
                 // --- Public reads: the whole point of the site ---
                 .requestMatchers(HttpMethod.GET, "/api/jobs/**").permitAll()
