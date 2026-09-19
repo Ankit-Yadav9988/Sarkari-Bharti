@@ -84,7 +84,13 @@ export async function runPipeline({ sources = SOURCES, now = new Date(), state: 
   const state = suppliedState || await readState(); state.requests ||= {}; state.candidates ||= {};
   const client = suppliedClient || createPoliteClient({ state });
   const discovery = await discover({ sources, state, client, cacheDir: CACHE_DIR });
-  if (discovery.reports.every(r => !r.ok)) throw new Error('Every source failed; refusing to produce an empty, misleading run.');
+  for (const report of discovery.reports.filter(r => !r.ok)) {
+    console.warn(`SOURCE FAILED — ${report.source.name}: ${report.error}`);
+  }
+  if (discovery.reports.every(r => !r.ok)) {
+    const reasons = discovery.reports.map(r => `${r.source.name}: ${r.error}`).join(' | ');
+    throw new Error(`Every source failed; refusing to produce an empty, misleading run. ${reasons}`);
+  }
 
   const { urls: publishedUrls, warning } = await publishedNotificationUrls();
   const rows = []; let skippedPublished = 0; const warnings = warning ? [warning] : [];

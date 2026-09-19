@@ -3,7 +3,7 @@ import { parseIndianDate, dateNearLabel, extractApplicationDates } from './lib/d
 import { linksFromHtml } from './lib/html.js';
 import { robotsAllows } from './lib/http.js';
 import { extractJob } from './lib/extract.js';
-import { canonicalUrl, inspectSource } from './discover.js';
+import { canonicalUrl, inspectSource, linksFromJson } from './discover.js';
 import { header, toCsv, previewValidation } from './lib/csv-out.js';
 
 let checks = 0;
@@ -26,6 +26,14 @@ const source = { id: 'test', name: 'Test', url: 'https://example.gov.in/notices'
 const sourceHtml = '<a href="a.pdf">Recruitment notice</a><a href="b.pdf">Vacancy</a><a href="c">home</a><a href="d">about</a><a href="e">contact</a>';
 equal(inspectSource({ source, html: sourceHtml }).candidates.length, 2, 'keywords select notices without selectors');
 assert.throws(() => inspectSource({ source, html: '<a href="a">one</a>' }), /minimum is 5/, 'link-count floor prevents silent success'); checks += 1;
+const jsonLinks = linksFromJson({ data: [
+  { headline: 'Recruitment notice', redirectUrl: '/notice.pdf' },
+  { title: 'Vacancy announcement', attachmentUrl: '/vacancy.pdf' },
+  { headline: 'Recruitment attachment', attachments: [{ url: '/nested.pdf' }] },
+  { title: 'A non-link item' }, { title: 'Ignored duplicate', fileUrl: '/notice.pdf' },
+] }, 'https://example.gov.in/feed');
+equal(jsonLinks.length, 3, 'official JSON feeds yield unique document links');
+equal(inspectSource({ source, links: [...jsonLinks, { url: 'https://example.gov.in/a', text: 'a' }, { url: 'https://example.gov.in/b', text: 'b' }, { url: 'https://example.gov.in/c', text: 'c' }] }).candidates.length, 3, 'JSON links use the same keyword filter');
 check(robotsAllows('User-agent: *\nDisallow: /admin\nAllow: /', '/jobs'), 'robots allows public path');
 check(!robotsAllows('User-agent: *\nDisallow: /admin', '/admin/import'), 'robots blocks disallowed path');
 

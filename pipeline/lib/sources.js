@@ -2,7 +2,11 @@
 export const SOURCES = [
   {
     id: 'ssc', name: 'Staff Selection Commission', organization: 'Staff Selection Commission', category: 'SSC',
-    url: 'https://ssc.gov.in/', allowedHosts: ['ssc.gov.in'],
+    // The public notice board is rendered client-side. This is its official
+    // read-only data feed, so a normal HTTP request sees the same notices that
+    // a browser receives instead of an empty application shell.
+    url: 'https://ssc.gov.in/api/general-website/portal/notice-boards?page=1&limit=50&contentType=notice-boards&key=createdAt&order=DESC&isAttachment=true&language=english&attributes=id%2Cheadline%2CexamId%2CcontentType%2CredirectUrl%2CstartDate%2CendDate%2Clanguage%2CcreatedAt',
+    format: 'json', allowedHosts: ['ssc.gov.in'],
   },
   {
     id: 'rrb', name: 'Railway Recruitment Board', organization: 'Railway Recruitment Board', category: 'RAILWAY',

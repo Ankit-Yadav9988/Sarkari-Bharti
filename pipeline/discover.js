@@ -20,8 +20,33 @@ export function isCandidate(link, source, { includeNotices = false } = {}) {
   return words.some(word => haystack.includes(word.toLowerCase()));
 }
 
-export function inspectSource({ source, html, includeNotices = false }) {
-  const all = linksFromHtml(html, source.url).map(link => ({ ...link, url: canonicalUrl(link.url) }));
+/**
+ * Extract document links from a public JSON feed without assuming a particular
+ * response wrapper (some departments call it `data`, others `items` or `rows`).
+ */
+export function linksFromJson(json, baseUrl) {
+  const links = []; const seen = new Set();
+  const visit = (value, inheritedText = '') => {
+    if (Array.isArray(value)) { value.forEach(item => visit(item, inheritedText)); return; }
+    if (!value || typeof value !== 'object') return;
+    const localText = [value.headline, value.title, value.name, value.subject, value.description]
+      .filter(v => typeof v === 'string').join(' ').replace(/\s+/g, ' ').trim();
+    const text = [inheritedText, localText].filter(Boolean).join(' ').replace(/\s+/g, ' ').trim();
+    for (const [key, raw] of Object.entries(value)) {
+      if (typeof raw !== 'string' || !/(?:url|link|redirect|attachment|document|file)/i.test(key)) continue;
+      try {
+        const url = new URL(raw, baseUrl);
+        if (!/^https?:$/.test(url.protocol) || seen.has(url.href)) continue;
+        seen.add(url.href); links.push({ url: url.href, text });
+      } catch { /* non-URL metadata is not a link */ }
+    }
+    Object.values(value).forEach(child => visit(child, text));
+  };
+  visit(json); return links;
+}
+
+export function inspectSource({ source, html, links, includeNotices = false }) {
+  const all = (links || linksFromHtml(html, source.url)).map(link => ({ ...link, url: canonicalUrl(link.url) }));
   if (all.length < 5) throw new Error(`${source.name}: only ${all.length} links found (minimum is 5); treating this as a source failure.`);
   const unique = new Map();
   for (const link of all) if (isCandidate(link, source, { includeNotices })) unique.set(link.url, link);
@@ -38,7 +63,13 @@ export async function discover({
       // Source-page bodies use the same conditional cache as PDFs. A 304 is
       // therefore a cheap normal success, not an impossible empty response.
       const downloaded = await fetchCached(client, source.url, cacheDir, { readOnly });
-      const report = inspectSource({ source, html: downloaded.body.toString('utf8'), includeNotices });
+      const body = downloaded.body.toString('utf8');
+      let links;
+      if (source.format === 'json') {
+        try { links = linksFromJson(JSON.parse(body), source.url); }
+        catch { throw new Error(`${source.name}: official JSON feed returned invalid JSON.`); }
+      }
+      const report = inspectSource({ source, html: body, links, includeNotices });
       reports.push({ source, ok: true, ...report });
       candidates.push(...report.candidates.map(link => ({ source, ...link })));
     } catch (error) { reports.push({ source, ok: false, error: error.message, linksSeen: 0, candidates: [] }); }
