@@ -1,0 +1,46 @@
+name: Collect official job notices
+
+on:
+  schedule:
+    # 06:00 IST (UTC+05:30). GitHub cron only supports whole minutes in UTC.
+    - cron: '30 0 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: official-notice-collection
+  cancel-in-progress: false
+
+jobs:
+  collect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Restore document cache
+        uses: actions/cache@v4
+        with:
+          path: pipeline/cache
+          key: official-notice-cache-${{ runner.os }}-${{ github.run_id }}
+          restore-keys: |
+            official-notice-cache-${{ runner.os }}-
+      - name: Install PDF text extractor
+        run: sudo apt-get update && sudo apt-get install -y poppler-utils
+      - name: Collect candidates
+        working-directory: pipeline
+        env:
+          # Set this repository secret to the public backend API base, e.g.
+          # https://your-api.example/api. If absent the run remains safe but
+          # cannot remove jobs already published on the site.
+          SARKARI_API_URL: ${{ secrets.SARKARI_API_URL }}
+        run: node run.js
+      - name: Commit state and review files
+        run: |
+          git add pipeline/state/seen.json pipeline/out
+          git diff --cached --quiet || git commit -m "chore: collect official job notices"
+          git push

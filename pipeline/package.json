@@ -1,0 +1,16 @@
+{
+  "name": "sarkari-bharti-pipeline",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "DISCOVER + EXTRACT for Sarkari Bharti. Produces a CSV for the existing admin importer. It never writes to the database.",
+  "scripts": {
+    "discover": "node discover.js",
+    "dry-run": "node discover.js --dry-run",
+    "run": "node run.js",
+    "test": "node pipeline-check.js"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

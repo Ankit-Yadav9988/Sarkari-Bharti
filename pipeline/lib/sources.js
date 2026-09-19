@@ -1,0 +1,22 @@
+/** Official pages chosen for broad notice coverage, not unofficial aggregators. */
+export const SOURCES = [
+  {
+    id: 'ssc', name: 'Staff Selection Commission', organization: 'Staff Selection Commission', category: 'SSC',
+    url: 'https://ssc.gov.in/', allowedHosts: ['ssc.gov.in'],
+  },
+  {
+    id: 'rrb', name: 'Railway Recruitment Board', organization: 'Railway Recruitment Board', category: 'RAILWAY',
+    url: 'https://www.rrbcdg.gov.in/employment-notices.php', allowedHosts: ['rrbcdg.gov.in', 'www.rrbcdg.gov.in'],
+  },
+  {
+    id: 'upsc', name: 'Union Public Service Commission', organization: 'Union Public Service Commission', category: 'UPSC',
+    url: 'https://upsc.gov.in/recruitment/recruitment-advertisement', allowedHosts: ['upsc.gov.in', 'www.upsc.gov.in'],
+  },
+];
+
+export const RECRUITMENT_KEYWORDS = [
+  'recruitment', 'vacancy', 'vacancies', 'advertisement', 'advt', 'employment notice',
+  'apply online', 'online application', 'notification', 'centralised employment', 'भर्ती', 'विज्ञापन', 'रोजगार',
+];
+
+export const NOTICE_KEYWORDS = ['result', 'admit card', 'answer key', 'results', 'e-call letter', 'परिणाम', 'प्रवेश पत्र', 'उत्तर कुंजी'];

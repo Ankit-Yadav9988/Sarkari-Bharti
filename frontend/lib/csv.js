@@ -69,8 +69,22 @@ export function parseCsv(text) {
 }
 
 /**
- * The columns the importer understands. Everything is optional except postName
- * and organization, which are the two the backend rejects a job without.
+ * The columns the importer understands. Four are required, because those four
+ * are the ones the backend cannot store a job without: postName and
+ * organization, plus both dates.
+ *
+ * The dates are required for a blunt reason: `application_start_date` and
+ * `last_date` are declared NOT NULL in V1__baseline_schema.sql and
+ * `nullable = false` on Job.java. A row with a blank date is therefore not a
+ * row the backend might dislike — it is a guaranteed constraint violation. And
+ * because JobController takes the body without @Valid and the entity carries no
+ * validation annotations, that violation surfaces as a 500 from the database
+ * layer, not a readable 400. Worse, import.js POSTs one row at a time, so the
+ * rows above it are already committed by the time it fails: the admin is left
+ * with a half-imported file and an opaque error.
+ *
+ * Catching it here costs one word per column and turns all of that into a line
+ * in the "skipped" list saying exactly which field is missing.
  *
  * Header matching is case- and separator-insensitive, so "Post Name",
  * "post_name" and "postName" are the same column. The admin is pasting from a
@@ -85,8 +99,8 @@ export const CSV_COLUMNS = [
   { key: 'listingSection', enum: SECTION_VALUES },
   { key: 'state', enum: STATES },
   { key: 'totalPosts', number: true },
-  { key: 'applicationStartDate', date: true },
-  { key: 'lastDate', date: true },
+  { key: 'applicationStartDate', date: true, required: true },
+  { key: 'lastDate', date: true, required: true },
   { key: 'admitCardDate', date: true },
   { key: 'examDate', date: true },
   { key: 'resultDate', date: true },

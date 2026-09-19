@@ -15,6 +15,7 @@ application-prod.properties
 # ---- Node / Next (frontend) ----
 node_modules/
 .next/
+pipeline/cache/
 out/
 .vercel
 npm-debug.log*
