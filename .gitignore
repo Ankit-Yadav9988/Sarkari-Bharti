@@ -17,6 +17,11 @@ node_modules/
 .next/
 pipeline/cache/
 out/
+# The collector's review CSV and Markdown report are intentional workflow
+# artifacts. Keep the broad `out/` rule for other build output, but allow this
+# tracked directory so the workflow can commit each run for human review.
+!pipeline/out/
+!pipeline/out/**
 .vercel
 npm-debug.log*
 yarn-error.log*
