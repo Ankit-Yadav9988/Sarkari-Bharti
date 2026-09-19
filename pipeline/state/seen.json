@@ -4,15 +4,47 @@
     "https://ssc.gov.in/api/general-website/portal/notice-boards?page=1&limit=50&contentType=notice-boards&key=createdAt&order=DESC&isAttachment=true&language=english&attributes=id%2Cheadline%2CexamId%2CcontentType%2CredirectUrl%2CstartDate%2CendDate%2Clanguage%2CcreatedAt": {
       "etag": "W/\"17fb-29uvCT8xOh6MCC3A7d2VQk/kuJQ\"",
       "lastModified": null,
-      "checkedAt": "2026-09-19T16:26:34.961Z"
+      "checkedAt": "2026-09-19T16:43:31.850Z"
     },
     "https://ssc.gov.in/api/general-website/portal/notice_16092026.pdf": {
       "etag": null,
       "lastModified": null,
-      "checkedAt": "2026-09-19T16:27:17.546Z"
+      "checkedAt": "2026-09-19T16:43:35.063Z"
+    },
+    "https://ssc.gov.in/api/general-website/portal/English_JE_17092026.pdf": {
+      "etag": null,
+      "lastModified": null,
+      "checkedAt": "2026-09-19T16:43:33.059Z"
+    },
+    "https://ssc.gov.in/api/general-website/portal/Important%20Notice%202026_cgle_2026_12092026.pdf": {
+      "etag": null,
+      "lastModified": null,
+      "checkedAt": "2026-09-19T16:43:37.063Z"
+    },
+    "https://ssc.gov.in/api/general-website/portal/notice_11092026.pdf": {
+      "etag": null,
+      "lastModified": null,
+      "checkedAt": "2026-09-19T16:43:39.058Z"
+    },
+    "https://ssc.gov.in/api/general-website/portal/Notice_of_adv_capf_2026.pdf": {
+      "etag": null,
+      "lastModified": null,
+      "checkedAt": "2026-09-19T16:43:41.067Z"
+    },
+    "https://ssc.gov.in/api/general-website/portal/Addendum_JE_10092026.pdf": {
+      "etag": null,
+      "lastModified": null,
+      "checkedAt": "2026-09-19T16:43:43.063Z"
     }
   },
-  "candidates": {},
+  "candidates": {
+    "https://ssc.gov.in/api/general-website/portal/notice-boards?page=1&limit=50&contentType=notice-boards&key=createdAt&order=DESC&isAttachment=true&language=english&attributes=id%2Cheadline%2CexamId%2CcontentType%2CredirectUrl%2CstartDate%2CendDate%2Clanguage%2CcreatedAt": {
+      "hash": "23a0da882e9bbe5c7a44fb87e68559cdc210e2f4f7b9e79f59f2c96918ae82cc",
+      "status": "processed",
+      "seenAt": "2026-09-19T16:43:31.852Z",
+      "source": "ssc"
+    }
+  },
   "zeroCandidateDays": 0,
-  "updatedAt": "2026-09-19T16:27:17.546Z"
+  "updatedAt": "2026-09-19T16:43:43.063Z"
 }
