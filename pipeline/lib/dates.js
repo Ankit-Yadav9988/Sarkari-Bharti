@@ -81,3 +81,17 @@ export function extractApplicationDates(text, options) {
     ], options),
   };
 }
+
+export function extractMilestoneDates(text, options) {
+  return {
+    admitCardDate: dateNearLabel(text, [
+      'admit card(?:s)?(?: will be|is|are)? available', 'admission certificate(?:s)?(?: will be|is|are)? available',
+    ], options),
+    examDate: dateNearLabel(text, [
+      'date(?:s)? of (?:the )?(?:written )?examination', 'exam(?:ination)? date', 'computer based examination date',
+    ], options),
+    resultDate: dateNearLabel(text, [
+      'result(?:s)?(?: will be|is|are)? declared', 'date of declaration of result', 'result date',
+    ], options),
+  };
+}

@@ -45,6 +45,23 @@ equal(extracted.row.totalPosts, 42, 'extracts labelled total posts');
 equal(extracted.row.notificationPdfUrl, 'https://example.gov.in/notice.pdf', 'PDF URL is preserved');
 equal(extracted.row.state, null, 'central source leaves state blank');
 
+const detailed = extractJob({
+  source, link: { url: 'https://example.gov.in/detailed.pdf', text: 'Detailed Recruitment 2026' },
+  body: 'Age Limit: 18 to 27 years. Educational Qualification: Bachelor degree in any discipline from a recognised university. Selection Process: Computer Based Test and Document Verification. Application Fee: General Rs 100, SC/ST Rs 0. Age Relaxation: OBC 3 years, SC/ST 5 years. Admit card will be available: 01 November 2026. Exam date: 15 November 2026. Result date: 20 December 2026. Apply online at https://example.gov.in/apply',
+  contentType: 'application/pdf', now: new Date('2026-01-01'),
+});
+equal(detailed.row.ageMin, 18, 'extracts labelled minimum age');
+equal(detailed.row.ageMax, 27, 'extracts labelled maximum age');
+check(detailed.row.eligibility.includes('Bachelor degree'), 'extracts labelled qualification');
+check(detailed.row.selectionProcess.includes('Computer Based Test'), 'extracts labelled selection process');
+equal(detailed.row.feeGENERAL, 100, 'extracts labelled general fee');
+equal(detailed.row.relaxOBC, 3, 'extracts labelled age relaxation');
+equal(detailed.row.officialApplyLink, 'https://example.gov.in/apply', 'extracts labelled apply link');
+equal(detailed.row.admitCardDate, '2026-11-01', 'extracts labelled admit-card date');
+equal(detailed.row.examDate, '2026-11-15', 'extracts labelled exam date');
+equal(detailed.row.resultDate, '2026-12-20', 'extracts labelled result date');
+check(toCsv([detailed.row]).includes('100'), 'extracted fee fields match the flat CSV contract');
+
 check(header().includes('lastDate'), 'CSV header comes from shared importer contract');
 const quoted = toCsv([{ postName: 'Engineer, Civil', organization: 'Test', category: 'SSC', applicationStartDate: '2026-10-01', lastDate: '2026-10-31' }]);
 const preview = previewValidation(quoted);
