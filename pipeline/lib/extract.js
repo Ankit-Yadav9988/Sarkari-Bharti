@@ -1,12 +1,12 @@
 import { extractApplicationDates, extractMilestoneDates } from './dates.js';
-import { textFromHtml } from './html.js';
+import { textFromHtml, linksFromHtml } from './html.js';
 
 const clean = value => String(value || '').replace(/\s+/g, ' ').trim();
 const result = (value, confidence, reason) => ({ value: value || null, confidence, ...(reason ? { reason } : {}) });
 
 export function extractAdvertisementNo(text) {
   const match = /(?:advertisement|advt\.?|centralised employment notification|cen)\s*(?:no\.?|number)?\s*[:#-]?\s*([A-Z0-9][A-Z0-9/._-]{2,})/i.exec(text);
-  return match ? result(match[1], 'medium') : result(null, 'none', 'no advertisement number label found');
+  return match && /\d/.test(match[1]) ? result(match[1], 'medium') : result(null, 'none', 'no advertisement number label found');
 }
 
 export function extractTotalPosts(text) {
@@ -19,7 +19,12 @@ export function extractTotalPosts(text) {
 
 export function extractPostName(text, linkText = '') {
   const label = clean(linkText);
-  if (label.length >= 5 && label.length <= 255) return result(label, 'high');
+  if (/\{\{|\}\}|_HM\b|_E_HM\b|_I_HM\b/i.test(label)) return result(null, 'none', 'source returned an untranslated UI label');
+  const actionTitle = label
+    .replace(/^click\s+here\s+to\s+apply(?:\s+online)?\s+(?:for\s+)?/i, '')
+    .replace(/\s*,?\s*(?:advt?\.?|advertisement)\s*no?\.?\s*[:#-]?.*$/i, '')
+    .trim();
+  if (actionTitle.length >= 5 && actionTitle.length <= 255) return result(actionTitle, actionTitle === label ? 'high' : 'medium');
   const match = /(?:recruitment|employment notice|notification)\s+(?:for|of)\s+(?:the\s+)?(?:post(?:s)?\s+of\s+)?([^\.\n]{5,180})/i.exec(text);
   return match ? result(clean(match[1]), 'medium') : result(null, 'none', 'no reliable title found');
 }
@@ -73,8 +78,10 @@ export function extractRelaxations(text) {
   return map;
 }
 
-export function extractOfficialApplyLink(text) {
-  const urls = String(text || '').match(/https?:\/\/[^\s<>()"]+/gi) || [];
+export function extractOfficialApplyLink(text, links = []) {
+  const anchor = links.find(link => /(?:apply|application|registration|candidate\s+portal|online)/i.test(`${link.text} ${link.url}`));
+  if (anchor) return result(anchor.url, 'medium');
+  const urls = String(text || '').match(/https?:\/\/[^\s<>()"']+/gi) || [];
   for (const url of urls) {
     const cleanUrl = url.replace(/[.,;]+$/, '');
     const start = Math.max(0, text.indexOf(url) - 140);
@@ -85,9 +92,23 @@ export function extractOfficialApplyLink(text) {
   return result(null, 'none', 'no labelled official apply URL found');
 }
 
+export function extractSyllabusLink(text, links = []) {
+  const anchor = links.find(link => /syllabus|scheme\s+of\s+examination|exam\s+pattern/i.test(`${link.text} ${link.url}`));
+  if (anchor) return result(anchor.url, 'medium');
+  const urls = String(text || '').match(/https?:\/\/[^\s<>()"']+/gi) || [];
+  for (const url of urls) {
+    const start = Math.max(0, text.indexOf(url) - 140);
+    if (/syllabus|scheme\s+of\s+examination|exam\s+pattern/i.test(text.slice(start, start + 160))) return result(url.replace(/[.,;]+$/, ''), 'low');
+  }
+  return result(null, 'none', 'no syllabus link found');
+}
+
 /** Turns an official document into a deliberately sparse job row. */
 export function extractJob({ source, link, body, contentType = '', now = new Date() }) {
-  const raw = contentType.includes('html') ? textFromHtml(body) : Buffer.isBuffer(body) ? body.toString('utf8') : String(body || '');
+  const bodyString = Buffer.isBuffer(body) ? body.toString('utf8') : String(body || '');
+  const isHtml = /html/i.test(contentType) || /<\s*(?:html|body|a)\b/i.test(bodyString);
+  const htmlLinks = isHtml ? linksFromHtml(bodyString, link.url) : [];
+  const raw = isHtml ? textFromHtml(bodyString) : bodyString;
   const dates = extractApplicationDates(raw, { now });
   const milestones = extractMilestoneDates(raw, { now });
   const age = extractAge(raw);
@@ -95,17 +116,23 @@ export function extractJob({ source, link, body, contentType = '', now = new Dat
   const selectionProcess = labelledText(raw, 'selection\\s+process|mode\\s+of\\s+selection|method\\s+of\\s+selection|selection\\s+procedure', ['age\\s+limit', 'application\\s+fee', 'fee\\s+details?', 'important\\s+instructions']);
   const fees = extractFees(raw);
   const relaxations = extractRelaxations(raw);
-  const officialApplyLink = extractOfficialApplyLink(raw);
+  const officialApplyLink = extractOfficialApplyLink(raw, htmlLinks);
+  const syllabusLink = extractSyllabusLink(raw, htmlLinks);
   const postName = extractPostName(raw, link.text);
   const advertisementNo = extractAdvertisementNo(raw);
   const totalPosts = extractTotalPosts(raw);
-  const isPdf = /(?:application\/pdf|\.pdf(?:$|[?#]))/i.test(`${contentType} ${link.url}`);
-  const fields = { postName, advertisementNo, totalPosts, ...dates, ...milestones, ...age, eligibility, selectionProcess, officialApplyLink,
-    notificationPdfUrl: result(isPdf ? link.url : null, isPdf ? 'certain' : 'none', isPdf ? undefined : 'candidate was not a PDF') };
+  const linkedPdf = !/\.pdf(?:$|[?#])/i.test(link.url) && isHtml
+    ? htmlLinks.find(item => /\.pdf(?:$|[?#])/i.test(item.url))?.url
+    : null;
+  const notificationPdfUrl = linkedPdf || (/\.pdf(?:$|[?#])/i.test(link.url) ? link.url : null);
+  const isPdf = Boolean(notificationPdfUrl);
+  const fields = { postName, advertisementNo, totalPosts, ...dates, ...milestones, ...age, eligibility, selectionProcess, officialApplyLink, syllabusLink,
+    notificationPdfUrl: result(notificationPdfUrl, isPdf ? 'certain' : 'none', isPdf ? undefined : 'candidate page had no PDF link') };
   const row = {
     postName: postName.value,
     organization: source.organization,
     category: source.category,
+    listingSection: 'AUTO',
     state: source.state || null,
     advertisementNo: advertisementNo.value,
     totalPosts: totalPosts.value,
@@ -119,7 +146,8 @@ export function extractJob({ source, link, body, contentType = '', now = new Dat
     eligibility: eligibility.value,
     selectionProcess: selectionProcess.value,
     officialApplyLink: officialApplyLink.value,
-    notificationPdfUrl: isPdf ? link.url : null,
+    notificationPdfUrl,
+    syllabusLink: syllabusLink.value,
   };
   // The pipeline output is flat because CSV_COLUMNS is flat; the admin
   // importer nests these columns into its API maps when it reads the file.

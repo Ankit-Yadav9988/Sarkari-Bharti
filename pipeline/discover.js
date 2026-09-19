@@ -15,8 +15,15 @@ export function canonicalUrl(value) {
 export function isCandidate(link, source, { includeNotices = false } = {}) {
   const host = new URL(link.url).hostname.toLowerCase();
   if (!source.allowedHosts.some(allowed => host === allowed || host.endsWith(`.${allowed}`))) return false;
+  // Angular/Vue government portals expose untranslated keys and generic
+  // placeholder links in their initial HTML shell. They are not notices.
+  if (/\{\{|\}\}|_HM\b|_E_HM\b|_I_HM\b/i.test(link.text)) return false;
+  const id = new URL(link.url).searchParams.get('ID');
+  if (id && id.length < 5) return false;
   const haystack = `${link.text} ${link.url}`.toLowerCase();
-  const words = includeNotices ? [...RECRUITMENT_KEYWORDS, ...NOTICE_KEYWORDS] : RECRUITMENT_KEYWORDS;
+  const words = source.id === 'uppsc'
+    ? RECRUITMENT_KEYWORDS.filter(word => word !== 'notice' && word !== 'advt')
+    : includeNotices ? [...RECRUITMENT_KEYWORDS, ...NOTICE_KEYWORDS] : RECRUITMENT_KEYWORDS;
   return words.some(word => haystack.includes(word.toLowerCase()));
 }
 

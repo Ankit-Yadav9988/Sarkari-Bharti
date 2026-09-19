@@ -3,7 +3,7 @@ import { parseIndianDate, dateNearLabel, extractApplicationDates } from './lib/d
 import { linksFromHtml } from './lib/html.js';
 import { robotsAllows } from './lib/http.js';
 import { extractJob } from './lib/extract.js';
-import { canonicalUrl, inspectSource, linksFromJson } from './discover.js';
+import { canonicalUrl, inspectSource, linksFromJson, isCandidate } from './discover.js';
 import { header, toCsv, previewValidation } from './lib/csv-out.js';
 
 let checks = 0;
@@ -34,6 +34,8 @@ const jsonLinks = linksFromJson({ data: [
 ] }, 'https://example.gov.in/feed');
 equal(jsonLinks.length, 3, 'official JSON feeds yield unique document links');
 equal(inspectSource({ source, links: [...jsonLinks, { url: 'https://example.gov.in/a', text: 'a' }, { url: 'https://example.gov.in/b', text: 'b' }, { url: 'https://example.gov.in/c', text: 'c' }] }).candidates.length, 3, 'JSON links use the same keyword filter');
+check(!isCandidate({ url: 'https://example.gov.in/x?ID=ter', text: 'Recruitment notice' }, source), 'placeholder IDs are ignored');
+check(!isCandidate({ url: 'https://example.gov.in/x', text: "{{'Recruitment_HM' | translate }}" }, source), 'untranslated UI labels are ignored');
 check(robotsAllows('User-agent: *\nDisallow: /admin\nAllow: /', '/jobs'), 'robots allows public path');
 check(!robotsAllows('User-agent: *\nDisallow: /admin', '/admin/import'), 'robots blocks disallowed path');
 
@@ -61,6 +63,16 @@ equal(detailed.row.admitCardDate, '2026-11-01', 'extracts labelled admit-card da
 equal(detailed.row.examDate, '2026-11-15', 'extracts labelled exam date');
 equal(detailed.row.resultDate, '2026-12-20', 'extracts labelled result date');
 check(toCsv([detailed.row]).includes('100'), 'extracted fee fields match the flat CSV contract');
+
+const htmlDetailed = extractJob({
+  source, link: { url: 'https://example.gov.in/recruitment-details', text: 'Recruitment Analyst 2026' },
+  body: '<html><body><h1>Recruitment Analyst</h1><a href="/files/analyst-notification.pdf">Download notification</a><a href="/apply/analyst">Apply online</a><a href="/files/analyst-syllabus.pdf">Syllabus</a><p>Last date: 31 October 2026</p></body></html>',
+  contentType: 'text/html', now: new Date('2026-01-01'),
+});
+equal(htmlDetailed.row.notificationPdfUrl, 'https://example.gov.in/files/analyst-notification.pdf', 'HTML detail pages resolve linked notification PDFs');
+equal(htmlDetailed.row.officialApplyLink, 'https://example.gov.in/apply/analyst', 'HTML detail pages preserve apply links');
+equal(htmlDetailed.row.syllabusLink, 'https://example.gov.in/files/analyst-syllabus.pdf', 'HTML detail pages preserve syllabus links');
+equal(htmlDetailed.row.listingSection, 'AUTO', 'rows use the importer default listing section');
 
 check(header().includes('lastDate'), 'CSV header comes from shared importer contract');
 const quoted = toCsv([{ postName: 'Engineer, Civil', organization: 'Test', category: 'SSC', applicationStartDate: '2026-10-01', lastDate: '2026-10-31' }]);

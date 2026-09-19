@@ -14,6 +14,10 @@ const HERE = path.dirname(fileURLToPath(import.meta.url));
 const STATE_PATH = path.join(HERE, 'state', 'seen.json');
 const CACHE_DIR = path.join(HERE, 'cache');
 const OUT_DIR = path.join(HERE, 'out');
+// Increment when extraction logic changes materially. Existing candidates are
+// then read once again so a code improvement can enrich rows already seen by
+// an earlier workflow run instead of being hidden forever by seen.json.
+const EXTRACTOR_VERSION = 2;
 
 const isoToday = () => new Date().toISOString().slice(0, 10);
 const escapeMd = value => String(value || '').replace(/\|/g, '\\|').replace(/\r?\n/g, ' ');
@@ -101,18 +105,25 @@ export async function runPipeline({ sources = SOURCES, now = new Date(), state: 
       // A URL is only marked processed after extraction succeeds. Older state
       // files have no status field, so they are eligible once for a safe
       // migration/retry instead of permanently hiding a previously failed PDF.
-      const changed = !prior || prior.hash !== downloaded.hash || prior.status !== 'processed';
+      const changed = !prior || prior.hash !== downloaded.hash || prior.status !== 'processed'
+        || prior.extractorVersion !== EXTRACTOR_VERSION;
       if (!changed) continue;
+      const isDocumentPdf = /(?:application\/pdf|\.pdf(?:$|[?#]))/i.test(`${downloaded.contentType} ${link.url}`);
       const text = await documentText(downloaded.body, link.url, downloaded.contentType);
-      const extracted = extractJob({ source: link.source, link, body: text, contentType: 'text/plain', now });
+      const extracted = extractJob({
+        source: link.source, link,
+        body: isDocumentPdf ? text : downloaded.body.toString('utf8'),
+        contentType: isDocumentPdf ? 'text/plain' : downloaded.contentType,
+        now,
+      });
       extracted.link = link;
       if (extracted.row.notificationPdfUrl && publishedUrls.has(extracted.row.notificationPdfUrl)) {
-        state.candidates[link.url] = { hash: downloaded.hash, status: 'processed', seenAt: new Date().toISOString(), source: link.source.id };
+        state.candidates[link.url] = { hash: downloaded.hash, status: 'processed', extractorVersion: EXTRACTOR_VERSION, seenAt: new Date().toISOString(), source: link.source.id };
         skippedPublished += 1;
         continue;
       }
       rows.push({ extracted });
-      state.candidates[link.url] = { hash: downloaded.hash, status: 'processed', seenAt: new Date().toISOString(), source: link.source.id };
+      state.candidates[link.url] = { hash: downloaded.hash, status: 'processed', extractorVersion: EXTRACTOR_VERSION, seenAt: new Date().toISOString(), source: link.source.id };
     } catch (error) { warnings.push(`${link.source.name}: ${link.url} — ${error.message}`); }
   }
 

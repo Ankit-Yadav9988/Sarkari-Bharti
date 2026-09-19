@@ -17,7 +17,12 @@ success.
 - Added the complete `pipeline/` producer: link discovery, robots-aware polite
   HTTP client, conditional document cache, strict Indian-date extraction,
   conservative job skeleton extraction, generated importer CSV, review report,
-  persistent seen state, and a 20-check offline test harness.
+  persistent seen state, and a 40-check offline test harness.
+- Added official sources for SSC, RRB, UPSC, and five State PSCs (UPPSC, BPSC,
+  RPSC, MPPSC, and UKPSC). The extractor now follows linked notification PDFs,
+  rejects untranslated/placeholder portal rows, and fills labelled age,
+  qualification, selection, fee, relaxation, apply-link, and milestone fields
+  when the official document contains them.
 - Added `.github/workflows/collect.yml`, scheduled for 06:00 IST, with PDF text
   extraction and persisted document cache.
 - Made the producer read the frontend's actual `CSV_COLUMNS`, then validate its
@@ -29,7 +34,7 @@ success.
 
 | Check | Result | Evidence |
 | --- | --- | --- |
-| Pipeline contract test | Pass | `npm test` in `pipeline/`: 20 checks passed |
+| Pipeline contract test | Pass | `npm test` in `pipeline/`: 40 checks passed |
 | Frontend production build | Pass | `npm run build` completed all 87 pages |
 | Static public routes | Pass | `/about`, `/contact`, `/privacy`, `/disclaimer`, `/unsubscribe`, `/sitemap.xml`, and `/robots.txt` each returned 200 |
 | Public-page protections | Pass | `nosniff`, `SAMEORIGIN`, strict referrer policy, restrictive Permissions Policy, and framework header removal present |
