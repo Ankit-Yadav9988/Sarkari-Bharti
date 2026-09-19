@@ -18,12 +18,14 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      # Node 24-compatible action runtimes. The v4 actions are being forced
+      # onto Node 24 by GitHub-hosted runners and will eventually be removed.
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
         with:
-          node-version: 20
+          node-version: 24
       - name: Restore document cache
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: pipeline/cache
           key: official-notice-cache-${{ runner.os }}-${{ github.run_id }}
