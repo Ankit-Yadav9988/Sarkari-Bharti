@@ -5,6 +5,11 @@ notices from the configured official source pages, extracts only high- or
 medium-confidence facts, and creates a CSV for an administrator to review. It
 never calls a write endpoint or publishes a job.
 
+The initial source set covers SSC, RRB, UPSC, and five State PSCs: Uttar
+Pradesh, Bihar, Rajasthan, Madhya Pradesh, and Uttarakhand. State PSC rows are
+written with `category=STATE_PSC` and their configured state; they still require
+the same human review as every other row.
+
 ## Local checks
 
 ```powershell

@@ -37,6 +37,7 @@ export function extractJob({ source, link, body, contentType = '', now = new Dat
     postName: postName.value,
     organization: source.organization,
     category: source.category,
+    state: source.state || null,
     advertisementNo: advertisementNo.value,
     totalPosts: totalPosts.value,
     applicationStartDate: dates.applicationStartDate.value,

@@ -16,6 +16,26 @@ export const SOURCES = [
     id: 'upsc', name: 'Union Public Service Commission', organization: 'Union Public Service Commission', category: 'UPSC',
     url: 'https://upsc.gov.in/recruitment/recruitment-advertisement', allowedHosts: ['upsc.gov.in', 'www.upsc.gov.in'],
   },
+  {
+    id: 'uppsc', name: 'Uttar Pradesh Public Service Commission', organization: 'Uttar Pradesh Public Service Commission', category: 'STATE_PSC', state: 'Uttar Pradesh',
+    url: 'https://uppsc.up.nic.in/', allowedHosts: ['uppsc.up.nic.in'],
+  },
+  {
+    id: 'bpsc', name: 'Bihar Public Service Commission', organization: 'Bihar Public Service Commission', category: 'STATE_PSC', state: 'Bihar',
+    url: 'https://bpsc.bihar.gov.in/', allowedHosts: ['bpsc.bihar.gov.in'],
+  },
+  {
+    id: 'rpsc', name: 'Rajasthan Public Service Commission', organization: 'Rajasthan Public Service Commission', category: 'STATE_PSC', state: 'Rajasthan',
+    url: 'https://rpsc.rajasthan.gov.in/', allowedHosts: ['rpsc.rajasthan.gov.in'],
+  },
+  {
+    id: 'mppsc', name: 'Madhya Pradesh Public Service Commission', organization: 'Madhya Pradesh Public Service Commission', category: 'STATE_PSC', state: 'Madhya Pradesh',
+    url: 'https://mppsc.mp.gov.in/', allowedHosts: ['mppsc.mp.gov.in'],
+  },
+  {
+    id: 'ukpsc', name: 'Uttarakhand Public Service Commission', organization: 'Uttarakhand Public Service Commission', category: 'STATE_PSC', state: 'Uttarakhand',
+    url: 'https://psc.uk.gov.in/', allowedHosts: ['psc.uk.gov.in'],
+  },
 ];
 
 export const RECRUITMENT_KEYWORDS = [

@@ -43,6 +43,7 @@ equal(extracted.row.applicationStartDate, '2026-10-01', 'extracts labelled start
 equal(extracted.row.lastDate, '2026-10-31', 'extracts labelled closing date');
 equal(extracted.row.totalPosts, 42, 'extracts labelled total posts');
 equal(extracted.row.notificationPdfUrl, 'https://example.gov.in/notice.pdf', 'PDF URL is preserved');
+equal(extracted.row.state, null, 'central source leaves state blank');
 
 check(header().includes('lastDate'), 'CSV header comes from shared importer contract');
 const quoted = toCsv([{ postName: 'Engineer, Civil', organization: 'Test', category: 'SSC', applicationStartDate: '2026-10-01', lastDate: '2026-10-31' }]);
