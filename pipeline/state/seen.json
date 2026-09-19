@@ -1,6 +1,18 @@
 {
   "version": 1,
-  "requests": {},
+  "requests": {
+    "https://ssc.gov.in/api/general-website/portal/notice-boards?page=1&limit=50&contentType=notice-boards&key=createdAt&order=DESC&isAttachment=true&language=english&attributes=id%2Cheadline%2CexamId%2CcontentType%2CredirectUrl%2CstartDate%2CendDate%2Clanguage%2CcreatedAt": {
+      "etag": "W/\"17fb-29uvCT8xOh6MCC3A7d2VQk/kuJQ\"",
+      "lastModified": null,
+      "checkedAt": "2026-09-19T16:26:34.961Z"
+    },
+    "https://ssc.gov.in/api/general-website/portal/notice_16092026.pdf": {
+      "etag": null,
+      "lastModified": null,
+      "checkedAt": "2026-09-19T16:27:17.546Z"
+    }
+  },
   "candidates": {},
-  "zeroCandidateDays": 0
+  "zeroCandidateDays": 0,
+  "updatedAt": "2026-09-19T16:27:17.546Z"
 }
