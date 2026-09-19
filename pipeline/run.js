@@ -98,19 +98,29 @@ export async function runPipeline({ sources = SOURCES, now = new Date(), state: 
     try {
       const downloaded = await fetchCached(client, link.url, CACHE_DIR);
       const prior = state.candidates[link.url];
-      const changed = !prior || prior.hash !== downloaded.hash;
-      state.candidates[link.url] = { hash: downloaded.hash, seenAt: new Date().toISOString(), source: link.source.id };
+      // A URL is only marked processed after extraction succeeds. Older state
+      // files have no status field, so they are eligible once for a safe
+      // migration/retry instead of permanently hiding a previously failed PDF.
+      const changed = !prior || prior.hash !== downloaded.hash || prior.status !== 'processed';
       if (!changed) continue;
       const text = await documentText(downloaded.body, link.url, downloaded.contentType);
       const extracted = extractJob({ source: link.source, link, body: text, contentType: 'text/plain', now });
       extracted.link = link;
-      if (extracted.row.notificationPdfUrl && publishedUrls.has(extracted.row.notificationPdfUrl)) { skippedPublished += 1; continue; }
+      if (extracted.row.notificationPdfUrl && publishedUrls.has(extracted.row.notificationPdfUrl)) {
+        state.candidates[link.url] = { hash: downloaded.hash, status: 'processed', seenAt: new Date().toISOString(), source: link.source.id };
+        skippedPublished += 1;
+        continue;
+      }
       rows.push({ extracted });
+      state.candidates[link.url] = { hash: downloaded.hash, status: 'processed', seenAt: new Date().toISOString(), source: link.source.id };
     } catch (error) { warnings.push(`${link.source.name}: ${link.url} — ${error.message}`); }
   }
 
   const candidateCount = discovery.candidates.length;
   state.zeroCandidateDays = candidateCount === 0 ? (state.zeroCandidateDays || 0) + 1 : 0;
+  if (candidateCount > 0 && rows.length === 0 && skippedPublished === 0) {
+    warnings.push('Candidates were discovered, but no changed row was written. They may already be recorded in seen.json or document extraction failed; inspect the report warnings.');
+  }
   if (state.zeroCandidateDays >= 7) warnings.push('No candidates have been found for seven consecutive runs; inspect the source pages and keyword filters.');
   state.updatedAt = new Date().toISOString();
 

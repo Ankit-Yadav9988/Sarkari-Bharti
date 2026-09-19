@@ -20,7 +20,7 @@ export const SOURCES = [
 
 export const RECRUITMENT_KEYWORDS = [
   'recruitment', 'vacancy', 'vacancies', 'advertisement', 'advt', 'employment notice',
-  'apply online', 'online application', 'notification', 'centralised employment', 'भर्ती', 'विज्ञापन', 'रोजगार',
+  'apply online', 'online application', 'notification', 'notice', 'centralised employment', 'भर्ती', 'विज्ञापन', 'रोजगार',
 ];
 
 export const NOTICE_KEYWORDS = ['result', 'admit card', 'answer key', 'results', 'e-call letter', 'परिणाम', 'प्रवेश पत्र', 'उत्तर कुंजी'];
