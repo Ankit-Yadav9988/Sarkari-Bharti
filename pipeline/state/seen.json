@@ -4,37 +4,342 @@
     "https://ssc.gov.in/api/general-website/portal/notice-boards?page=1&limit=50&contentType=notice-boards&key=createdAt&order=DESC&isAttachment=true&language=english&attributes=id%2Cheadline%2CexamId%2CcontentType%2CredirectUrl%2CstartDate%2CendDate%2Clanguage%2CcreatedAt": {
       "etag": "W/\"17fb-29uvCT8xOh6MCC3A7d2VQk/kuJQ\"",
       "lastModified": null,
-      "checkedAt": "2026-09-19T16:43:31.850Z"
+      "checkedAt": "2026-09-19T16:55:18.662Z"
     },
     "https://ssc.gov.in/api/general-website/portal/notice_16092026.pdf": {
       "etag": null,
       "lastModified": null,
-      "checkedAt": "2026-09-19T16:43:35.063Z"
+      "checkedAt": "2026-09-19T16:55:21.826Z"
     },
     "https://ssc.gov.in/api/general-website/portal/English_JE_17092026.pdf": {
       "etag": null,
       "lastModified": null,
-      "checkedAt": "2026-09-19T16:43:33.059Z"
+      "checkedAt": "2026-09-19T16:55:19.822Z"
     },
     "https://ssc.gov.in/api/general-website/portal/Important%20Notice%202026_cgle_2026_12092026.pdf": {
       "etag": null,
       "lastModified": null,
-      "checkedAt": "2026-09-19T16:43:37.063Z"
+      "checkedAt": "2026-09-19T16:55:23.831Z"
     },
     "https://ssc.gov.in/api/general-website/portal/notice_11092026.pdf": {
       "etag": null,
       "lastModified": null,
-      "checkedAt": "2026-09-19T16:43:39.058Z"
+      "checkedAt": "2026-09-19T16:55:25.822Z"
     },
     "https://ssc.gov.in/api/general-website/portal/Notice_of_adv_capf_2026.pdf": {
       "etag": null,
       "lastModified": null,
-      "checkedAt": "2026-09-19T16:43:41.067Z"
+      "checkedAt": "2026-09-19T16:55:27.823Z"
     },
     "https://ssc.gov.in/api/general-website/portal/Addendum_JE_10092026.pdf": {
       "etag": null,
       "lastModified": null,
-      "checkedAt": "2026-09-19T16:43:43.063Z"
+      "checkedAt": "2026-09-19T16:55:29.826Z"
+    },
+    "https://uppsc.up.nic.in/": {
+      "etag": null,
+      "lastModified": null,
+      "checkedAt": "2026-09-19T16:55:32.902Z"
+    },
+    "https://uppsc.up.nic.in/CandidatePages/Notifications.aspx": {
+      "etag": null,
+      "lastModified": null,
+      "checkedAt": "2026-09-19T16:55:34.186Z"
+    },
+    "https://uppsc.up.nic.in/PublicPages/Recruitment_Details.aspx?ID=IO": {
+      "etag": null,
+      "lastModified": null,
+      "checkedAt": "2026-09-19T16:55:36.182Z"
+    },
+    "https://uppsc.up.nic.in/PublicPages/Recruitment_Details.aspx?ID=SI": {
+      "etag": null,
+      "lastModified": null,
+      "checkedAt": "2026-09-19T16:55:38.184Z"
+    },
+    "https://uppsc.up.nic.in/PublicPages/Recruitment_Details.aspx?ID=EO": {
+      "etag": null,
+      "lastModified": null,
+      "checkedAt": "2026-09-19T16:55:40.184Z"
+    },
+    "https://uppsc.up.nic.in/PublicPages/Recruitment_Details.aspx?ID=EI": {
+      "etag": null,
+      "lastModified": null,
+      "checkedAt": "2026-09-19T16:55:42.185Z"
+    },
+    "https://uppsc.up.nic.in/PublicPages/Recruitment_Details.aspx?ID=EIM": {
+      "etag": null,
+      "lastModified": null,
+      "checkedAt": "2026-09-19T16:55:44.185Z"
+    },
+    "https://uppsc.up.nic.in/OuterPages/DisplayOnlineNotice.aspx?ID=1": {
+      "etag": null,
+      "lastModified": null,
+      "checkedAt": "2026-09-19T16:55:47.539Z"
+    },
+    "https://uppsc.up.nic.in/OuterPages/DisplayOnlineNotice.aspx?ID=2": {
+      "etag": null,
+      "lastModified": null,
+      "checkedAt": "2026-09-19T16:55:48.904Z"
+    },
+    "https://uppsc.up.nic.in/CandidatePages/IntLtr/Interview_DetailsShowByAdvertisement_New.aspx": {
+      "etag": null,
+      "lastModified": null,
+      "checkedAt": "2026-09-19T16:55:50.836Z"
+    },
+    "https://uppsc.up.nic.in/Open_PDF_DB.aspx?I4PnQ0tBagmNKfqXmoSUnt55CdzP5iuV": {
+      "etag": null,
+      "lastModified": null,
+      "checkedAt": "2026-09-19T16:55:52.898Z"
+    },
+    "https://uppsc.up.nic.in/Open_PDF_DB.aspx?I4PnQ0tBagmNKfqXmoSUnpgVo6m3YsHG": {
+      "etag": null,
+      "lastModified": null,
+      "checkedAt": "2026-09-19T16:55:54.901Z"
+    },
+    "https://uppsc.up.nic.in/Open_PDF_DB.aspx?I4PnQ0tBagnQ0/TjMEfCjH2Nkd5tvpyU": {
+      "etag": null,
+      "lastModified": null,
+      "checkedAt": "2026-09-19T16:55:57.801Z"
+    },
+    "https://uppsc.up.nic.in/Open_PDF_DB.aspx?I4PnQ0tBagnQ0/TjMEfCjLL4PcUughPB": {
+      "etag": null,
+      "lastModified": null,
+      "checkedAt": "2026-09-19T16:56:01.979Z"
+    },
+    "https://uppsc.up.nic.in/Open_PDF_DB.aspx?I4PnQ0tBagnQ0/TjMEfCjD3K8mMdO/t9": {
+      "etag": null,
+      "lastModified": null,
+      "checkedAt": "2026-09-19T16:56:05.513Z"
+    },
+    "https://uppsc.up.nic.in/Open_PDF_DB.aspx?I4PnQ0tBagnQ0/TjMEfCjGanQUJh2j09": {
+      "etag": null,
+      "lastModified": null,
+      "checkedAt": "2026-09-19T16:56:07.898Z"
+    },
+    "https://uppsc.up.nic.in/Open_PDF_DB.aspx?I4PnQ0tBagnQ0/TjMEfCjKltRtnq0cgK": {
+      "etag": null,
+      "lastModified": null,
+      "checkedAt": "2026-09-19T16:56:10.536Z"
+    },
+    "https://uppsc.up.nic.in/Open_PDF_DB.aspx?I4PnQ0tBagnQ0/TjMEfCjI+X70XaoE7Y": {
+      "etag": null,
+      "lastModified": null,
+      "checkedAt": "2026-09-19T16:56:13.291Z"
+    },
+    "https://uppsc.up.nic.in/Open_PDF_DB.aspx?I4PnQ0tBagnQ0/TjMEfCjKKsih8bLTaq": {
+      "etag": null,
+      "lastModified": null,
+      "checkedAt": "2026-09-19T16:56:17.207Z"
+    },
+    "https://uppsc.up.nic.in/Open_PDF_DB.aspx?I4PnQ0tBagnQ0/TjMEfCjPpW5M5/1HwO": {
+      "etag": null,
+      "lastModified": null,
+      "checkedAt": "2026-09-19T16:56:21.148Z"
+    },
+    "https://uppsc.up.nic.in/Open_PDF_DB.aspx?I4PnQ0tBagnQ0/TjMEfCjLsAllTmw6lk": {
+      "etag": null,
+      "lastModified": null,
+      "checkedAt": "2026-09-19T16:56:25.096Z"
+    },
+    "https://uppsc.up.nic.in/Open_PDF_DB.aspx?I4PnQ0tBagnQ0/TjMEfCjG1nSVQb3U34": {
+      "etag": null,
+      "lastModified": null,
+      "checkedAt": "2026-09-19T16:56:28.247Z"
+    },
+    "https://uppsc.up.nic.in/Open_PDF_DB.aspx?I4PnQ0tBaglFjifabMvCvQwhX2clRPNl": {
+      "etag": null,
+      "lastModified": null,
+      "checkedAt": "2026-09-19T16:56:33.820Z"
+    },
+    "https://uppsc.up.nic.in/Open_PDF_DB.aspx?I4PnQ0tBaglFjifabMvCvSLY5D1B0Dk8": {
+      "etag": null,
+      "lastModified": null,
+      "checkedAt": "2026-09-19T16:56:37.751Z"
+    },
+    "https://uppsc.up.nic.in/Open_PDF_DB.aspx?I4PnQ0tBaglFjifabMvCvfvuznPEhL/S": {
+      "etag": null,
+      "lastModified": null,
+      "checkedAt": "2026-09-19T16:56:40.652Z"
+    },
+    "https://uppsc.up.nic.in/Open_PDF_DB.aspx?I4PnQ0tBaglFjifabMvCvQhkTL2Hie7+": {
+      "etag": null,
+      "lastModified": null,
+      "checkedAt": "2026-09-19T16:56:44.582Z"
+    },
+    "https://uppsc.up.nic.in/Open_PDF_DB.aspx?I4PnQ0tBagkgOS6AWCvRlT7Z9nwCD5P+": {
+      "etag": null,
+      "lastModified": null,
+      "checkedAt": "2026-09-19T16:56:48.002Z"
+    },
+    "https://uppsc.up.nic.in/Open_PDF_DB.aspx?I4PnQ0tBagkgOS6AWCvRlbow8bdLZJ6R": {
+      "etag": null,
+      "lastModified": null,
+      "checkedAt": "2026-09-19T16:56:50.652Z"
+    },
+    "https://uppsc.up.nic.in/Open_PDF_DB.aspx?I4PnQ0tBagkgOS6AWCvRlb0J6t8q6LXg": {
+      "etag": null,
+      "lastModified": null,
+      "checkedAt": "2026-09-19T16:56:52.640Z"
+    },
+    "https://uppsc.up.nic.in/Open_PDF_DB.aspx?I4PnQ0tBagkgOS6AWCvRlUPg+9/fLH/E": {
+      "etag": null,
+      "lastModified": null,
+      "checkedAt": "2026-09-19T16:56:54.643Z"
+    },
+    "https://uppsc.up.nic.in/Open_PDF_DB.aspx?I4PnQ0tBagkgOS6AWCvRlSPaXqLdKVhI": {
+      "etag": null,
+      "lastModified": null,
+      "checkedAt": "2026-09-19T16:56:56.642Z"
+    },
+    "https://uppsc.up.nic.in/Open_PDF_DB.aspx?I4PnQ0tBagnM8dHr1ViOngpAmDJbFNDU": {
+      "etag": null,
+      "lastModified": null,
+      "checkedAt": "2026-09-19T16:56:59.075Z"
+    },
+    "https://uppsc.up.nic.in/Open_PDF_DB.aspx?I4PnQ0tBagnM8dHr1ViOnigkngtaMhJ7": {
+      "etag": null,
+      "lastModified": null,
+      "checkedAt": "2026-09-19T16:57:02.492Z"
+    },
+    "https://uppsc.up.nic.in/Open_PDF_DB.aspx?I4PnQ0tBagnM8dHr1ViOngi0A8/iw89g": {
+      "etag": null,
+      "lastModified": null,
+      "checkedAt": "2026-09-19T16:57:06.681Z"
+    },
+    "https://uppsc.up.nic.in/Open_PDF_DB.aspx?I4PnQ0tBagnM8dHr1ViOnkuvDrTd7Cob": {
+      "etag": null,
+      "lastModified": null,
+      "checkedAt": "2026-09-19T16:57:09.846Z"
+    },
+    "https://uppsc.up.nic.in/Open_PDF_DB.aspx?I4PnQ0tBagkC/gT4ITeNgrXkVJ6dwkRn": {
+      "etag": null,
+      "lastModified": null,
+      "checkedAt": "2026-09-19T16:57:13.259Z"
+    },
+    "https://uppsc.up.nic.in/Open_PDF_DB.aspx?I4PnQ0tBagkz0o52o77EYRiV9UshCHNK": {
+      "etag": null,
+      "lastModified": null,
+      "checkedAt": "2026-09-19T16:57:17.189Z"
+    },
+    "https://uppsc.up.nic.in/Open_PDF_DB.aspx?I4PnQ0tBagkz0o52o77EYeOz5T9WBNmY": {
+      "etag": null,
+      "lastModified": null,
+      "checkedAt": "2026-09-19T16:57:20.094Z"
+    },
+    "https://uppsc.up.nic.in/Open_PDF_DB.aspx?I4PnQ0tBagkz0o52o77EYadVpmKbwEUn": {
+      "etag": null,
+      "lastModified": null,
+      "checkedAt": "2026-09-19T16:57:22.478Z"
+    },
+    "https://uppsc.up.nic.in/Open_PDF_DB.aspx?I4PnQ0tBagm1I38phqc5aj9szEEFmvLl": {
+      "etag": null,
+      "lastModified": null,
+      "checkedAt": "2026-09-19T16:57:26.188Z"
+    },
+    "https://uppsc.up.nic.in/Open_PDF_DB.aspx?I4PnQ0tBagnSFF+2PuzLq8yhYQ7psXl2": {
+      "etag": null,
+      "lastModified": null,
+      "checkedAt": "2026-09-19T16:57:31.912Z"
+    },
+    "https://uppsc.up.nic.in/Open_PDF_DB.aspx?I4PnQ0tBagktt06NhTTxwivFUuvsdMCE": {
+      "etag": null,
+      "lastModified": null,
+      "checkedAt": "2026-09-19T16:57:36.072Z"
+    },
+    "https://uppsc.up.nic.in/Open_PDF_DB.aspx?I4PnQ0tBagldpN1/ndg4XQJWpYXr4Ud3": {
+      "etag": null,
+      "lastModified": null,
+      "checkedAt": "2026-09-19T16:57:41.338Z"
+    },
+    "https://uppsc.up.nic.in/Open_PDF_DB.aspx?I4PnQ0tBagnFvgVqjblDZARklky4+2Ju": {
+      "etag": null,
+      "lastModified": null,
+      "checkedAt": "2026-09-19T16:57:45.271Z"
+    },
+    "https://uppsc.up.nic.in/CandidatePages/Advertismentwise_DownloadDocument.aspx?inptprmtr=mc": {
+      "etag": null,
+      "lastModified": null,
+      "checkedAt": "2026-09-19T16:57:49.218Z"
+    },
+    "https://uppsc.up.nic.in/CandidatePages/OTRAppForm/Applicant_OtrAuthentication.aspx?WEqGEem9m0+8Y4tNQqJiNYurmbKsjJR/fgSlThSTh6o=": {
+      "etag": null,
+      "lastModified": null,
+      "checkedAt": "2026-09-19T16:57:53.029Z"
+    },
+    "https://uppsc.up.nic.in/CandidatePages/Advertismentwise_DownloadDocument.aspx?inptprmtr=ac": {
+      "etag": null,
+      "lastModified": null,
+      "checkedAt": "2026-09-19T16:57:55.371Z"
+    },
+    "https://uppsc.up.nic.in/FooterPages/Notice": {
+      "etag": null,
+      "lastModified": null,
+      "checkedAt": "2026-09-19T16:57:57.525Z"
+    },
+    "https://uppsc.up.nic.in/Open_PDF.aspx?I4PnQ0tBagnQ0/TjMEfCjLeu0vVyodfJ": {
+      "etag": null,
+      "lastModified": null,
+      "checkedAt": "2026-09-19T16:58:00.676Z"
+    },
+    "https://uppsc.up.nic.in/Open_PDF.aspx?I4PnQ0tBagnQ0/TjMEfCjAwR0kJ5346+": {
+      "etag": null,
+      "lastModified": null,
+      "checkedAt": "2026-09-19T16:58:03.710Z"
+    },
+    "https://uppsc.up.nic.in/Open_PDF.aspx?I4PnQ0tBagkz0o52o77EYehACV4lKyrV": {
+      "etag": null,
+      "lastModified": null,
+      "checkedAt": "2026-09-19T16:58:06.373Z"
+    },
+    "https://uppsc.up.nic.in/Open_PDF.aspx?I4PnQ0tBagkz0o52o77EYbVztd2XC1Km": {
+      "etag": null,
+      "lastModified": null,
+      "checkedAt": "2026-09-19T16:58:10.296Z"
+    },
+    "https://uppsc.up.nic.in/Open_PDF.aspx?I4PnQ0tBagmNKfqXmoSUnj3RSz4YcAsN": {
+      "etag": null,
+      "lastModified": null,
+      "checkedAt": "2026-09-19T16:58:13.705Z"
+    },
+    "https://uppsc.up.nic.in/Open_PDF.aspx?I4PnQ0tBagmNKfqXmoSUnv2XgcCDttnM": {
+      "etag": null,
+      "lastModified": null,
+      "checkedAt": "2026-09-19T16:58:17.120Z"
+    },
+    "https://uppsc.up.nic.in/Open_PDF.aspx?I4PnQ0tBagnQ0/TjMEfCjHNjHdrEpv0R": {
+      "etag": null,
+      "lastModified": null,
+      "checkedAt": "2026-09-19T16:58:21.343Z"
+    },
+    "https://uppsc.up.nic.in/Open_PDF.aspx?I4PnQ0tBagnQ0/TjMEfCjIL5L9Hs6r49": {
+      "etag": null,
+      "lastModified": null,
+      "checkedAt": "2026-09-19T16:58:26.833Z"
+    },
+    "https://uppsc.up.nic.in/Open_PDF.aspx?I4PnQ0tBagnQ0/TjMEfCjLiTSi73XyRM": {
+      "etag": null,
+      "lastModified": null,
+      "checkedAt": "2026-09-19T16:58:31.132Z"
+    },
+    "https://uppsc.up.nic.in/Open_PDF.aspx?I4PnQ0tBagnQ0/TjMEfCjILNJltHvQFj": {
+      "etag": null,
+      "lastModified": null,
+      "checkedAt": "2026-09-19T16:58:36.091Z"
+    },
+    "https://uppsc.up.nic.in/Open_PDF.aspx?I4PnQ0tBagnQ0/TjMEfCjDxCKVUIkbBP": {
+      "etag": null,
+      "lastModified": null,
+      "checkedAt": "2026-09-19T16:58:39.511Z"
+    },
+    "https://uppsc.up.nic.in/Open_PDF.aspx?I4PnQ0tBaglFjifabMvCvXpg/AsjRD1Q": {
+      "etag": null,
+      "lastModified": null,
+      "checkedAt": "2026-09-19T16:58:42.665Z"
+    },
+    "https://uppsc.up.nic.in/Open_PDF.aspx?I4PnQ0tBagnQ0/TjMEfCjD/Z23VMS8eB": {
+      "etag": null,
+      "lastModified": null,
+      "checkedAt": "2026-09-19T16:58:46.609Z"
     }
   },
   "candidates": {
@@ -43,8 +348,374 @@
       "status": "processed",
       "seenAt": "2026-09-19T16:43:31.852Z",
       "source": "ssc"
+    },
+    "https://uppsc.up.nic.in/": {
+      "hash": "fdfd3cfd26ef5831c01a12d46bfd43f00f7274c2ea44af7b533bd5f99d472ac4",
+      "status": "processed",
+      "seenAt": "2026-09-19T16:55:33.920Z",
+      "source": "uppsc"
+    },
+    "https://uppsc.up.nic.in/CandidatePages/Notifications.aspx": {
+      "hash": "3e738ccf3551756b530c3998994e29bf9a0d800f85bb632d8f0f47a5e72b1e17",
+      "status": "processed",
+      "seenAt": "2026-09-19T16:55:34.188Z",
+      "source": "uppsc"
+    },
+    "https://uppsc.up.nic.in/PublicPages/Recruitment_Details.aspx?ID=IO": {
+      "hash": "5159d2b0c8362aecfaeccbbd476b3a0e06c392274ebb01169e97ea8270ce9fb3",
+      "status": "processed",
+      "seenAt": "2026-09-19T16:55:36.184Z",
+      "source": "uppsc"
+    },
+    "https://uppsc.up.nic.in/PublicPages/Recruitment_Details.aspx?ID=SI": {
+      "hash": "91186db269e213fc7a00ff6a16b444423ecf0d2129e2dc6a530ef7a54c7b64cb",
+      "status": "processed",
+      "seenAt": "2026-09-19T16:55:38.186Z",
+      "source": "uppsc"
+    },
+    "https://uppsc.up.nic.in/PublicPages/Recruitment_Details.aspx?ID=EO": {
+      "hash": "3e2a0d56bf3a1883130fd4111892c3708e93a54787bb404c6178218667b7f745",
+      "status": "processed",
+      "seenAt": "2026-09-19T16:55:40.437Z",
+      "source": "uppsc"
+    },
+    "https://uppsc.up.nic.in/PublicPages/Recruitment_Details.aspx?ID=EI": {
+      "hash": "f17b061a5963225b2bf399164bf9aba80eba79fd522863fd75bea668540ecedc",
+      "status": "processed",
+      "seenAt": "2026-09-19T16:55:42.439Z",
+      "source": "uppsc"
+    },
+    "https://uppsc.up.nic.in/PublicPages/Recruitment_Details.aspx?ID=EIM": {
+      "hash": "7ed15b36912607e598fd3aa1fd3a19c9f65427ae3d1a69b98b2496be2ca067f1",
+      "status": "processed",
+      "seenAt": "2026-09-19T16:55:44.444Z",
+      "source": "uppsc"
+    },
+    "https://uppsc.up.nic.in/OuterPages/DisplayOnlineNotice.aspx?ID=1": {
+      "hash": "f38233f0964597574d59ba7ef883e6ed66d65e601e885aad7c8b4be4989ecbed",
+      "status": "processed",
+      "seenAt": "2026-09-19T16:55:48.314Z",
+      "source": "uppsc"
+    },
+    "https://uppsc.up.nic.in/OuterPages/DisplayOnlineNotice.aspx?ID=2": {
+      "hash": "acaa8f79b1a44899aa2401d33f74cafcbd3b9a76e184d55828645695f586622d",
+      "status": "processed",
+      "seenAt": "2026-09-19T16:55:49.679Z",
+      "source": "uppsc"
+    },
+    "https://uppsc.up.nic.in/CandidatePages/IntLtr/Interview_DetailsShowByAdvertisement_New.aspx": {
+      "hash": "ad4b34fcdf355867dc2cf95c80a3112a28659782a4174344e322de94a8912775",
+      "status": "processed",
+      "seenAt": "2026-09-19T16:55:51.343Z",
+      "source": "uppsc"
+    },
+    "https://uppsc.up.nic.in/Open_PDF_DB.aspx?I4PnQ0tBagmNKfqXmoSUnt55CdzP5iuV": {
+      "hash": "24cb4a5336b4947a1e3c31a56c84a914657ee2f935fbfbb1dc5b783bc12ec53e",
+      "status": "processed",
+      "seenAt": "2026-09-19T16:55:53.931Z",
+      "source": "uppsc"
+    },
+    "https://uppsc.up.nic.in/Open_PDF_DB.aspx?I4PnQ0tBagmNKfqXmoSUnpgVo6m3YsHG": {
+      "hash": "f4a3ab91200df64045c39dacd81f9eeb9ab518d1543832516ec01f3c39520fb3",
+      "status": "processed",
+      "seenAt": "2026-09-19T16:55:57.217Z",
+      "source": "uppsc"
+    },
+    "https://uppsc.up.nic.in/Open_PDF_DB.aspx?I4PnQ0tBagnQ0/TjMEfCjH2Nkd5tvpyU": {
+      "hash": "66450dea479ae7c000dba3ba7330d4fff2810dd1b0d775dd13589bd7e6ec5fa6",
+      "status": "processed",
+      "seenAt": "2026-09-19T16:56:01.144Z",
+      "source": "uppsc"
+    },
+    "https://uppsc.up.nic.in/Open_PDF_DB.aspx?I4PnQ0tBagnQ0/TjMEfCjLL4PcUughPB": {
+      "hash": "ba3c92ac9361bf116ced35ffc725c2dac479bca344060cae0029dece53fc585a",
+      "status": "processed",
+      "seenAt": "2026-09-19T16:56:04.776Z",
+      "source": "uppsc"
+    },
+    "https://uppsc.up.nic.in/Open_PDF_DB.aspx?I4PnQ0tBagnQ0/TjMEfCjD3K8mMdO/t9": {
+      "hash": "83d40d061e095ec47ddcbb4192dc767c8c3250305b14a2449d9726b18a1e7b33",
+      "status": "processed",
+      "seenAt": "2026-09-19T16:56:07.314Z",
+      "source": "uppsc"
+    },
+    "https://uppsc.up.nic.in/Open_PDF_DB.aspx?I4PnQ0tBagnQ0/TjMEfCjGanQUJh2j09": {
+      "hash": "fe94557bbed10fde20070670feec10c210450a3ee97b17c55f2fd54c57fb5cf6",
+      "status": "processed",
+      "seenAt": "2026-09-19T16:56:09.958Z",
+      "source": "uppsc"
+    },
+    "https://uppsc.up.nic.in/Open_PDF_DB.aspx?I4PnQ0tBagnQ0/TjMEfCjKltRtnq0cgK": {
+      "hash": "9aa32720eef96720550a15b389aa915c636ef9b3cca80e73d8b31424a7458d93",
+      "status": "processed",
+      "seenAt": "2026-09-19T16:56:12.458Z",
+      "source": "uppsc"
+    },
+    "https://uppsc.up.nic.in/Open_PDF_DB.aspx?I4PnQ0tBagnQ0/TjMEfCjI+X70XaoE7Y": {
+      "hash": "1e6b21922d2a0c97f08025e5f70242d815d052b603cbda18bf0749194850a1ab",
+      "status": "processed",
+      "seenAt": "2026-09-19T16:56:16.378Z",
+      "source": "uppsc"
+    },
+    "https://uppsc.up.nic.in/Open_PDF_DB.aspx?I4PnQ0tBagnQ0/TjMEfCjKKsih8bLTaq": {
+      "hash": "d3ffd5d2be9affbecb8ba6cc9db3199aedebc4e6cf504b0661229730f8e15761",
+      "status": "processed",
+      "seenAt": "2026-09-19T16:56:20.295Z",
+      "source": "uppsc"
+    },
+    "https://uppsc.up.nic.in/Open_PDF_DB.aspx?I4PnQ0tBagnQ0/TjMEfCjPpW5M5/1HwO": {
+      "hash": "93ae2e6a0b9c1b04b8ec9ea8c6dc0870721003b2836ee9b09d3b08e4b4fae275",
+      "status": "processed",
+      "seenAt": "2026-09-19T16:56:24.233Z",
+      "source": "uppsc"
+    },
+    "https://uppsc.up.nic.in/Open_PDF_DB.aspx?I4PnQ0tBagnQ0/TjMEfCjLsAllTmw6lk": {
+      "hash": "1a409c4d63ffd9aa94fd541159c2293c32b5bfaa0041e4c9e43f62f60d2fa478",
+      "status": "processed",
+      "seenAt": "2026-09-19T16:56:27.667Z",
+      "source": "uppsc"
+    },
+    "https://uppsc.up.nic.in/Open_PDF_DB.aspx?I4PnQ0tBagnQ0/TjMEfCjG1nSVQb3U34": {
+      "hash": "04a6b0c3318396667f5e76d06c13d16120d0f3b9b525d9d2693dfb09d3205d67",
+      "status": "processed",
+      "seenAt": "2026-09-19T16:56:31.931Z",
+      "source": "uppsc"
+    },
+    "https://uppsc.up.nic.in/Open_PDF_DB.aspx?I4PnQ0tBaglFjifabMvCvQwhX2clRPNl": {
+      "hash": "cc027c93e7e757e957a9858fd7473759166c781f9cedeb539273c9039f4a9e05",
+      "status": "processed",
+      "seenAt": "2026-09-19T16:56:36.910Z",
+      "source": "uppsc"
+    },
+    "https://uppsc.up.nic.in/Open_PDF_DB.aspx?I4PnQ0tBaglFjifabMvCvSLY5D1B0Dk8": {
+      "hash": "a07f0101f885362858b2c276763bff9a13b7e265cda2e3e7b50b6ff4d7b0166a",
+      "status": "processed",
+      "seenAt": "2026-09-19T16:56:40.067Z",
+      "source": "uppsc"
+    },
+    "https://uppsc.up.nic.in/Open_PDF_DB.aspx?I4PnQ0tBaglFjifabMvCvfvuznPEhL/S": {
+      "hash": "9177d78c43a92410576d021cf0ea7d71b44e948dcd95928163283626cbf1a5c6",
+      "status": "processed",
+      "seenAt": "2026-09-19T16:56:44.000Z",
+      "source": "uppsc"
+    },
+    "https://uppsc.up.nic.in/Open_PDF_DB.aspx?I4PnQ0tBaglFjifabMvCvQhkTL2Hie7+": {
+      "hash": "a60dce1add3823ce7e61f40e97c2dca87fa4b01c0c3a9405a0a98e4de9fa8cb3",
+      "status": "processed",
+      "seenAt": "2026-09-19T16:56:47.414Z",
+      "source": "uppsc"
+    },
+    "https://uppsc.up.nic.in/Open_PDF_DB.aspx?I4PnQ0tBagkgOS6AWCvRlT7Z9nwCD5P+": {
+      "hash": "4c0040ceded7e4c38fb01a5b9dc8c9ad8975b01822808234b19d708073e50a6b",
+      "status": "processed",
+      "seenAt": "2026-09-19T16:56:50.061Z",
+      "source": "uppsc"
+    },
+    "https://uppsc.up.nic.in/Open_PDF_DB.aspx?I4PnQ0tBagkgOS6AWCvRlbow8bdLZJ6R": {
+      "hash": "783933167685849b82dd31a549ad1e344d69469c1d6be475268ed93accdd9602",
+      "status": "processed",
+      "seenAt": "2026-09-19T16:56:51.685Z",
+      "source": "uppsc"
+    },
+    "https://uppsc.up.nic.in/Open_PDF_DB.aspx?I4PnQ0tBagkgOS6AWCvRlb0J6t8q6LXg": {
+      "hash": "9575129a743856e1890c010eb1b809de56ce9827fdda906d9e8f34ac94fc1ca2",
+      "status": "processed",
+      "seenAt": "2026-09-19T16:56:53.413Z",
+      "source": "uppsc"
+    },
+    "https://uppsc.up.nic.in/Open_PDF_DB.aspx?I4PnQ0tBagkgOS6AWCvRlUPg+9/fLH/E": {
+      "hash": "c8f170adf44973dbb842275b8dc77ec1738637ccbede0a740823185a52b43d6e",
+      "status": "processed",
+      "seenAt": "2026-09-19T16:56:55.933Z",
+      "source": "uppsc"
+    },
+    "https://uppsc.up.nic.in/Open_PDF_DB.aspx?I4PnQ0tBagkgOS6AWCvRlSPaXqLdKVhI": {
+      "hash": "1da6f293dcbaed5833ca310788fa041310e71bbb10fbbd27f9481e4a78993bc3",
+      "status": "processed",
+      "seenAt": "2026-09-19T16:56:58.231Z",
+      "source": "uppsc"
+    },
+    "https://uppsc.up.nic.in/Open_PDF_DB.aspx?I4PnQ0tBagnM8dHr1ViOngpAmDJbFNDU": {
+      "hash": "35057cdc1470daf80ced614524530f97be5b9605ed8ee01d899fb854cdc791a6",
+      "status": "processed",
+      "seenAt": "2026-09-19T16:57:01.648Z",
+      "source": "uppsc"
+    },
+    "https://uppsc.up.nic.in/Open_PDF_DB.aspx?I4PnQ0tBagnM8dHr1ViOnigkngtaMhJ7": {
+      "hash": "04d2c0d0746545223d251c7b5b4c0e35a9b02f396e94ed24be5dd06a6686dafe",
+      "status": "processed",
+      "seenAt": "2026-09-19T16:57:05.838Z",
+      "source": "uppsc"
+    },
+    "https://uppsc.up.nic.in/Open_PDF_DB.aspx?I4PnQ0tBagnM8dHr1ViOngi0A8/iw89g": {
+      "hash": "607729d57336644de18844f7efe13cc356e0ddbaaeeb04f100543b5a474718f5",
+      "status": "processed",
+      "seenAt": "2026-09-19T16:57:09.258Z",
+      "source": "uppsc"
+    },
+    "https://uppsc.up.nic.in/Open_PDF_DB.aspx?I4PnQ0tBagnM8dHr1ViOnkuvDrTd7Cob": {
+      "hash": "3dd6ec1ef610810a84bc7bfddf48c19faf8de129248f08a4ae8d8165514130a3",
+      "status": "processed",
+      "seenAt": "2026-09-19T16:57:12.417Z",
+      "source": "uppsc"
+    },
+    "https://uppsc.up.nic.in/Open_PDF_DB.aspx?I4PnQ0tBagkC/gT4ITeNgrXkVJ6dwkRn": {
+      "hash": "0d89fd19b6c69479e4cb1e214f04821a20ce9090ae86d9fee1cc322a14b6325e",
+      "status": "processed",
+      "seenAt": "2026-09-19T16:57:16.343Z",
+      "source": "uppsc"
+    },
+    "https://uppsc.up.nic.in/Open_PDF_DB.aspx?I4PnQ0tBagkz0o52o77EYRiV9UshCHNK": {
+      "hash": "49ad07b7945bef5b7ae326e33d0f82c3b9ba68aa44452098af987b0d724ec7e2",
+      "status": "processed",
+      "seenAt": "2026-09-19T16:57:19.507Z",
+      "source": "uppsc"
+    },
+    "https://uppsc.up.nic.in/Open_PDF_DB.aspx?I4PnQ0tBagkz0o52o77EYeOz5T9WBNmY": {
+      "hash": "ff025f45783b04a4ea7f8efcf412d4140d351764a5dac83dc16d013108941bdf",
+      "status": "processed",
+      "seenAt": "2026-09-19T16:57:21.640Z",
+      "source": "uppsc"
+    },
+    "https://uppsc.up.nic.in/Open_PDF_DB.aspx?I4PnQ0tBagkz0o52o77EYadVpmKbwEUn": {
+      "hash": "04a453b91870a823e81fa7dbe14e81816e18eca5cb9a01e9f160b048f568c1c1",
+      "status": "processed",
+      "seenAt": "2026-09-19T16:57:25.307Z",
+      "source": "uppsc"
+    },
+    "https://uppsc.up.nic.in/Open_PDF_DB.aspx?I4PnQ0tBagm1I38phqc5aj9szEEFmvLl": {
+      "hash": "c499ed1272b5a3acab90d9c871c8a099f3d2fa548111f8096465c4544acba9b7",
+      "status": "processed",
+      "seenAt": "2026-09-19T16:57:30.048Z",
+      "source": "uppsc"
+    },
+    "https://uppsc.up.nic.in/Open_PDF_DB.aspx?I4PnQ0tBagnSFF+2PuzLq8yhYQ7psXl2": {
+      "hash": "c6dc7747f70c4a01fa77721e8e71d797f00866d740e88f1eecea4fe28dd9b1d6",
+      "status": "processed",
+      "seenAt": "2026-09-19T16:57:34.958Z",
+      "source": "uppsc"
+    },
+    "https://uppsc.up.nic.in/Open_PDF_DB.aspx?I4PnQ0tBagktt06NhTTxwivFUuvsdMCE": {
+      "hash": "6db5c2c042d982975c51f5153b1203d831ef071dd9e63229686f95a27a69d692",
+      "status": "processed",
+      "seenAt": "2026-09-19T16:57:39.712Z",
+      "source": "uppsc"
+    },
+    "https://uppsc.up.nic.in/Open_PDF_DB.aspx?I4PnQ0tBagldpN1/ndg4XQJWpYXr4Ud3": {
+      "hash": "acc6655ec215782a1b94b85963f4a451d76edf1733d695fbd94b59178bb148d1",
+      "status": "processed",
+      "seenAt": "2026-09-19T16:57:44.425Z",
+      "source": "uppsc"
+    },
+    "https://uppsc.up.nic.in/Open_PDF_DB.aspx?I4PnQ0tBagnFvgVqjblDZARklky4+2Ju": {
+      "hash": "55e53accd45a88491af94ddbcfa9170057820db55b1cb27b5852b3db50ec3286",
+      "status": "processed",
+      "seenAt": "2026-09-19T16:57:48.101Z",
+      "source": "uppsc"
+    },
+    "https://uppsc.up.nic.in/CandidatePages/Advertismentwise_DownloadDocument.aspx?inptprmtr=mc": {
+      "hash": "a9d5f57655a95f7fb63595804b7fb2a49eef9855c09581b600d6a127d84c18c1",
+      "status": "processed",
+      "seenAt": "2026-09-19T16:57:52.500Z",
+      "source": "uppsc"
+    },
+    "https://uppsc.up.nic.in/CandidatePages/OTRAppForm/Applicant_OtrAuthentication.aspx?WEqGEem9m0+8Y4tNQqJiNYurmbKsjJR/fgSlThSTh6o=": {
+      "hash": "6f6db5e6265742beeb74c6b8652531e633cc52881167a94d9a9301a748aaaf27",
+      "status": "processed",
+      "seenAt": "2026-09-19T16:57:53.031Z",
+      "source": "uppsc"
+    },
+    "https://uppsc.up.nic.in/CandidatePages/Advertismentwise_DownloadDocument.aspx?inptprmtr=ac": {
+      "hash": "e72d2012ff6b99f343517e1c51e4683e3ab3a869e9bc2a104d6fba497eddb961",
+      "status": "processed",
+      "seenAt": "2026-09-19T16:57:56.915Z",
+      "source": "uppsc"
+    },
+    "https://uppsc.up.nic.in/FooterPages/Notice": {
+      "hash": "fbc8daf8d893336b273871df09ca23eb2075252b814db129bc0b430ca9401cb2",
+      "status": "processed",
+      "seenAt": "2026-09-19T16:58:00.099Z",
+      "source": "uppsc"
+    },
+    "https://uppsc.up.nic.in/Open_PDF.aspx?I4PnQ0tBagnQ0/TjMEfCjLeu0vVyodfJ": {
+      "hash": "82580e5fa7da4e18498a16388a8b1fe4785a3425e0dc63cc9dec57c6209fa2ad",
+      "status": "processed",
+      "seenAt": "2026-09-19T16:58:03.110Z",
+      "source": "uppsc"
+    },
+    "https://uppsc.up.nic.in/Open_PDF.aspx?I4PnQ0tBagnQ0/TjMEfCjAwR0kJ5346+": {
+      "hash": "da185c8ef2a572131526402a8207f0370dd0f393e0a7638b4cb118b97080dfa3",
+      "status": "processed",
+      "seenAt": "2026-09-19T16:58:05.771Z",
+      "source": "uppsc"
+    },
+    "https://uppsc.up.nic.in/Open_PDF.aspx?I4PnQ0tBagkz0o52o77EYehACV4lKyrV": {
+      "hash": "91b883717eac5ea34ab742a0de07fc19c6256655366b5b896d5bad1f5f1dd605",
+      "status": "processed",
+      "seenAt": "2026-09-19T16:58:09.459Z",
+      "source": "uppsc"
+    },
+    "https://uppsc.up.nic.in/Open_PDF.aspx?I4PnQ0tBagkz0o52o77EYbVztd2XC1Km": {
+      "hash": "039f6a70799923feacad79ee3c2f332d57cda3781837eaa0d47e96a9bf36d104",
+      "status": "processed",
+      "seenAt": "2026-09-19T16:58:13.124Z",
+      "source": "uppsc"
+    },
+    "https://uppsc.up.nic.in/Open_PDF.aspx?I4PnQ0tBagmNKfqXmoSUnj3RSz4YcAsN": {
+      "hash": "5ebf7ffc72dcc6fce49fcc67eb2b7d0f1d6030eca83b758f8982eafb0c714764",
+      "status": "processed",
+      "seenAt": "2026-09-19T16:58:16.538Z",
+      "source": "uppsc"
+    },
+    "https://uppsc.up.nic.in/Open_PDF.aspx?I4PnQ0tBagmNKfqXmoSUnv2XgcCDttnM": {
+      "hash": "4575d5a7731c407fd8c5ece5114ea49645d8e9003029c998bb60ae59aea394fa",
+      "status": "processed",
+      "seenAt": "2026-09-19T16:58:20.509Z",
+      "source": "uppsc"
+    },
+    "https://uppsc.up.nic.in/Open_PDF.aspx?I4PnQ0tBagnQ0/TjMEfCjHNjHdrEpv0R": {
+      "hash": "1480dfc9febffc315b0f2563ad019008c39d17e8482df6656ef0ded72072f41e",
+      "status": "processed",
+      "seenAt": "2026-09-19T16:58:24.941Z",
+      "source": "uppsc"
+    },
+    "https://uppsc.up.nic.in/Open_PDF.aspx?I4PnQ0tBagnQ0/TjMEfCjIL5L9Hs6r49": {
+      "hash": "0e7de05646673cb3fc73863a82da20a004ffccbe026554f0815a9ebc7a203569",
+      "status": "processed",
+      "seenAt": "2026-09-19T16:58:29.925Z",
+      "source": "uppsc"
+    },
+    "https://uppsc.up.nic.in/Open_PDF.aspx?I4PnQ0tBagnQ0/TjMEfCjLiTSi73XyRM": {
+      "hash": "a28e709719fa1fd00dbc87d47c5a4fe178ad624d177749929e49acfcd05dde68",
+      "status": "processed",
+      "seenAt": "2026-09-19T16:58:34.476Z",
+      "source": "uppsc"
+    },
+    "https://uppsc.up.nic.in/Open_PDF.aspx?I4PnQ0tBagnQ0/TjMEfCjILNJltHvQFj": {
+      "hash": "e248abf651f2efb633ac899c575a53b65c9fbed097dfc8eeecb5e875229f97f5",
+      "status": "processed",
+      "seenAt": "2026-09-19T16:58:38.931Z",
+      "source": "uppsc"
+    },
+    "https://uppsc.up.nic.in/Open_PDF.aspx?I4PnQ0tBagnQ0/TjMEfCjDxCKVUIkbBP": {
+      "hash": "ea8b1d5d877f3a29fe70b686b74929385b5ec046ef3d9d4eeee119df9a127c00",
+      "status": "processed",
+      "seenAt": "2026-09-19T16:58:42.081Z",
+      "source": "uppsc"
+    },
+    "https://uppsc.up.nic.in/Open_PDF.aspx?I4PnQ0tBaglFjifabMvCvXpg/AsjRD1Q": {
+      "hash": "9e3a61135e85c54c56558b13d16c1d957939882a688214cae81b9e75373d0f01",
+      "status": "processed",
+      "seenAt": "2026-09-19T16:58:45.751Z",
+      "source": "uppsc"
+    },
+    "https://uppsc.up.nic.in/Open_PDF.aspx?I4PnQ0tBagnQ0/TjMEfCjD/Z23VMS8eB": {
+      "hash": "245ef9da2ee25591853abca6a1db4a8302f7e602cda5b1348361900e08ed6eaa",
+      "status": "processed",
+      "seenAt": "2026-09-19T16:58:49.178Z",
+      "source": "uppsc"
     }
   },
   "zeroCandidateDays": 0,
-  "updatedAt": "2026-09-19T16:43:43.063Z"
+  "updatedAt": "2026-09-19T16:58:49.178Z"
 }
