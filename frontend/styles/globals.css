@@ -244,7 +244,8 @@ p  { font-size: 0.95rem; }
   gap: 34px;
   white-space: nowrap;
   padding-left: 100%;
-  animation: ticker-scroll 38s linear infinite;
+  /* Keep headlines readable on desktop; hover still pauses the strip. */
+  animation: ticker-scroll 72s linear infinite;
 }
 .ticker:hover .ticker-track { animation-play-state: paused; }
 .ticker-track a { font-size: 0.85rem; font-weight: 600; }
