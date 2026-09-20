@@ -84,8 +84,11 @@ public final class JobSpecifications {
             Predicate onAuto = cb.or(
                     cb.isNull(root.get("listingSection")),
                     cb.equal(root.get("listingSection"), ListingSection.AUTO));
-            // The guard computeStatus applies first, as a reusable predicate.
-            Predicate stillOpen = cb.greaterThanOrEqualTo(root.get("lastDate"), today);
+            // Null dates are allowed for Upcoming notices. A missing date is not
+            // evidence that the job is closed; it means the window is unknown.
+            Predicate stillOpen = cb.or(
+                    cb.isNull(root.get("lastDate")),
+                    cb.greaterThanOrEqualTo(root.get("lastDate"), today));
 
             switch (status) {
                 case ACTIVE:
@@ -95,17 +98,25 @@ public final class JobSpecifications {
                                     cb.lessThanOrEqualTo(root.get("applicationStartDate"), today))));
 
                 case UPCOMING:
-                    return cb.and(stillOpen, cb.or(
+                    // An explicit Upcoming pin is authoritative: its dates are
+                    // estimates and may be absent or already past. AUTO still
+                    // needs an unknown/future start and a non-past deadline.
+                    return cb.or(
                             cb.equal(root.get("listingSection"), ListingSection.UPCOMING),
-                            cb.and(onAuto,
+                            cb.and(stillOpen, onAuto, cb.or(
+                                    cb.isNull(root.get("applicationStartDate")),
                                     cb.greaterThan(root.get("applicationStartDate"), today))));
 
                 case CLOSED:
-                    // No onAuto here, and no pin exemption: the last date having
+                    // Upcoming is intentionally exempt because its last date is
                     // passed is the whole condition. A job pinned to LATEST used
                     // to be excluded from this and reported ACTIVE forever, which
                     // sent students to forms that shut months ago.
-                    return cb.lessThan(root.get("lastDate"), today);
+                    return cb.and(
+                            cb.or(
+                                    cb.isNull(root.get("listingSection")),
+                                    cb.notEqual(root.get("listingSection"), ListingSection.UPCOMING)),
+                            cb.lessThan(root.get("lastDate"), today));
 
                 default:
                     return cb.conjunction();

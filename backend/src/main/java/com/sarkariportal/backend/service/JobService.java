@@ -4,6 +4,7 @@ import com.sarkariportal.backend.dto.JobDetailResponse;
 import com.sarkariportal.backend.dto.JobSummaryResponse;
 import com.sarkariportal.backend.dto.PageResponse;
 import com.sarkariportal.backend.dto.Slugs;
+import com.sarkariportal.backend.config.BadRequestException;
 import com.sarkariportal.backend.model.Job;
 import com.sarkariportal.backend.model.JobCategory;
 import com.sarkariportal.backend.model.JobStatus;
@@ -151,6 +152,7 @@ public class JobService {
     @Transactional
     public JobDetailResponse createJob(Job job) {
         job.setId(null);        // a client-supplied id would overwrite a row
+        validateDates(job);
         Job saved = jobRepository.save(job);
         return JobDetailResponse.from(withComputedStatus(saved));
     }
@@ -158,6 +160,8 @@ public class JobService {
     @Transactional
     public JobDetailResponse updateJob(Long id, Job updatedJob) {
         Job existing = requireJob(id);
+
+        validateDates(updatedJob);
 
         existing.setPostName(updatedJob.getPostName());
         existing.setOrganization(updatedJob.getOrganization());
@@ -238,6 +242,27 @@ public class JobService {
     }
 
     /**
+     * An Upcoming notice may be published before either application date is
+     * confirmed. Once an admin places a job in AUTO or Latest, both dates are
+     * required because those sections describe a live application window.
+     */
+    private void validateDates(Job job) {
+        ListingSection section = job.getListingSection() == null
+                ? ListingSection.AUTO
+                : job.getListingSection();
+        if (section == ListingSection.UPCOMING) {
+            return;
+        }
+        if (job.getApplicationStartDate() == null || job.getLastDate() == null) {
+            throw new BadRequestException(
+                    "Application start date and last date are required outside the Upcoming section");
+        }
+        if (job.getLastDate().isBefore(job.getApplicationStartDate())) {
+            throw new BadRequestException("Last date cannot be before application start date");
+        }
+    }
+
+    /**
      * Derives the status from today's date and the job's own dates, so the admin
      * never has to remember to mark a posting closed.
      *
@@ -256,9 +281,12 @@ public class JobService {
     JobStatus computeStatus(Job job) {
         LocalDate today = LocalDate.now();
 
-        // Checked before the overrides, deliberately. Both date columns are
-        // NOT NULL in the schema, but this also runs on entities that were just
-        // built from a request body, so the guards stay.
+        // Upcoming dates are often estimates. They must not close an Upcoming
+        // notice merely because an estimated date has passed.
+        if (job.getListingSection() == ListingSection.UPCOMING) {
+            return JobStatus.UPCOMING;
+        }
+
         if (job.getLastDate() != null && today.isAfter(job.getLastDate())) {
             return JobStatus.CLOSED;
         }
@@ -267,11 +295,10 @@ public class JobService {
         if (section == ListingSection.LATEST) {
             return JobStatus.ACTIVE;
         }
-        if (section == ListingSection.UPCOMING) {
+        if (job.getApplicationStartDate() != null && today.isBefore(job.getApplicationStartDate())) {
             return JobStatus.UPCOMING;
         }
-
-        if (job.getApplicationStartDate() != null && today.isBefore(job.getApplicationStartDate())) {
+        if (job.getApplicationStartDate() == null) {
             return JobStatus.UPCOMING;
         }
         return JobStatus.ACTIVE;

@@ -42,10 +42,8 @@ public class Job {
 
     private Integer totalPosts;
 
-    @Column(nullable = false)
     private LocalDate applicationStartDate;
 
-    @Column(nullable = false)
     private LocalDate lastDate;
 
     private LocalDate admitCardDate;
