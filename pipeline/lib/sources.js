@@ -2,14 +2,11 @@
 export const SOURCES = [
   {
     id: 'sarkariresult', kind: 'aggregator',
-    name: 'Sarkari Result discovery', organization: null, category: 'CENTRAL_GOVT',
+    name: 'Sarkari Result discovery (.com.cm)', organization: null, category: 'CENTRAL_GOVT',
     // Discovery only: detail pages are used to find official links and every
     // row remains a manual-review candidate before publication.
-    // The apex host is reachable from GitHub-hosted runners where the www
-    // alias intermittently returns a generic 403 page.
-    url: 'https://sarkariresult.com/latestjob/',
-    fallbackUrls: ['https://sarkariresult.com/latestjob/?page=1'],
-    allowedHosts: ['sarkariresult.com', 'www.sarkariresult.com'],
+    url: 'https://sarkariresult.com.cm/latest-jobs/',
+    allowedHosts: ['sarkariresult.com.cm', 'www.sarkariresult.com.cm'],
     maxCandidates: 120,
   },
   {

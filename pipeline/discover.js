@@ -10,6 +10,7 @@ export function canonicalUrl(value) {
   for (const key of [...url.searchParams.keys()]) if (/^(utm_|gclid$|fbclid$)/i.test(key)) url.searchParams.delete(key);
   url.hostname = url.hostname.toLowerCase();
   if (url.hostname === 'www.sarkariresult.com') url.hostname = 'sarkariresult.com';
+  if (url.hostname === 'www.sarkariresult.com.cm') url.hostname = 'sarkariresult.com.cm';
   return url.href;
 }
 

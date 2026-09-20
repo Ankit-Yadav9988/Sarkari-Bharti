@@ -84,7 +84,7 @@ export function extractRelaxations(text) {
   return map;
 }
 
-const AGGREGATOR_HOSTS = ['sarkariresult.com', 'sarkariresults.org.in'];
+const AGGREGATOR_HOSTS = ['sarkariresult.com', 'sarkariresults.org.in', 'sarkariresult.com.cm'];
 const isAggregatorUrl = url => {
   try {
     const host = new URL(url).hostname.toLowerCase();
@@ -132,7 +132,10 @@ export function extractSyllabusLink(text, links = [], { excludeAggregator = fals
   return result(null, 'none', 'no syllabus link found');
 }
 
-function extractAggregatorOrganization(text, headings) {
+function extractAggregatorOrganization(text, headings, links = []) {
+  const linkedOrganization = links.find(link => !isAggregatorUrl(link.url)
+    && /(?:commission|board|bank|university|institute|corporation|court|department|force|railway|limited|authority|council|service|college|ministry|navy|army|air force|esb|psu)/i.test(link.text || ''));
+  if (linkedOrganization?.text && linkedOrganization.text.length <= 255) return clean(linkedOrganization.text);
   const heading = headings
     .filter(value => /(?:commission|board|bank|university|institute|corporation|court|department|force|railway|limited|authority|council|service|college|ministry|navy|army|air force|esb|psu)/i.test(value)
       && !/(?:sarkari|important links|how to fill|short details|frequently asked)/i.test(value))
@@ -183,7 +186,7 @@ export function extractJob({ source, link, body, contentType = '', now = new Dat
   const fees = extractFees(raw);
   const relaxations = extractRelaxations(raw);
   const aggregator = source.kind === 'aggregator';
-  const inferredOrganization = aggregator ? extractAggregatorOrganization(raw, headings) : source.organization;
+  const inferredOrganization = aggregator ? extractAggregatorOrganization(raw, headings, htmlLinks) : source.organization;
   const inferredCategory = aggregator ? classifyAggregator(`${link.text || ''} ${inferredOrganization || ''}`, inferredOrganization) : { category: source.category, state: source.state || null };
   let officialApplyLink = extractOfficialApplyLink(raw, htmlLinks, { excludeAggregator: aggregator });
   if (!officialApplyLink.value && source.id === 'uppsc' && /\bapply\b/i.test(link.text || '')) {

@@ -82,6 +82,8 @@ export function extractApplicationDates(text, options) {
   return {
     applicationStartDate: dateNearLabel(text, [
       'application\\s+(?:form\\s+)?begin(?:s)?',
+      'online\\s+(?:apply|application)\\s+start\\s+date',
+      '(?:re[- ]?open\\s+)?form\\s+start\\s+date',
       'application\\s+(?:filling\\s+)?start\\s+date',
       'start\\s+date\\s+(?:for\\s+)?(?:online\\s+)?application',
       'date[s]? for submission of online application(?:s)?(?: form)?(?: begin| start| starts| from)?',
@@ -89,6 +91,8 @@ export function extractApplicationDates(text, options) {
       'opening date(?: for online application)?',
     ], options),
     lastDate: dateNearLabel(text, [
+      'online\\s+(?:apply|application)\\s+last\\s+date',
+      '(?:re[- ]?open\\s+)?form\\s+last\\s+date',
       'application\\s+(?:filling\\s+)?last\\s+date',
       'last\\s+date\\s+(?:for\\s+)?(?:online\\s+)?application',
       'last date(?: and time)?(?: for (?:receipt|submission) of online application(?:s)?(?: form)?)?',
