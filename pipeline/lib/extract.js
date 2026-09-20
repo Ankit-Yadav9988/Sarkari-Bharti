@@ -1,5 +1,5 @@
 import { datesInText, extractApplicationDates, extractMilestoneDates } from './dates.js';
-import { textFromHtml, linksFromHtml } from './html.js';
+import { textFromHtml, linksFromHtml, headingsFromHtml } from './html.js';
 
 const clean = value => String(value || '').replace(/\s+/g, ' ').trim();
 const result = (value, confidence, reason) => ({ value: value || null, confidence, ...(reason ? { reason } : {}) });
@@ -84,8 +84,30 @@ export function extractRelaxations(text) {
   return map;
 }
 
-export function extractOfficialApplyLink(text, links = []) {
-  const anchor = links.find(link => /(?:apply|application|registration|candidate\s+portal|online)/i.test(`${link.text} ${link.url}`));
+const AGGREGATOR_HOSTS = ['sarkariresult.com', 'sarkariresults.org.in'];
+const isAggregatorUrl = url => {
+  try {
+    const host = new URL(url).hostname.toLowerCase();
+    return AGGREGATOR_HOSTS.some(allowed => host === allowed || host.endsWith(`.${allowed}`));
+  } catch { return false; }
+};
+
+function linkScore(link) {
+  const haystack = `${link.text || ''} ${link.context || ''} ${link.url || ''}`;
+  let score = 0;
+  if (/(?:apply|application|registration|candidate\s+portal)/i.test(haystack)) score += 8;
+  if (/online/i.test(haystack)) score += 3;
+  if (!isAggregatorUrl(link.url)) score += 2;
+  if (/\.pdf(?:$|[?#])/i.test(link.url)) score -= 2;
+  return score;
+}
+
+export function extractOfficialApplyLink(text, links = [], { excludeAggregator = false } = {}) {
+  const candidates = links
+    .filter(link => !excludeAggregator || !isAggregatorUrl(link.url))
+    .filter(link => /(?:apply|application|registration|candidate\s+portal|online)/i.test(`${link.text} ${link.context || ''} ${link.url}`))
+    .sort((a, b) => linkScore(b) - linkScore(a));
+  const anchor = candidates[0];
   if (anchor) return result(anchor.url, 'medium');
   const urls = String(text || '').match(/https?:\/\/[^\s<>()"']+/gi) || [];
   for (const url of urls) {
@@ -98,8 +120,9 @@ export function extractOfficialApplyLink(text, links = []) {
   return result(null, 'none', 'no labelled official apply URL found');
 }
 
-export function extractSyllabusLink(text, links = []) {
-  const anchor = links.find(link => /syllabus|scheme\s+of\s+examination|exam\s+pattern/i.test(`${link.text} ${link.url}`));
+export function extractSyllabusLink(text, links = [], { excludeAggregator = false } = {}) {
+  const anchor = links.find(link => (!excludeAggregator || !isAggregatorUrl(link.url))
+    && /syllabus|scheme\s+of\s+examination|exam\s+pattern/i.test(`${link.text} ${link.url}`));
   if (anchor) return result(anchor.url, 'medium');
   const urls = String(text || '').match(/https?:\/\/[^\s<>()"']+/gi) || [];
   for (const url of urls) {
@@ -109,11 +132,48 @@ export function extractSyllabusLink(text, links = []) {
   return result(null, 'none', 'no syllabus link found');
 }
 
+function extractAggregatorOrganization(text, headings) {
+  const heading = headings
+    .filter(value => /(?:commission|board|bank|university|institute|corporation|court|department|force|railway|limited|authority|council|service|college|ministry|navy|army|air force|esb|psu)/i.test(value)
+      && !/(?:sarkari|important links|how to fill|short details|frequently asked)/i.test(value))
+    .sort((a, b) => a.length - b.length)[0];
+  if (heading && heading.length <= 255) return heading;
+  const sentence = /(?:^|\s)([A-Z][A-Za-z.&()'/-]*(?:\s+[A-Za-z0-9.&()'/-]+){1,12}?(?:Commission|Board|Bank|University|Institute|Corporation|Court|Department|Force|Railway|Limited|Authority|Council|Service|College|Ministry|Navy|Army|ESB|PSU))\b/i.exec(text);
+  return sentence?.[1]?.trim() || null;
+}
+
+function classifyAggregator(text, organization) {
+  const haystack = `${text} ${organization || ''}`.toLowerCase();
+  const stateNames = [
+    ['Uttar Pradesh', /\b(?:up|uttar pradesh)\b/], ['Bihar', /\bbihar\b/], ['Rajasthan', /\brajasthan\b/],
+    ['Madhya Pradesh', /\b(?:mp|madhya pradesh)\b/], ['Uttarakhand', /\b(?:uk|uttarakhand)\b/],
+    ['Jharkhand', /\bjharkhand\b/], ['Haryana', /\bharyana\b/], ['Himachal Pradesh', /\bhimachal\b/],
+    ['Chhattisgarh', /\bchhattisgarh\b/], ['Punjab', /\bpunjab\b/], ['Gujarat', /\bgujarat\b/],
+    ['Maharashtra', /\bmaharashtra\b/], ['West Bengal', /\bwest bengal\b/], ['Odisha', /\bodisha\b/],
+    ['Tamil Nadu', /\btamil nadu\b/], ['Karnataka', /\bkarnataka\b/], ['Kerala', /\bkerala\b/],
+    ['Andhra Pradesh', /\bandhra pradesh\b/], ['Telangana', /\btelangana\b/], ['Assam', /\bassam\b/],
+    ['Delhi', /\b(?:delhi|dsssb)\b/],
+  ];
+  const state = stateNames.find(([, pattern]) => pattern.test(haystack))?.[0] || null;
+  if (/\b(?:railway|rrb|rrc)\b/.test(haystack)) return { category: 'RAILWAY', state };
+  if (/\b(?:jssc|bpsc|rpsc|mppsc|uppsc|ukpsc|hpsc|cgpsc|psc)\b|public service commission/.test(haystack)) return { category: 'STATE_PSC', state };
+  if (/\b(?:ssc|staff selection commission)\b/.test(haystack)) return { category: 'SSC', state: null };
+  if (/\bupsc\b|union public service commission/.test(haystack)) return { category: 'UPSC', state: null };
+  if (/\b(?:bank|ibps|sbi|pnb|boi|uco|insurance)\b/.test(haystack)) return { category: 'BANKING', state };
+  if (/\b(?:army|navy|air force|agniveer|defence|defense|capf|crpf|cisf|bsf|itbp)\b/.test(haystack)) return { category: 'DEFENCE', state: null };
+  if (/\bpolice\b|\bbpssc\b|\bupp\b/.test(haystack)) return { category: 'POLICE', state };
+  if (/\b(?:teacher|teaching|lecturer|professor|tet|ctet|school)\b/.test(haystack)) return { category: 'TEACHING', state };
+  if (/\b(?:sssc|ssb)\b/.test(haystack)) return { category: 'STATE_PSC', state };
+  if (/\b(?:psu|ntpc|iocl|isro|drdo|aiims|concor|rcfl|nmdc)\b|limited\b/.test(haystack)) return { category: 'PSU', state: null };
+  return { category: state ? 'STATE_GOVT' : 'CENTRAL_GOVT', state };
+}
+
 /** Turns an official document into a deliberately sparse job row. */
 export function extractJob({ source, link, body, contentType = '', now = new Date() }) {
   const bodyString = Buffer.isBuffer(body) ? body.toString('utf8') : String(body || '');
   const isHtml = /html/i.test(contentType) || /<\s*(?:html|body|a)\b/i.test(bodyString);
   const htmlLinks = isHtml ? linksFromHtml(bodyString, link.url) : [];
+  const headings = isHtml ? headingsFromHtml(bodyString) : [];
   const raw = isHtml ? textFromHtml(bodyString) : bodyString;
   const dates = extractApplicationDates(raw, { now });
   const milestones = extractMilestoneDates(raw, { now });
@@ -122,11 +182,14 @@ export function extractJob({ source, link, body, contentType = '', now = new Dat
   const selectionProcess = labelledText(raw, 'selection\\s+process|mode\\s+of\\s+selection|method\\s+of\\s+selection|selection\\s+procedure', ['age\\s+limit', 'application\\s+fee', 'fee\\s+details?', 'important\\s+instructions']);
   const fees = extractFees(raw);
   const relaxations = extractRelaxations(raw);
-  let officialApplyLink = extractOfficialApplyLink(raw, htmlLinks);
+  const aggregator = source.kind === 'aggregator';
+  const inferredOrganization = aggregator ? extractAggregatorOrganization(raw, headings) : source.organization;
+  const inferredCategory = aggregator ? classifyAggregator(`${link.text || ''} ${inferredOrganization || ''}`, inferredOrganization) : { category: source.category, state: source.state || null };
+  let officialApplyLink = extractOfficialApplyLink(raw, htmlLinks, { excludeAggregator: aggregator });
   if (!officialApplyLink.value && source.id === 'uppsc' && /\bapply\b/i.test(link.text || '')) {
     officialApplyLink = result(link.url, 'medium');
   }
-  const syllabusLink = extractSyllabusLink(raw, htmlLinks);
+  const syllabusLink = extractSyllabusLink(raw, htmlLinks, { excludeAggregator: aggregator });
   const contextDates = source.id === 'uppsc' ? datesInText(link.context || raw, { now }) : [];
   const effectiveDates = source.id === 'uppsc' && contextDates.length >= 3
     ? {
@@ -139,7 +202,7 @@ export function extractJob({ source, link, body, contentType = '', now = new Dat
   const advertisementNo = extractAdvertisementNo(`${raw} ${link.context || ''}`);
   const totalPosts = extractTotalPosts(`${raw} ${link.context || ''}`);
   const linkedPdf = !/\.pdf(?:$|[?#])/i.test(link.url) && isHtml
-    ? htmlLinks.find(item => /\.pdf(?:$|[?#])/i.test(item.url))?.url
+    ? htmlLinks.find(item => /\.pdf(?:$|[?#])/i.test(item.url) && (!aggregator || !isAggregatorUrl(item.url)))?.url
     : null;
   const notificationPdfUrl = linkedPdf || (/\.pdf(?:$|[?#])/i.test(link.url) ? link.url : null);
   const isPdf = Boolean(notificationPdfUrl);
@@ -147,10 +210,10 @@ export function extractJob({ source, link, body, contentType = '', now = new Dat
     notificationPdfUrl: result(notificationPdfUrl, isPdf ? 'certain' : 'none', isPdf ? undefined : 'candidate page had no PDF link') };
   const row = {
     postName: postName.value,
-    organization: source.organization,
-    category: source.category,
+    organization: inferredOrganization || source.organization || 'Organization to verify',
+    category: inferredCategory.category,
     listingSection: 'AUTO',
-    state: source.state || null,
+    state: inferredCategory.state,
     advertisementNo: advertisementNo.value,
     totalPosts: totalPosts.value,
     applicationStartDate: effectiveDates.applicationStartDate.value,
@@ -176,5 +239,10 @@ export function extractJob({ source, link, body, contentType = '', now = new Dat
     row[`relax${category}`] = field.value;
     fields[`relax${category}`] = field;
   }
-  return { row, fields, text: raw };
+  return {
+    row, fields, text: raw,
+    metadata: aggregator
+      ? { sourceType: 'AGGREGATOR', verificationStatus: 'PENDING_MANUAL', aggregatorUrl: link.url, officialSourceFound: Boolean(notificationPdfUrl || officialApplyLink.value) }
+      : { sourceType: 'OFFICIAL', verificationStatus: 'PENDING_MANUAL' },
+  };
 }

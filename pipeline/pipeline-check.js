@@ -16,6 +16,7 @@ equal(parseIndianDate('October 14, 2026'), '2026-10-14', 'written month-first da
 equal(parseIndianDate('2026-02-31'), null, 'impossible date is rejected');
 equal(dateNearLabel('Exam date: 14 October 2026. Last date: 31 October 2026', ['last date'], { now: new Date('2026-01-01') }).value, '2026-10-31', 'label chooses the right date');
 equal(extractApplicationDates('Online application starts: 1 October 2026. Closing date: 31 October 2026', { now: new Date('2026-01-01') }).lastDate.value, '2026-10-31', 'closing date is detected');
+equal(extractApplicationDates('Application Begin: 5 August 2026. Last Date for Apply Online: 29 September 2026', { now: new Date('2026-01-01') }).applicationStartDate.value, '2026-08-05', 'aggregator application-begin date is detected');
 
 const anchors = linksFromHtml('<table><tr><td>Advt. No. 05/2026 for Physiotherapist - 2026</td><td><a href="notice.pdf"> Recruitment <b>Notice</b></a></td></tr></table><a href="mailto:x@y">mail</a>', 'https://example.gov.in/list');
 equal(anchors.length, 1, 'non-web links are excluded');
@@ -85,6 +86,27 @@ equal(htmlDetailed.row.notificationPdfUrl, 'https://example.gov.in/files/analyst
 equal(htmlDetailed.row.officialApplyLink, 'https://example.gov.in/apply/analyst', 'HTML detail pages preserve apply links');
 equal(htmlDetailed.row.syllabusLink, 'https://example.gov.in/files/analyst-syllabus.pdf', 'HTML detail pages preserve syllabus links');
 equal(htmlDetailed.row.listingSection, 'AUTO', 'rows use the importer default listing section');
+
+const aggregatorSource = {
+  id: 'sarkariresult', kind: 'aggregator', name: 'Sarkari Result discovery', organization: null,
+  category: 'CENTRAL_GOVT', allowedHosts: ['sarkariresult.com'],
+};
+const aggregatorPage = '<h1>JSSC Jharkhand JILCCE Inter Level Recruitment 2026</h1>'
+  + '<h2>Jharkhand Staff Selection Commission (JSSC)</h2>'
+  + '<p>Application Begin: 05/08/2026 Last Date for Apply Online: 29/09/2026 Total : 326 Post</p>'
+  + '<a href="https://apply.jssc.jharkhand.gov.in/form">Apply Online</a>'
+  + '<a href="https://doc.sarkariresults.org.in/jssc.pdf">Download Notification</a>'
+  + '<a href="https://jssc.jharkhand.gov.in/files/jilcce.pdf">Official Notification</a>';
+const aggregator = extractJob({
+  source: aggregatorSource,
+  link: { url: 'https://www.sarkariresult.com/2026/jssc-jilcce/', text: 'JSSC Jharkhand JILCCE Inter Level Recruitment 2026' },
+  body: aggregatorPage, contentType: 'text/html', now: new Date('2026-09-20'),
+});
+equal(aggregator.row.organization, 'Jharkhand Staff Selection Commission (JSSC)', 'aggregator headings identify the organisation');
+equal(aggregator.row.category, 'STATE_PSC', 'aggregator category identifies a state PSC');
+equal(aggregator.row.notificationPdfUrl, 'https://jssc.jharkhand.gov.in/files/jilcce.pdf', 'aggregator ignores its own document host');
+equal(aggregator.row.officialApplyLink, 'https://apply.jssc.jharkhand.gov.in/form', 'aggregator preserves the external apply link');
+equal(aggregator.metadata.verificationStatus, 'PENDING_MANUAL', 'aggregator rows require manual verification');
 
 check(header().includes('lastDate'), 'CSV header comes from shared importer contract');
 const quoted = toCsv([{ postName: 'Engineer, Civil', organization: 'Test', category: 'SSC', applicationStartDate: '2026-10-01', lastDate: '2026-10-31' }]);

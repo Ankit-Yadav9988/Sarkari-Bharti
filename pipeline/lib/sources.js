@@ -1,5 +1,14 @@
-/** Official pages chosen for broad notice coverage, not unofficial aggregators. */
+/** Official sources plus one discovery index; discovery rows still require verification. */
 export const SOURCES = [
+  {
+    id: 'sarkariresult', kind: 'aggregator',
+    name: 'Sarkari Result discovery', organization: null, category: 'CENTRAL_GOVT',
+    // Discovery only: detail pages are used to find official links and every
+    // row remains a manual-review candidate before publication.
+    url: 'https://www.sarkariresult.com/latestjob/',
+    allowedHosts: ['sarkariresult.com', 'www.sarkariresult.com'],
+    maxCandidates: 120,
+  },
   {
     id: 'ssc', name: 'Staff Selection Commission', organization: 'Staff Selection Commission', category: 'SSC',
     // The public notice board is rendered client-side. This is its official

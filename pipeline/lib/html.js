@@ -14,6 +14,18 @@ export function textFromHtml(html) {
     .replace(/\s+/g, ' ').trim();
 }
 
+/** Text from headings, useful when an aggregator puts the organisation in h2. */
+export function headingsFromHtml(html) {
+  const headings = [];
+  const pattern = /<h[1-4]\b[^>]*>([\s\S]*?)<\/h[1-4]\s*>/gi;
+  let match;
+  while ((match = pattern.exec(String(html || '')))) {
+    const text = textFromHtml(match[1]);
+    if (text) headings.push(text);
+  }
+  return headings;
+}
+
 /** Every anchor, not a brittle selector for one source site's current markup. */
 export function linksFromHtml(html, baseUrl) {
   const links = [];

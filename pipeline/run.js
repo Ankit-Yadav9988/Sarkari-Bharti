@@ -17,7 +17,7 @@ const OUT_DIR = path.join(HERE, 'out');
 // Increment when extraction logic changes materially. Existing candidates are
 // then read once again so a code improvement can enrich rows already seen by
 // an earlier workflow run instead of being hidden forever by seen.json.
-const EXTRACTOR_VERSION = 3;
+const EXTRACTOR_VERSION = 4;
 
 const isoToday = () => new Date().toISOString().slice(0, 10);
 const escapeMd = value => String(value || '').replace(/\|/g, '\\|').replace(/\r?\n/g, ' ');
@@ -81,7 +81,25 @@ function reportMarkdown({ date, discovery, rows, preview, skippedPublished, warn
     const missing = Object.entries(extracted.fields).filter(([, f]) => !f.value).map(([name, f]) => `${name}: ${f.reason || 'not extracted'}`);
     return missing.length ? `- **${escapeMd(extracted.row.postName || extracted.link.text || extracted.link.url)}** — ${missing.join('; ')}` : null;
   }).filter(Boolean).join('\n') || '- None.';
-  return `# Pipeline report — ${date}\n\nThis file is a review aid. It never publishes jobs; import the accompanying CSV through the existing admin screen and approve each valid row.\n\n## Source health\n\n| Source | Status | Links seen | Candidates | Detail |\n| --- | --- | ---: | ---: | --- |\n${sourceLines}\n\n## Output\n\n- Candidate documents processed: ${rows.length}\n- Rows already published and omitted: ${skippedPublished}\n- Importer-valid rows: ${preview.valid}/${preview.total}\n- Rows needing manual completion: ${preview.invalid}\n- Consecutive zero-candidate runs: ${state.zeroCandidateDays}\n${warnings.map(w => `- Warning: ${w}`).join('\n')}\n\n## Importer validation\n\n| CSV line | Post | Why it will be skipped |\n| ---: | --- | --- |\n${issues}\n\n## Fields deliberately left blank\n\n${fieldNotes}\n`;
+  const verificationRows = rows.map(({ extracted }) => {
+    const metadata = extracted.metadata || {};
+    return `| ${escapeMd(extracted.row.postName || extracted.link?.text || '')} | ${escapeMd(metadata.verificationStatus || 'PENDING_MANUAL')} | ${metadata.officialSourceFound ? 'yes' : 'no'} | ${escapeMd(metadata.aggregatorUrl || extracted.link?.url || '')} | ${escapeMd(extracted.row.notificationPdfUrl || extracted.row.officialApplyLink || '')} |`;
+  }).join('\n') || '| — | — | — | — | — |';
+  return `# Pipeline report — ${date}\n\nThis file is a review aid. It never publishes jobs; import the accompanying CSV through the existing admin screen and approve each valid row.\n\n## Source health\n\n| Source | Status | Links seen | Candidates | Detail |\n| --- | --- | ---: | ---: | --- |\n${sourceLines}\n\n## Output\n\n- Current review-queue rows written: ${rows.length}\n- Rows already published and omitted: ${skippedPublished}\n- Importer-valid rows: ${preview.valid}/${preview.total}\n- Rows needing manual completion: ${preview.invalid}\n- Consecutive zero-candidate runs: ${state.zeroCandidateDays}\n${warnings.map(w => `- Warning: ${w}`).join('\n')}\n\n## Verification queue\n\n| Post | Status | Official link found | Aggregator page | Official notification/apply link |\n| --- | --- | --- | --- | --- |\n${verificationRows}\n\n## Importer validation\n\n| CSV line | Post | Why it will be skipped |\n| ---: | --- | --- |\n${issues}\n\n## Fields deliberately left blank\n\n${fieldNotes}\n`;
+}
+
+function mergeExtracted(aggregatorExtracted, officialExtracted) {
+  const row = { ...aggregatorExtracted.row };
+  const fields = { ...aggregatorExtracted.fields };
+  for (const [key, field] of Object.entries(officialExtracted.fields)) {
+    if (field?.value != null && field.value !== '') { row[key] = field.value; fields[key] = field; }
+  }
+  return {
+    ...aggregatorExtracted,
+    row,
+    fields,
+    metadata: { ...aggregatorExtracted.metadata, officialSourceFound: true, officialFetch: 'OK' },
+  };
 }
 
 export async function runPipeline({ sources = SOURCES, now = new Date(), state: suppliedState, client: suppliedClient } = {}) {
@@ -106,8 +124,14 @@ export async function runPipeline({ sources = SOURCES, now = new Date(), state: 
       // files have no status field, so they are eligible once for a safe
       // migration/retry instead of permanently hiding a previously failed PDF.
       const changed = !prior || prior.hash !== downloaded.hash || prior.status !== 'processed'
-        || prior.extractorVersion !== EXTRACTOR_VERSION;
-      if (!changed) continue;
+        || prior.extractorVersion !== EXTRACTOR_VERSION || !prior.row
+        || (link.source.kind === 'aggregator' && prior.metadata?.officialFetch === 'RETRY');
+      if (!changed) {
+        const cachedExtracted = { row: prior.row, fields: prior.fields || {}, metadata: prior.metadata || {}, link };
+        if (cachedExtracted.row.notificationPdfUrl && publishedUrls.has(cachedExtracted.row.notificationPdfUrl)) { skippedPublished += 1; continue; }
+        rows.push({ extracted: cachedExtracted });
+        continue;
+      }
       // Some government servers redirect dead PDF URLs to an HTML home page.
       // Do not feed that HTML to pdftotext and call the result a scanned PDF.
       const looksLikePdf = downloaded.body.subarray(0, 4).toString() === '%PDF';
@@ -120,20 +144,49 @@ export async function runPipeline({ sources = SOURCES, now = new Date(), state: 
         now,
       });
       extracted.link = link;
+      if (link.source.kind === 'aggregator' && extracted.row.notificationPdfUrl) {
+        try {
+          const official = await fetchCached(client, extracted.row.notificationPdfUrl, CACHE_DIR);
+          const officialPdf = official.body.subarray(0, 4).toString() === '%PDF' || /application\/pdf/i.test(official.contentType);
+          const officialText = await documentText(official.body, extracted.row.notificationPdfUrl, official.contentType);
+          const officialExtracted = extractJob({
+            source: { ...link.source, kind: 'official', organization: extracted.row.organization, category: extracted.row.category, state: extracted.row.state },
+            link: { ...link, url: extracted.row.notificationPdfUrl },
+            body: officialPdf ? officialText : official.body.toString('utf8'),
+            contentType: officialPdf ? 'text/plain' : official.contentType,
+            now,
+          });
+          Object.assign(extracted, mergeExtracted(extracted, officialExtracted));
+          extracted.link = link;
+        } catch (error) {
+          extracted.metadata = { ...extracted.metadata, officialFetch: 'RETRY' };
+          warnings.push(`${link.source.name}: official notification fetch failed for ${extracted.row.postName || link.url} — ${error.message}`);
+        }
+      } else if (link.source.kind === 'aggregator') {
+        extracted.metadata = { ...extracted.metadata, officialFetch: 'NOT_FOUND' };
+      }
       if (extracted.row.notificationPdfUrl && publishedUrls.has(extracted.row.notificationPdfUrl)) {
-        state.candidates[link.url] = { hash: downloaded.hash, status: 'processed', extractorVersion: EXTRACTOR_VERSION, seenAt: new Date().toISOString(), source: link.source.id };
+        state.candidates[link.url] = {
+          hash: downloaded.hash, status: 'processed', extractorVersion: EXTRACTOR_VERSION,
+          seenAt: new Date().toISOString(), source: link.source.id,
+          row: extracted.row, fields: extracted.fields, metadata: extracted.metadata || {},
+        };
         skippedPublished += 1;
         continue;
       }
       rows.push({ extracted });
-      state.candidates[link.url] = { hash: downloaded.hash, status: 'processed', extractorVersion: EXTRACTOR_VERSION, seenAt: new Date().toISOString(), source: link.source.id };
+      state.candidates[link.url] = {
+        hash: downloaded.hash, status: 'processed', extractorVersion: EXTRACTOR_VERSION,
+        seenAt: new Date().toISOString(), source: link.source.id,
+        row: extracted.row, fields: extracted.fields, metadata: extracted.metadata || {},
+      };
     } catch (error) { warnings.push(`${link.source.name}: ${link.url} — ${error.message}`); }
   }
 
   const candidateCount = discovery.candidates.length;
   state.zeroCandidateDays = candidateCount === 0 ? (state.zeroCandidateDays || 0) + 1 : 0;
   if (candidateCount > 0 && rows.length === 0 && skippedPublished === 0) {
-    warnings.push('Candidates were discovered, but no changed row was written. They may already be recorded in seen.json or document extraction failed; inspect the report warnings.');
+    warnings.push('Candidates were discovered, but no review row was written. Inspect the report warnings and source health.');
   }
   if (state.zeroCandidateDays >= 7) warnings.push('No candidates have been found for seven consecutive runs; inspect the source pages and keyword filters.');
   state.updatedAt = new Date().toISOString();
