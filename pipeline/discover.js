@@ -18,9 +18,16 @@ export function isCandidate(link, source, { includeNotices = false } = {}) {
   // Angular/Vue government portals expose untranslated keys and generic
   // placeholder links in their initial HTML shell. They are not notices.
   if (/\{\{|\}\}|_HM\b|_E_HM\b|_I_HM\b/i.test(link.text)) return false;
-  const id = new URL(link.url).searchParams.get('ID');
-  if (id && id.length < 5) return false;
-  const haystack = `${link.text} ${link.url}`.toLowerCase();
+  const parsed = new URL(link.url);
+  const id = parsed.searchParams.get('ID');
+  if (id && id.length < 5 && source.id !== 'uppsc') return false;
+  const haystack = `${link.text} ${link.context || ''} ${link.url}`.toLowerCase();
+  if (parsed.searchParams.has('page')) return false;
+  if (canonicalUrl(link.url) === canonicalUrl(source.url)) return false;
+  if (source.id === 'rpsc' && !haystack.includes(String(new Date().getUTCFullYear()))) return false;
+  if (source.id === 'uppsc' && /candidatepages\/notifications\.aspx/i.test(parsed.pathname)) {
+    return /\bapply\b|recruitment|advt\.?/i.test(haystack);
+  }
   const words = source.id === 'uppsc'
     ? RECRUITMENT_KEYWORDS.filter(word => word !== 'notice' && word !== 'advt')
     : includeNotices ? [...RECRUITMENT_KEYWORDS, ...NOTICE_KEYWORDS] : RECRUITMENT_KEYWORDS;

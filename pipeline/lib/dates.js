@@ -46,6 +46,17 @@ export function isSaneNoticeDate(value, now = new Date()) {
 
 const DATE_PATTERN = '(?:\\d{4}[./-]\\d{1,2}[./-]\\d{1,2}|\\d{1,2}[./-]\\d{1,2}[./-]\\d{4}|\\d{1,2}(?:st|nd|rd|th)?\\s+[A-Za-z]+\\s+\\d{4}|[A-Za-z]+\\s+\\d{1,2}(?:st|nd|rd|th)?\\s+\\d{4})';
 
+export function datesInText(text, { now = new Date() } = {}) {
+  const values = [];
+  const pattern = new RegExp(DATE_PATTERN, 'gi');
+  let match;
+  while ((match = pattern.exec(String(text || '')))) {
+    const value = parseIndianDate(match[0]);
+    if (isSaneNoticeDate(value, now)) values.push(value);
+  }
+  return values;
+}
+
 /**
  * Finds a date following one of the supplied labels.  A 180-character window
  * covers table cells flattened by pdftotext without letting an unrelated date
@@ -70,11 +81,15 @@ export function dateNearLabel(text, labels, { now = new Date(), window = 180 } =
 export function extractApplicationDates(text, options) {
   return {
     applicationStartDate: dateNearLabel(text, [
+      'application\\s+(?:filling\\s+)?start\\s+date',
+      'start\\s+date\\s+(?:for\\s+)?(?:online\\s+)?application',
       'date[s]? for submission of online application(?:s)?(?: form)?(?: begin| start| starts| from)?',
       'online application(?:s)?(?: form)?(?: begin| start| starts| from)',
       'opening date(?: for online application)?',
     ], options),
     lastDate: dateNearLabel(text, [
+      'application\\s+(?:filling\\s+)?last\\s+date',
+      'last\\s+date\\s+(?:for\\s+)?(?:online\\s+)?application',
       'last date(?: and time)?(?: for (?:receipt|submission) of online application(?:s)?(?: form)?)?',
       'closing date(?: and time)?(?: for online application(?:s)?)?',
       'last date to apply(?: online)?',

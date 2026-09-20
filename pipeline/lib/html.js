@@ -26,7 +26,19 @@ export function linksFromHtml(html, baseUrl) {
     try {
       const url = new URL(rawHref, baseUrl);
       if (!/^https?:$/.test(url.protocol)) continue;
-      links.push({ url: url.href, text: textFromHtml(match[2]) });
+      const text = textFromHtml(match[2]);
+      // Recruitment indexes commonly put the useful title and dates in the
+      // surrounding table row while the anchor itself says only "View" or
+      // contains an icon. Preserve that row as context for discovery and
+      // extraction without changing the anchor-text contract.
+      const source = String(html || '');
+      const rowStart = source.lastIndexOf('<tr', match.index);
+      const rowEnd = source.indexOf('</tr', match.index + match[0].length);
+      const previousRowEnd = source.lastIndexOf('</tr', match.index);
+      const context = rowStart >= 0 && rowStart > previousRowEnd && rowEnd >= 0
+        ? textFromHtml(source.slice(rowStart, rowEnd + 5))
+        : '';
+      links.push({ url: url.href, text, ...(context && context !== text ? { context } : {}) });
     } catch { /* malformed links are simply not candidates */ }
   }
   return links;

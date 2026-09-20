@@ -1,30 +1,36 @@
-import { extractApplicationDates, extractMilestoneDates } from './dates.js';
+import { datesInText, extractApplicationDates, extractMilestoneDates } from './dates.js';
 import { textFromHtml, linksFromHtml } from './html.js';
 
 const clean = value => String(value || '').replace(/\s+/g, ' ').trim();
 const result = (value, confidence, reason) => ({ value: value || null, confidence, ...(reason ? { reason } : {}) });
 
 export function extractAdvertisementNo(text) {
-  const match = /(?:advertisement|advt\.?|centralised employment notification|cen)\s*(?:no\.?|number)?\s*[:#-]?\s*([A-Z0-9][A-Z0-9/._-]{2,})/i.exec(text);
+  const match = /(?:advertisement|advt\.?|centralised employment notification|cen)\s*(?:(?:no\.?|number)\s*)?[:#-]?\s*(?=[A-Z0-9][A-Z0-9/._-]*\d)([A-Z0-9][A-Z0-9/._-]{2,})/i.exec(text);
   return match && /\d/.test(match[1]) ? result(match[1], 'medium') : result(null, 'none', 'no advertisement number label found');
 }
 
 export function extractTotalPosts(text) {
-  const match = /(?:total\s+(?:number of )?(?:posts?|vacancies)|total posts?)\s*[:=-]?\s*([\d,]+)/i.exec(text)
+  const match = /(?:total\s+(?:number of )?(?:posts?|vacancies)|total posts?|(?:number|no\.?)\s+of\s+(?:posts?|vacancies))\s*[:=-]?\s*([\d,]+)/i.exec(text)
     || /([\d,]+)\s+(?:posts?|vacancies)\b/i.exec(text);
   if (!match) return result(null, 'none', 'no unambiguous total-post count found');
   const value = Number(match[1].replace(/,/g, ''));
   return Number.isSafeInteger(value) ? result(value, 'medium') : result(null, 'none', 'invalid post count');
 }
 
-export function extractPostName(text, linkText = '') {
+export function extractPostName(text, linkText = '', contextText = '') {
   const label = clean(linkText);
   if (/\{\{|\}\}|_HM\b|_E_HM\b|_I_HM\b/i.test(label)) return result(null, 'none', 'source returned an untranslated UI label');
   const actionTitle = label
     .replace(/^click\s+here\s+to\s+apply(?:\s+online)?\s+(?:for\s+)?/i, '')
     .replace(/\s*,?\s*(?:advt?\.?|advertisement)\s*no?\.?\s*[:#-]?.*$/i, '')
     .trim();
-  if (actionTitle.length >= 5 && actionTitle.length <= 255) return result(actionTitle, actionTitle === label ? 'high' : 'medium');
+  const generic = /^(?:view|view advertisement|download|download advertisement|apply|apply online|click here|read more)$/i.test(actionTitle);
+  if (!generic && actionTitle.length >= 5 && actionTitle.length <= 255) return result(actionTitle, actionTitle === label ? 'high' : 'medium');
+  const context = clean(contextText);
+  const contextMatch = /(?:advt\.?|advertisement)(?:\s+(?:no\.?|number))?\s*[A-Z0-9./-]+\s+(?:for|of)\s+(.+?)(?=\s+(?:view|download|apply|click)\b|$)/i.exec(context);
+  if (contextMatch) return result(clean(contextMatch[1]), 'medium');
+  const contextAd = extractAdvertisementNo(context).value;
+  if (generic && contextAd) return result(`Advertisement ${contextAd}`, 'low');
   const match = /(?:recruitment|employment notice|notification)\s+(?:for|of)\s+(?:the\s+)?(?:post(?:s)?\s+of\s+)?([^\.\n]{5,180})/i.exec(text);
   return match ? result(clean(match[1]), 'medium') : result(null, 'none', 'no reliable title found');
 }
@@ -116,17 +122,28 @@ export function extractJob({ source, link, body, contentType = '', now = new Dat
   const selectionProcess = labelledText(raw, 'selection\\s+process|mode\\s+of\\s+selection|method\\s+of\\s+selection|selection\\s+procedure', ['age\\s+limit', 'application\\s+fee', 'fee\\s+details?', 'important\\s+instructions']);
   const fees = extractFees(raw);
   const relaxations = extractRelaxations(raw);
-  const officialApplyLink = extractOfficialApplyLink(raw, htmlLinks);
+  let officialApplyLink = extractOfficialApplyLink(raw, htmlLinks);
+  if (!officialApplyLink.value && source.id === 'uppsc' && /\bapply\b/i.test(link.text || '')) {
+    officialApplyLink = result(link.url, 'medium');
+  }
   const syllabusLink = extractSyllabusLink(raw, htmlLinks);
-  const postName = extractPostName(raw, link.text);
-  const advertisementNo = extractAdvertisementNo(raw);
-  const totalPosts = extractTotalPosts(raw);
+  const contextDates = source.id === 'uppsc' ? datesInText(link.context || raw, { now }) : [];
+  const effectiveDates = source.id === 'uppsc' && contextDates.length >= 3
+    ? {
+      ...dates,
+      applicationStartDate: result(contextDates[1], 'medium'),
+      lastDate: result(contextDates[2], 'medium'),
+    }
+    : dates;
+  const postName = extractPostName(raw, link.text, link.context);
+  const advertisementNo = extractAdvertisementNo(`${raw} ${link.context || ''}`);
+  const totalPosts = extractTotalPosts(`${raw} ${link.context || ''}`);
   const linkedPdf = !/\.pdf(?:$|[?#])/i.test(link.url) && isHtml
     ? htmlLinks.find(item => /\.pdf(?:$|[?#])/i.test(item.url))?.url
     : null;
   const notificationPdfUrl = linkedPdf || (/\.pdf(?:$|[?#])/i.test(link.url) ? link.url : null);
   const isPdf = Boolean(notificationPdfUrl);
-  const fields = { postName, advertisementNo, totalPosts, ...dates, ...milestones, ...age, eligibility, selectionProcess, officialApplyLink, syllabusLink,
+  const fields = { postName, advertisementNo, totalPosts, ...effectiveDates, ...milestones, ...age, eligibility, selectionProcess, officialApplyLink, syllabusLink,
     notificationPdfUrl: result(notificationPdfUrl, isPdf ? 'certain' : 'none', isPdf ? undefined : 'candidate page had no PDF link') };
   const row = {
     postName: postName.value,
@@ -136,8 +153,8 @@ export function extractJob({ source, link, body, contentType = '', now = new Dat
     state: source.state || null,
     advertisementNo: advertisementNo.value,
     totalPosts: totalPosts.value,
-    applicationStartDate: dates.applicationStartDate.value,
-    lastDate: dates.lastDate.value,
+    applicationStartDate: effectiveDates.applicationStartDate.value,
+    lastDate: effectiveDates.lastDate.value,
     admitCardDate: milestones.admitCardDate.value,
     examDate: milestones.examDate.value,
     resultDate: milestones.resultDate.value,

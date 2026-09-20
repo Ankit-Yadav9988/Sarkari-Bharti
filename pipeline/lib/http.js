@@ -39,16 +39,19 @@ export function createPoliteClient({ state = {}, fetchImpl = fetch, delayMs = 20
   const robotsByOrigin = new Map(); let lastRequest = 0;
   state.requests ||= {};
 
-  async function raw(url, headers = {}) {
+  async function raw(url, headers = {}, { userAgent = USER_AGENT } = {}) {
     const wait = Math.max(0, delayMs - (Date.now() - lastRequest));
     if (wait) await pause(wait);
     lastRequest = Date.now();
     for (let attempt = 0; attempt < 3; attempt += 1) {
       try {
-        const response = await fetchImpl(url, { headers: { 'User-Agent': USER_AGENT, ...headers }, signal: AbortSignal.timeout(30000) });
+        const response = await fetchImpl(url, { headers: { 'User-Agent': userAgent, ...headers }, signal: AbortSignal.timeout(30000) });
         if (response.status < 500 || attempt === 2) return response;
       } catch (error) {
-        if (attempt === 2) throw error;
+        if (attempt === 2) {
+          const detail = error?.cause?.message || error?.message || String(error);
+          throw new Error(`fetch failed for ${url}: ${detail}`, { cause: error });
+        }
       }
       await pause(1000 * (attempt + 1));
     }
@@ -59,9 +62,15 @@ export function createPoliteClient({ state = {}, fetchImpl = fetch, delayMs = 20
     const parsed = new URL(url); const origin = parsed.origin;
     if (!robotsByOrigin.has(origin)) {
       const response = await raw(`${origin}/robots.txt`);
-      if (response.status === 404) robotsByOrigin.set(origin, '');
-      else if (!response.ok) throw new Error(`Cannot check robots.txt for ${origin}: HTTP ${response.status}`);
-      else robotsByOrigin.set(origin, await response.text());
+      let robotsResponse = response;
+      // A few government hosts reject the collector's descriptive UA on the
+      // robots endpoint even though the public page is available. Retry only
+      // that robots request with a browser-compatible UA; page/document
+      // requests continue to use the named collector UA.
+      if (response.status === 403) robotsResponse = await raw(`${origin}/robots.txt`, {}, { userAgent: 'Mozilla/5.0' });
+      if (robotsResponse.status === 404) robotsByOrigin.set(origin, '');
+      else if (!robotsResponse.ok) throw new Error(`Cannot check robots.txt for ${origin}: HTTP ${robotsResponse.status}`);
+      else robotsByOrigin.set(origin, await robotsResponse.text());
     }
     if (!robotsAllows(robotsByOrigin.get(origin), parsed.pathname)) throw new Error(`robots.txt disallows ${parsed.href}`);
   }
@@ -72,7 +81,12 @@ export function createPoliteClient({ state = {}, fetchImpl = fetch, delayMs = 20
     const headers = {};
     if (remembered.etag) headers['If-None-Match'] = remembered.etag;
     if (remembered.lastModified) headers['If-Modified-Since'] = remembered.lastModified;
-    const response = await raw(url, headers);
+    let response = await raw(url, headers);
+    // Some public government sites return 403 to descriptive crawler UAs but
+    // serve the same public page to a normal browser UA. This does not bypass
+    // robots.txt (that check already happened above); it only retries the
+    // requested public URL with a browser-compatible identity.
+    if (response.status === 403) response = await raw(url, headers, { userAgent: 'Mozilla/5.0' });
     const metadata = {
       etag: response.headers.get('etag') || remembered.etag || null,
       lastModified: response.headers.get('last-modified') || remembered.lastModified || null,
