@@ -4,47 +4,47 @@
     "https://ssc.gov.in/api/general-website/portal/notice-boards?page=1&limit=50&contentType=notice-boards&key=createdAt&order=DESC&isAttachment=true&language=english&attributes=id%2Cheadline%2CexamId%2CcontentType%2CredirectUrl%2CstartDate%2CendDate%2Clanguage%2CcreatedAt": {
       "etag": "W/\"17fb-29uvCT8xOh6MCC3A7d2VQk/kuJQ\"",
       "lastModified": null,
-      "checkedAt": "2026-09-20T05:30:35.402Z"
+      "checkedAt": "2026-09-20T05:40:48.705Z"
     },
     "https://ssc.gov.in/api/general-website/portal/notice_16092026.pdf": {
       "etag": null,
       "lastModified": null,
-      "checkedAt": "2026-09-20T05:32:28.738Z"
+      "checkedAt": "2026-09-20T05:42:41.992Z"
     },
     "https://ssc.gov.in/api/general-website/portal/English_JE_17092026.pdf": {
       "etag": null,
       "lastModified": null,
-      "checkedAt": "2026-09-20T05:32:27.438Z"
+      "checkedAt": "2026-09-20T05:42:40.764Z"
     },
     "https://ssc.gov.in/api/general-website/portal/Important%20Notice%202026_cgle_2026_12092026.pdf": {
       "etag": null,
       "lastModified": null,
-      "checkedAt": "2026-09-20T05:32:30.737Z"
+      "checkedAt": "2026-09-20T05:42:43.995Z"
     },
     "https://ssc.gov.in/api/general-website/portal/notice_11092026.pdf": {
       "etag": null,
       "lastModified": null,
-      "checkedAt": "2026-09-20T05:32:32.734Z"
+      "checkedAt": "2026-09-20T05:42:45.995Z"
     },
     "https://ssc.gov.in/api/general-website/portal/Notice_of_adv_capf_2026.pdf": {
       "etag": null,
       "lastModified": null,
-      "checkedAt": "2026-09-20T05:32:34.738Z"
+      "checkedAt": "2026-09-20T05:42:47.996Z"
     },
     "https://ssc.gov.in/api/general-website/portal/Addendum_JE_10092026.pdf": {
       "etag": null,
       "lastModified": null,
-      "checkedAt": "2026-09-20T05:32:36.738Z"
+      "checkedAt": "2026-09-20T05:42:49.996Z"
     },
     "https://uppsc.up.nic.in/": {
       "etag": null,
       "lastModified": null,
-      "checkedAt": "2026-09-20T05:31:18.002Z"
+      "checkedAt": "2026-09-20T05:41:31.718Z"
     },
     "https://uppsc.up.nic.in/CandidatePages/Notifications.aspx": {
       "etag": null,
       "lastModified": null,
-      "checkedAt": "2026-09-20T05:32:39.622Z"
+      "checkedAt": "2026-09-20T05:42:53.473Z"
     },
     "https://uppsc.up.nic.in/PublicPages/Recruitment_Details.aspx?ID=IO": {
       "etag": null,
@@ -349,7 +349,12 @@
     "https://sarkariresult.com/latestjob/": {
       "etag": null,
       "lastModified": null,
-      "checkedAt": "2026-09-20T05:30:31.169Z"
+      "checkedAt": "2026-09-20T05:40:40.405Z"
+    },
+    "https://sarkariresult.com/latestjob/?page=1": {
+      "etag": null,
+      "lastModified": null,
+      "checkedAt": "2026-09-20T05:40:44.406Z"
     }
   },
   "candidates": {
@@ -367,10 +372,10 @@
       "source": "uppsc"
     },
     "https://uppsc.up.nic.in/CandidatePages/Notifications.aspx": {
-      "hash": "2a9bae2453efb5abdf86c7414fa8dd0728f4ac5fe7ba3c0d81e85a54d48f102b",
+      "hash": "e12f512e69d944c9de809cc019f157ee7bb1dd151712f55337518c78c6ca0d2e",
       "status": "processed",
       "extractorVersion": 4,
-      "seenAt": "2026-09-20T05:32:40.071Z",
+      "seenAt": "2026-09-20T05:42:53.734Z",
       "source": "uppsc",
       "row": {
         "postName": "DEPUTY SECRETARY (I.T.) IN UPPSC",
@@ -827,5 +832,5 @@
     }
   },
   "zeroCandidateDays": 0,
-  "updatedAt": "2026-09-20T05:32:40.071Z"
+  "updatedAt": "2026-09-20T05:42:53.734Z"
 }
