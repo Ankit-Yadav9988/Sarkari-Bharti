@@ -96,22 +96,16 @@ export function LatestJobRow({ job }) {
 // --- Upcoming: emphasis on the opening date ---
 export function UpcomingJobRow({ job }) {
   const { t } = useLang();
-  const opensIn = daysUntil(job.applicationStartDate);
   return (
     <Link href={jobHref(job)} className="linklist-item">
       <span className="linklist-title">
         {job.postName}
         <NewTag job={job} />
-        {opensIn !== null && opensIn > 0 && (
-          <span className="tag tag-soon">
-            {opensIn === 1 ? t('row.inDay') : t('row.inDays', { n: opensIn })}
-          </span>
-        )}
       </span>
       <span className="linklist-meta">
         {jobSub(job, t)}
         {job.applicationStartDate && (
-          <> · <strong style={{ color: DATE_COLORS.start }}>{t('row.opens')}: {formatDate(job.applicationStartDate)}</strong></>
+          <> · <strong style={{ color: DATE_COLORS.start }}>Expected opening: {formatDate(job.applicationStartDate)}</strong></>
         )}
       </span>
     </Link>

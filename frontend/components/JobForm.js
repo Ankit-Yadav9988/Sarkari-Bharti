@@ -101,8 +101,8 @@ export default function JobForm({ initialData, onSubmit, submitLabel }) {
       listingSection: form.listingSection,
       state: form.state || null,
       totalPosts: form.totalPosts ? Number(form.totalPosts) : null,
-      applicationStartDate: form.applicationStartDate,
-      lastDate: form.lastDate,
+      applicationStartDate: form.applicationStartDate || null,
+      lastDate: form.lastDate || null,
       admitCardDate: form.admitCardDate || null,
       examDate: form.examDate || null,
       resultDate: form.resultDate || null,
@@ -185,13 +185,17 @@ export default function JobForm({ initialData, onSubmit, submitLabel }) {
 
         <div className="grid-2">
           <div>
-            <label className="field-label" style={{ color: 'var(--green)' }}>Application start date *</label>
-            <input className="input" type="date" required value={form.applicationStartDate}
+            <label className="field-label" style={{ color: 'var(--green)' }}>
+              {form.listingSection === 'UPCOMING' ? 'Expected application start date' : 'Application start date *'}
+            </label>
+            <input className="input" type="date" required={form.listingSection !== 'UPCOMING'} value={form.applicationStartDate}
                    onChange={e => updateField('applicationStartDate', e.target.value)} />
           </div>
           <div>
-            <label className="field-label" style={{ color: 'var(--red)' }}>Last date to apply *</label>
-            <input className="input" type="date" required value={form.lastDate}
+            <label className="field-label" style={{ color: 'var(--red)' }}>
+              {form.listingSection === 'UPCOMING' ? 'Expected last date to apply' : 'Last date to apply *'}
+            </label>
+            <input className="input" type="date" required={form.listingSection !== 'UPCOMING'} value={form.lastDate}
                    onChange={e => updateField('lastDate', e.target.value)} />
           </div>
           <div>
@@ -211,6 +215,10 @@ export default function JobForm({ initialData, onSubmit, submitLabel }) {
           </div>
         </div>
         <p className="field-hint">
+          {form.listingSection === 'UPCOMING'
+            ? 'Upcoming dates are optional estimates. Leave them blank when the official application window has not been confirmed; these expected dates will not automatically close the notice.'
+            : 'Confirmed application start and last dates are required for live application sections.'}
+          {' '}
           Admit card / result dates here are just the expected dates shown on the job page.
           When they're actually released, post them from "Admit cards" / "Results" in the admin menu.
         </p>

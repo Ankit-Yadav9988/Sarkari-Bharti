@@ -99,8 +99,8 @@ export const CSV_COLUMNS = [
   { key: 'listingSection', enum: SECTION_VALUES },
   { key: 'state', enum: STATES },
   { key: 'totalPosts', number: true },
-  { key: 'applicationStartDate', date: true, required: true },
-  { key: 'lastDate', date: true, required: true },
+  { key: 'applicationStartDate', date: true },
+  { key: 'lastDate', date: true },
   { key: 'admitCardDate', date: true },
   { key: 'examDate', date: true },
   { key: 'resultDate', date: true },
@@ -320,6 +320,14 @@ export function mapRows(rows) {
     },
 
     finish: (payload, errors) => {
+      if (!payload.category) payload.category = 'CENTRAL_GOVT';
+      if (!payload.listingSection) payload.listingSection = 'AUTO';
+
+      if (payload.listingSection !== 'UPCOMING') {
+        if (!payload.applicationStartDate) errors.push('applicationStartDate is required outside UPCOMING');
+        if (!payload.lastDate) errors.push('lastDate is required outside UPCOMING');
+      }
+
       // Dates that contradict each other. The backend accepts them; a visitor
       // seeing a last date before the start date will assume the whole listing
       // is wrong, which is the reputational cost this site cannot afford.
@@ -333,8 +341,6 @@ export function mapRows(rows) {
         errors.push('state is required for a STATE_GOVT posting');
       }
 
-      if (!payload.category) payload.category = 'CENTRAL_GOVT';
-      if (!payload.listingSection) payload.listingSection = 'AUTO';
       if (!Object.keys(payload.feeByCategory).length) delete payload.feeByCategory;
       if (!Object.keys(payload.ageRelaxationByCategory).length) delete payload.ageRelaxationByCategory;
     },

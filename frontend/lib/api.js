@@ -167,7 +167,9 @@ export function isNew(job) {
   // The status the backend computed, checked first: it is the same rule the
   // CLOSED chip is drawn from, so the badge and the chip cannot contradict each
   // other on one row.
-  if (job.status === 'CLOSED') return false;
+  // Upcoming rows are not open yet. Their dates may be estimates, so an
+  // estimated opening date must not trigger a "New" badge or countdown logic.
+  if (job.status === 'CLOSED' || job.status === 'UPCOMING') return false;
 
   // The dates checked independently, for any response shape that omits status.
   const daysLeft = daysUntil(job.lastDate);
