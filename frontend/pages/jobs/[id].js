@@ -210,6 +210,7 @@ export default function JobDetail({
   const daysLeft = daysUntil(job.lastDate);
   const hasFees = Object.keys(job.feeByCategory || {}).length > 0;
   const hasRelaxations = Object.keys(job.ageRelaxationByCategory || {}).length > 0;
+  const upcomingDatesAreExpected = job.status === 'UPCOMING';
 
   // Link out to the landing pages this posting belongs to. This is the internal
   // link that matters most on the site: the detail pages are where the inbound
@@ -434,10 +435,10 @@ export default function JobDetail({
               <div className="stat-value">{job.totalPosts.toLocaleString('en-IN')}</div>
             </div>
           )}
-          <div className="stat">
-            <div className="stat-label">{t('job.lastDate')}</div>
+          {job.lastDate && <div className="stat">
+            <div className="stat-label">{upcomingDatesAreExpected ? 'Expected last date' : t('job.lastDate')}</div>
             <div className="stat-value" style={{ color: DATE_COLORS.last }}>{formatDate(job.lastDate)}</div>
-          </div>
+          </div>}
           {job.ageMin != null && job.ageMax != null && (
             <div className="stat">
               <div className="stat-label">{t('job.ageLimit')}</div>
@@ -459,8 +460,8 @@ export default function JobDetail({
         )}
 
         <TableBlock caption={`📅 ${t('job.importantDates')}`}>
-          <DateRow label={t('job.dateStart')} value={job.applicationStartDate} color={DATE_COLORS.start} />
-          <DateRow label={t('job.dateLast')}  value={job.lastDate}             color={DATE_COLORS.last} />
+          <DateRow label={upcomingDatesAreExpected ? 'Expected application start' : t('job.dateStart')} value={job.applicationStartDate} color={DATE_COLORS.start} />
+          <DateRow label={upcomingDatesAreExpected ? 'Expected last date' : t('job.dateLast')} value={job.lastDate} color={DATE_COLORS.last} />
           <DateRow label={t('job.dateAdmit')} value={job.admitCardDate}        color={DATE_COLORS.admitCard} />
           <DateRow label={t('job.dateExam')}  value={job.examDate}             color={DATE_COLORS.exam} />
           <DateRow label={t('job.dateResult')} value={job.resultDate}          color={DATE_COLORS.result} />
