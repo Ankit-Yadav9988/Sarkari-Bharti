@@ -34,6 +34,7 @@ jobs:
       - name: Install PDF text extractor
         run: sudo apt-get update && sudo apt-get install -y poppler-utils
       - name: Collect candidates
+        id: collect
         working-directory: pipeline
         env:
           # Set this repository secret to the public backend API base, e.g.
@@ -41,10 +42,22 @@ jobs:
           # cannot remove jobs already published on the site.
           SARKARI_API_URL: ${{ secrets.SARKARI_API_URL }}
         run: node run.js
+      - name: Upload review files
+        if: steps.collect.outcome == 'success'
+        uses: actions/upload-artifact@v4
+        with:
+          name: pipeline-review-${{ github.run_id }}
+          path: |
+            pipeline/out/*.csv
+            pipeline/out/*.report.md
+          if-no-files-found: warn
+          retention-days: 30
       - name: Commit state and review files
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add pipeline/state/seen.json pipeline/out
-          git diff --cached --quiet || git commit -m "chore: collect official job notices"
-          git push
+          if git diff --cached --quiet; then exit 0; fi
+          git commit -m "chore: collect job review queue"
+          git pull --rebase origin main
+          git push origin HEAD:main

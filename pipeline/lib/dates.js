@@ -81,6 +81,7 @@ export function dateNearLabel(text, labels, { now = new Date(), window = 180 } =
 export function extractApplicationDates(text, options) {
   return {
     applicationStartDate: dateNearLabel(text, [
+      'application\\s+(?:form\\s+)?begin(?:s)?',
       'application\\s+(?:filling\\s+)?start\\s+date',
       'start\\s+date\\s+(?:for\\s+)?(?:online\\s+)?application',
       'date[s]? for submission of online application(?:s)?(?: form)?(?: begin| start| starts| from)?',

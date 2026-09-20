@@ -24,6 +24,12 @@ export function isCandidate(link, source, { includeNotices = false } = {}) {
   const haystack = `${link.text} ${link.context || ''} ${link.url}`.toLowerCase();
   if (parsed.searchParams.has('page')) return false;
   if (canonicalUrl(link.url) === canonicalUrl(source.url)) return false;
+  if (source.kind === 'aggregator') {
+    if (!/(?:online\s+form|recruitment|vacanc(?:y|ies)|bharti|apply\s+online|apprentice|walk[- ]?in|notification|employment)/i.test(haystack)) return false;
+    if (/(?:admit\s+card|answer\s+key|\bresult\b|correction|counselling|document\s+upload|option\s+form|fee\s+payment|exam\s+city|syllabus)/i.test(haystack)
+      && !/(?:online\s+form|recruitment|vacanc(?:y|ies)|bharti|apply\s+online)/i.test(link.text || '')) return false;
+    return true;
+  }
   if (source.id === 'rpsc' && !haystack.includes(String(new Date().getUTCFullYear()))) return false;
   if (source.id === 'uppsc' && /candidatepages\/notifications\.aspx/i.test(parsed.pathname)) {
     return /\bapply\b|recruitment|advt\.?/i.test(haystack);
@@ -64,7 +70,8 @@ export function inspectSource({ source, html, links, includeNotices = false }) {
   if (all.length < 5) throw new Error(`${source.name}: only ${all.length} links found (minimum is 5); treating this as a source failure.`);
   const unique = new Map();
   for (const link of all) if (isCandidate(link, source, { includeNotices })) unique.set(link.url, link);
-  return { linksSeen: all.length, candidates: [...unique.values()] };
+  const candidates = [...unique.values()];
+  return { linksSeen: all.length, candidates: source.maxCandidates ? candidates.slice(0, source.maxCandidates) : candidates };
 }
 
 export async function discover({
