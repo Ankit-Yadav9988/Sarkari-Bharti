@@ -9,6 +9,7 @@ export function canonicalUrl(value) {
   const url = new URL(value); url.hash = '';
   for (const key of [...url.searchParams.keys()]) if (/^(utm_|gclid$|fbclid$)/i.test(key)) url.searchParams.delete(key);
   url.hostname = url.hostname.toLowerCase();
+  if (url.hostname === 'www.sarkariresult.com') url.hostname = 'sarkariresult.com';
   return url.href;
 }
 

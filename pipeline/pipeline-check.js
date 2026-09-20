@@ -23,6 +23,7 @@ equal(anchors.length, 1, 'non-web links are excluded');
 equal(anchors[0].url, 'https://example.gov.in/notice.pdf', 'relative URL resolves');
 check(anchors[0].context.includes('05/2026'), 'table row context is preserved for sparse link labels');
 equal(canonicalUrl('https://SSC.GOV.IN/x.pdf?utm_source=x&keep=1#page=2'), 'https://ssc.gov.in/x.pdf?keep=1', 'tracking and fragments do not make new candidates');
+equal(canonicalUrl('https://www.sarkariresult.com/2026/job/'), 'https://sarkariresult.com/2026/job/', 'Sarkari Result www links use the runner-compatible apex host');
 
 const source = { id: 'test', name: 'Test', url: 'https://example.gov.in/notices', organization: 'Test', category: 'SSC', allowedHosts: ['example.gov.in'] };
 const sourceHtml = '<a href="a.pdf">Recruitment notice</a><a href="b.pdf">Vacancy</a><a href="c">home</a><a href="d">about</a><a href="e">contact</a>';
