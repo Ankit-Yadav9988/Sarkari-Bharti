@@ -10,7 +10,7 @@ export const SOURCES = [
   },
   {
     id: 'rrb', name: 'Railway Recruitment Board', organization: 'Railway Recruitment Board', category: 'RAILWAY',
-    url: 'https://www.rrbcdg.gov.in/employment-notices.php', allowedHosts: ['rrbcdg.gov.in', 'www.rrbcdg.gov.in'],
+    url: 'https://rrbcdg.gov.in/employment-notices.php', allowedHosts: ['rrbcdg.gov.in', 'www.rrbcdg.gov.in'],
   },
   {
     id: 'upsc', name: 'Union Public Service Commission', organization: 'Union Public Service Commission', category: 'UPSC',
@@ -22,11 +22,11 @@ export const SOURCES = [
   },
   {
     id: 'bpsc', name: 'Bihar Public Service Commission', organization: 'Bihar Public Service Commission', category: 'STATE_PSC', state: 'Bihar',
-    url: 'https://bpsc.bihar.gov.in/', allowedHosts: ['bpsc.bihar.gov.in'],
+    url: 'https://bpsc.bihar.gov.in/advertisement/', allowedHosts: ['bpsc.bihar.gov.in'],
   },
   {
     id: 'rpsc', name: 'Rajasthan Public Service Commission', organization: 'Rajasthan Public Service Commission', category: 'STATE_PSC', state: 'Rajasthan',
-    url: 'https://rpsc.rajasthan.gov.in/', allowedHosts: ['rpsc.rajasthan.gov.in'],
+    url: 'https://rpsc.rajasthan.gov.in/advertisements', allowedHosts: ['rpsc.rajasthan.gov.in'],
   },
   {
     id: 'mppsc', name: 'Madhya Pradesh Public Service Commission', organization: 'Madhya Pradesh Public Service Commission', category: 'STATE_PSC', state: 'Madhya Pradesh',
@@ -34,7 +34,7 @@ export const SOURCES = [
   },
   {
     id: 'ukpsc', name: 'Uttarakhand Public Service Commission', organization: 'Uttarakhand Public Service Commission', category: 'STATE_PSC', state: 'Uttarakhand',
-    url: 'https://psc.uk.gov.in/', allowedHosts: ['psc.uk.gov.in'],
+    url: 'https://psc.uk.gov.in/candidate-corner/recruitment', allowedHosts: ['psc.uk.gov.in'],
   },
 ];
 

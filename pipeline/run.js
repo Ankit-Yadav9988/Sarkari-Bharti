@@ -17,7 +17,7 @@ const OUT_DIR = path.join(HERE, 'out');
 // Increment when extraction logic changes materially. Existing candidates are
 // then read once again so a code improvement can enrich rows already seen by
 // an earlier workflow run instead of being hidden forever by seen.json.
-const EXTRACTOR_VERSION = 2;
+const EXTRACTOR_VERSION = 3;
 
 const isoToday = () => new Date().toISOString().slice(0, 10);
 const escapeMd = value => String(value || '').replace(/\|/g, '\\|').replace(/\r?\n/g, ' ');
@@ -108,7 +108,10 @@ export async function runPipeline({ sources = SOURCES, now = new Date(), state: 
       const changed = !prior || prior.hash !== downloaded.hash || prior.status !== 'processed'
         || prior.extractorVersion !== EXTRACTOR_VERSION;
       if (!changed) continue;
-      const isDocumentPdf = /(?:application\/pdf|\.pdf(?:$|[?#]))/i.test(`${downloaded.contentType} ${link.url}`);
+      // Some government servers redirect dead PDF URLs to an HTML home page.
+      // Do not feed that HTML to pdftotext and call the result a scanned PDF.
+      const looksLikePdf = downloaded.body.subarray(0, 4).toString() === '%PDF';
+      const isDocumentPdf = looksLikePdf || (/application\/pdf/i.test(downloaded.contentType) && !/html/i.test(downloaded.contentType));
       const text = await documentText(downloaded.body, link.url, downloaded.contentType);
       const extracted = extractJob({
         source: link.source, link,

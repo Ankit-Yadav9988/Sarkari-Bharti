@@ -17,9 +17,10 @@ equal(parseIndianDate('2026-02-31'), null, 'impossible date is rejected');
 equal(dateNearLabel('Exam date: 14 October 2026. Last date: 31 October 2026', ['last date'], { now: new Date('2026-01-01') }).value, '2026-10-31', 'label chooses the right date');
 equal(extractApplicationDates('Online application starts: 1 October 2026. Closing date: 31 October 2026', { now: new Date('2026-01-01') }).lastDate.value, '2026-10-31', 'closing date is detected');
 
-const anchors = linksFromHtml('<a href="notice.pdf"> Recruitment <b>Notice</b></a><a href="mailto:x@y">mail</a>', 'https://example.gov.in/list');
+const anchors = linksFromHtml('<table><tr><td>Advt. No. 05/2026 for Physiotherapist - 2026</td><td><a href="notice.pdf"> Recruitment <b>Notice</b></a></td></tr></table><a href="mailto:x@y">mail</a>', 'https://example.gov.in/list');
 equal(anchors.length, 1, 'non-web links are excluded');
 equal(anchors[0].url, 'https://example.gov.in/notice.pdf', 'relative URL resolves');
+check(anchors[0].context.includes('05/2026'), 'table row context is preserved for sparse link labels');
 equal(canonicalUrl('https://SSC.GOV.IN/x.pdf?utm_source=x&keep=1#page=2'), 'https://ssc.gov.in/x.pdf?keep=1', 'tracking and fragments do not make new candidates');
 
 const source = { id: 'test', name: 'Test', url: 'https://example.gov.in/notices', organization: 'Test', category: 'SSC', allowedHosts: ['example.gov.in'] };
@@ -46,6 +47,17 @@ equal(extracted.row.lastDate, '2026-10-31', 'extracts labelled closing date');
 equal(extracted.row.totalPosts, 42, 'extracts labelled total posts');
 equal(extracted.row.notificationPdfUrl, 'https://example.gov.in/notice.pdf', 'PDF URL is preserved');
 equal(extracted.row.state, null, 'central source leaves state blank');
+
+const uppsc = extractJob({
+  source: { ...source, id: 'uppsc', category: 'STATE_PSC', state: 'Uttar Pradesh' },
+  link: { url: 'https://uppsc.up.nic.in/OuterPages/View_Advertisement.aspx?ID=560', text: 'View Advertisement', context: 'Direct Recruitment Advt. Number D-2/E-1/2026 14/09/2026 14/09/2026 14/10/2026' },
+  body: 'Mode of Recruitment Examination Name Advt. Number Date Application Filling Start Date Application Filling Last Date Direct Direct Recruitment D-2/E-1/2026 14/09/2026 14/09/2026 14/10/2026',
+  contentType: 'text/html', now: new Date('2026-09-20'),
+});
+equal(uppsc.row.advertisementNo, 'D-2/E-1/2026', 'UPPSC advertisement number is extracted');
+equal(uppsc.row.applicationStartDate, '2026-09-14', 'UPPSC application start date is extracted');
+equal(uppsc.row.lastDate, '2026-10-14', 'UPPSC application last date is extracted');
+equal(uppsc.row.postName, 'Advertisement D-2/E-1/2026', 'generic table link gets a stable advertisement title');
 
 const detailed = extractJob({
   source, link: { url: 'https://example.gov.in/detailed.pdf', text: 'Detailed Recruitment 2026' },
