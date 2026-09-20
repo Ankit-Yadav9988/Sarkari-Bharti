@@ -8,6 +8,7 @@ export const SOURCES = [
     // The apex host is reachable from GitHub-hosted runners where the www
     // alias intermittently returns a generic 403 page.
     url: 'https://sarkariresult.com/latestjob/',
+    fallbackUrls: ['https://sarkariresult.com/latestjob/?page=1'],
     allowedHosts: ['sarkariresult.com', 'www.sarkariresult.com'],
     maxCandidates: 120,
   },

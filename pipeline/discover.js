@@ -84,7 +84,15 @@ export async function discover({
     try {
       // Source-page bodies use the same conditional cache as PDFs. A 304 is
       // therefore a cheap normal success, not an impossible empty response.
-      const downloaded = await fetchCached(client, source.url, cacheDir, { readOnly });
+      const sourceUrls = [source.url, ...(source.fallbackUrls || [])];
+      let downloaded; let lastError;
+      for (const sourceUrl of sourceUrls) {
+        try {
+          downloaded = await fetchCached(client, sourceUrl, cacheDir, { readOnly });
+          break;
+        } catch (error) { lastError = error; }
+      }
+      if (!downloaded) throw lastError || new Error(`Could not fetch ${source.name}`);
       const body = downloaded.body.toString('utf8');
       let links;
       if (source.format === 'json') {
