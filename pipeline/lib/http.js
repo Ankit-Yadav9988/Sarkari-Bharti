@@ -68,8 +68,14 @@ export function createPoliteClient({ state = {}, fetchImpl = fetch, delayMs = 20
       // that robots request with a browser-compatible UA; page/document
       // requests continue to use the named collector UA.
       if (response.status === 403) robotsResponse = await raw(`${origin}/robots.txt`, {}, { userAgent: 'Mozilla/5.0' });
-      if (robotsResponse.status === 404) robotsByOrigin.set(origin, '');
-      else if (!robotsResponse.ok) throw new Error(`Cannot check robots.txt for ${origin}: HTTP ${robotsResponse.status}`);
+      if (robotsResponse.status === 404 || robotsResponse.status === 410) robotsByOrigin.set(origin, '');
+      else if (robotsResponse.status >= 400 && robotsResponse.status < 500) {
+        // RFC 9309 treats a 4xx robots response as an unavailable robots file,
+        // not as a successful set of disallow rules. Continue politely with an
+        // empty policy; network/5xx failures remain fail-closed below.
+        logger.warn?.(`robots.txt unavailable for ${origin} (HTTP ${robotsResponse.status}); continuing without rules.`);
+        robotsByOrigin.set(origin, '');
+      } else if (!robotsResponse.ok) throw new Error(`Cannot check robots.txt for ${origin}: HTTP ${robotsResponse.status}`);
       else robotsByOrigin.set(origin, await robotsResponse.text());
     }
     if (!robotsAllows(robotsByOrigin.get(origin), parsed.pathname)) throw new Error(`robots.txt disallows ${parsed.href}`);

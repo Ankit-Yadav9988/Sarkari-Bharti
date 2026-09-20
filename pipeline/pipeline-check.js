@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import { parseIndianDate, dateNearLabel, extractApplicationDates } from './lib/dates.js';
 import { linksFromHtml } from './lib/html.js';
-import { robotsAllows } from './lib/http.js';
+import { createPoliteClient, robotsAllows } from './lib/http.js';
 import { extractJob } from './lib/extract.js';
 import { canonicalUrl, inspectSource, linksFromJson, isCandidate } from './discover.js';
 import { header, toCsv, previewValidation } from './lib/csv-out.js';
@@ -40,6 +40,11 @@ check(!isCandidate({ url: 'https://example.gov.in/x?ID=ter', text: 'Recruitment 
 check(!isCandidate({ url: 'https://example.gov.in/x', text: "{{'Recruitment_HM' | translate }}" }, source), 'untranslated UI labels are ignored');
 check(robotsAllows('User-agent: *\nDisallow: /admin\nAllow: /', '/jobs'), 'robots allows public path');
 check(!robotsAllows('User-agent: *\nDisallow: /admin', '/admin/import'), 'robots blocks disallowed path');
+const blockedRobotsClient = createPoliteClient({
+  state: {}, delayMs: 0, fetchImpl: async url => new Response(url.endsWith('/robots.txt') ? 'blocked' : '<html>ok</html>', { status: url.endsWith('/robots.txt') ? 403 : 200 }),
+  logger: { warn() {}, debug() {} },
+});
+equal((await blockedRobotsClient.get('https://sarkariresult.test/latestjob/')).response.status, 200, '4xx robots response does not block the public page');
 
 const sample = 'ADVERTISEMENT NO. 10/2026 Recruitment for the post of Analyst. Total vacancies: 42. Online application starts: 01/10/2026. Last date: 31/10/2026.';
 const extracted = extractJob({ source, link: { url: 'https://example.gov.in/notice.pdf', text: 'Analyst Recruitment 2026' }, body: sample, contentType: 'application/pdf', now: new Date('2026-01-01') });
