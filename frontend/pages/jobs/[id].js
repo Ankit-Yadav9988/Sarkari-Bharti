@@ -25,6 +25,8 @@ import { ldScript } from '../../lib/jsonld';
  * the page carrying the last date to apply, which is the one thing on it that
  * cannot wait.
  */
+// Supporting content is intentionally fetched after the main job has rendered.
+// A slow notices/syllabus endpoint must not delay the primary job details.
 async function fetchForJob(jobId) {
   const one = async path => {
     try {
@@ -68,10 +70,10 @@ export async function getServerSideProps({ params, res }) {
       return { redirect: { destination: `/jobs/${job.slug}`, permanent: true } };
     }
 
-    const related = await fetchForJob(job.id);
-
     setListingCache(res, { detail: true });
-    return { props: { job, ...related, backendError: false } };
+    // Keep the five supporting requests out of the SSR critical path. The
+    // browser loads them after the job details and apply links are visible.
+    return { props: { job, backendError: false } };
   } catch (err) {
     // The response has to say 503 here, and this is the page where it matters
     // most. A sleeping backend is the normal state of a free-tier host, so
@@ -152,16 +154,41 @@ function RelatedBlock({ title, rows, href, note, children }) {
   );
 }
 
-// The five related lists default to empty. getServerSideProps always sends all
-// five, including on the error path, but this page is also the one rendered from
-// a cached payload after a client-side navigation, and a missing key here would
-// throw during render rather than just drop a block.
+// The five related lists start empty so the primary job details can render first.
 export default function JobDetail({
-  job, notices = [], syllabi = [], cutoffs = [], calendar = [], papers = [], backendError,
+  job,
+  notices: initialNotices = [],
+  syllabi: initialSyllabi = [],
+  cutoffs: initialCutoffs = [],
+  calendar: initialCalendar = [],
+  papers: initialPapers = [],
+  backendError,
 }) {
   const { t, lang } = useLang();
 
   const [views, setViews] = useState(job?.views ?? null);
+  const [related, setRelated] = useState({
+    notices: initialNotices,
+    syllabi: initialSyllabi,
+    cutoffs: initialCutoffs,
+    calendar: initialCalendar,
+    papers: initialPapers,
+  });
+
+  useEffect(() => {
+    if (!job?.id) return undefined;
+
+    let cancelled = false;
+    // Clear data from the previous job during client-side navigation, then
+    // fetch all supporting blocks in parallel without blocking the main page.
+    setRelated({ notices: [], syllabi: [], cutoffs: [], calendar: [], papers: [] });
+    fetchForJob(job.id).then(data => {
+      if (!cancelled) setRelated(data);
+    });
+
+    return () => { cancelled = true; };
+  }, [job?.id]);
+
   useEffect(() => {
     if (!job?.id) return;
     let cancelled = false;
@@ -171,6 +198,22 @@ export default function JobDetail({
       .catch(() => { /* the counter is cosmetic — never break the page */ });
     return () => { cancelled = true; };
   }, [job?.id]);
+
+  const {
+    notices: loadedNotices,
+    syllabi: loadedSyllabi,
+    cutoffs: loadedCutoffs,
+    calendar: loadedCalendar,
+    papers: loadedPapers,
+  } = related;
+
+  // Keep the existing render variables readable while the values now come from
+  // client-side supporting-content state.
+  const notices = loadedNotices;
+  const syllabi = loadedSyllabi;
+  const cutoffs = loadedCutoffs;
+  const calendar = loadedCalendar;
+  const papers = loadedPapers;
 
   // Share row is the growth loop for this audience, so it must be in the
   // server HTML rather than appearing after hydration. Build the URL from
@@ -447,11 +490,11 @@ export default function JobDetail({
           )}
         </div>
 
-        {notices.length > 0 && (
+        {loadedNotices.length > 0 && (
           <div className="panel" style={{ marginBottom: 14 }}>
             <div className="panel-head">{t('job.latestUpdates')}</div>
             <div className="linklist">
-              {notices.map(n => {
+              {loadedNotices.map(n => {
                 const a = NOTICE_ACTION[n.type] || NOTICE_ACTION.RESULT;
                 return <NoticeRow key={n.id} notice={n} actionLabel={t(a.key)} color={a.color} />;
               })}
@@ -472,7 +515,7 @@ export default function JobDetail({
             three stages with three dates; this is where those fit, each with
             its own tentative flag. */}
         <RelatedBlock title={`🗓️ ${t('job.examSchedule')}`} rows={calendar} href={byCategory('/exam-calendar')}>
-          <CalendarTable entries={calendar} />
+          <CalendarTable entries={loadedCalendar} />
         </RelatedBlock>
 
         {hasFees && (
@@ -521,13 +564,13 @@ export default function JobDetail({
             the /for-job endpoints rather than a column on the job. */}
         <RelatedBlock title={`📚 ${t('job.syllabusFor')}`} rows={syllabi} href={byCategory('/syllabus')}>
           <div className="linklist">
-            {syllabi.map(s => <SyllabusRow key={s.id} syllabus={s} />)}
+            {loadedSyllabi.map(s => <SyllabusRow key={s.id} syllabus={s} />)}
           </div>
         </RelatedBlock>
 
         <RelatedBlock title={`📄 ${t('job.pastPapers')}`} rows={papers} href={papersHref}>
           <div className="linklist">
-            {papers.map(p => <PaperRow key={p.id} paper={p} />)}
+            {loadedPapers.map(p => <PaperRow key={p.id} paper={p} />)}
           </div>
         </RelatedBlock>
 
@@ -543,7 +586,7 @@ export default function JobDetail({
           note={t('job.pastCutOffsNote')}
         >
           <div className="linklist">
-            {cutoffs.map(c => <CutoffRow key={c.id} cutoff={c} />)}
+            {loadedCutoffs.map(c => <CutoffRow key={c.id} cutoff={c} />)}
           </div>
         </RelatedBlock>
 
