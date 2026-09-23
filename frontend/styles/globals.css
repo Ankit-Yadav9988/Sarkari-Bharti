@@ -359,6 +359,81 @@ p  { font-size: 0.95rem; }
 }
 
 /* =========================================================================
+   Route-change progress bar (components/RouteProgress.js)
+
+   Every page here is server-rendered, so a click on a job waits for a server
+   round-trip before anything is drawn -- and a client-side navigation shows
+   none of the browser's own loading UI. Without this the page simply sits
+   there, which reads as broken rather than slow and makes people click again.
+   ========================================================================= */
+.route-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  /* Above the sticky masthead, below nothing else. */
+  z-index: 2000;
+  height: 3px;
+  /* The track is invisible; only the moving fill is drawn, so the bar does not
+     read as a permanent border under the masthead. */
+  background: transparent;
+  pointer-events: none;
+}
+.route-progress::after {
+  content: '';
+  display: block;
+  height: 100%;
+  background: linear-gradient(90deg, var(--gold), var(--red));
+  /* Never reaches 100% on its own. The response takes as long as it takes, and
+     a bar that completes before the page arrives is a bar nobody believes
+     again; it creeps towards 90% and stops there until the navigation ends. */
+  animation: route-progress-creep 8s cubic-bezier(0.1, 0.6, 0.2, 1) forwards;
+}
+.route-progress--done::after {
+  animation: none;
+  width: 100%;
+  /* Two transitions: snap to full, then fade. The opacity delay is what makes
+     the completion visible instead of the bar just disappearing. */
+  transition: width 120ms ease-out, opacity 220ms ease-in 120ms;
+  opacity: 0;
+}
+@keyframes route-progress-creep {
+  0%   { width: 0%; }
+  60%  { width: 70%; }
+  100% { width: 90%; }
+}
+
+/* Reduced motion, deliberately placed AFTER the rules it overrides.
+   A media query adds no specificity, so `@media (prefers-reduced-motion)` does
+   not beat a plain `.route-progress::after` -- source order decides, and this
+   block originally sat ~30 lines higher with the other reduced-motion rules,
+   where the creep animation below it simply won and the override did nothing.
+
+   The bar still appears and still says a navigation is in progress: that is
+   information, not decoration, and hiding it would leave exactly the users who
+   asked for less motion with the blank-screen problem the bar exists to solve.
+   It just stops creeping and sits at a fixed width instead. */
+@media (prefers-reduced-motion: reduce) {
+  .route-progress::after { animation: none; width: 40%; transition: none; }
+  /* The completed state is an animation too -- without this it still slides. */
+  .route-progress--done::after { transition: none; width: 100%; opacity: 0; }
+}
+
+/* Visible to screen readers, invisible on screen. Used for the bar's "Loading
+   page" announcement, which has no on-screen text of its own. */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* =========================================================================
    Page heading band (used by every listing page)
    ========================================================================= */
 

@@ -69,22 +69,28 @@ export function parseCsv(text) {
 }
 
 /**
- * The columns the importer understands. Four are required, because those four
- * are the ones the backend cannot store a job without: postName and
- * organization, plus both dates.
+ * The columns the importer understands. Two are always required — postName and
+ * organization — and the two application dates are required for every listing
+ * section except UPCOMING.
  *
- * The dates are required for a blunt reason: `application_start_date` and
- * `last_date` are declared NOT NULL in V1__baseline_schema.sql and
- * `nullable = false` on Job.java. A row with a blank date is therefore not a
- * row the backend might dislike — it is a guaranteed constraint violation. And
- * because JobController takes the body without @Valid and the entity carries no
- * validation annotations, that violation surfaces as a 500 from the database
- * layer, not a readable 400. Worse, import.js POSTs one row at a time, so the
- * rows above it are already committed by the time it fails: the admin is left
- * with a half-imported file and an opaque error.
+ * That exception is not a convenience. An Upcoming notice is routinely published
+ * before either date is confirmed, so demanding a date there would mean
+ * inventing one. V6__upcoming_dates_optional.sql dropped the NOT NULL these two
+ * columns used to carry, and Job.java no longer declares them
+ * `nullable = false`, precisely so that case can be stored honestly.
  *
- * Catching it here costs one word per column and turns all of that into a line
- * in the "skipped" list saying exactly which field is missing.
+ * Note the dates are deliberately NOT marked `required: true`. That flag is
+ * unconditional and is checked against the header, before any row's
+ * listingSection has been read — it would reject a legitimate Upcoming file
+ * outright. The conditional check in validateRows below is what implements the
+ * real rule.
+ *
+ * The rule lives in two places on purpose. JobService.validateDates is the
+ * authority and answers a readable 400. The copy here runs in the browser, and
+ * it earns its keep because import.js POSTs one row at a time: without it the
+ * admin meets the error mid-batch, after the rows above it are already
+ * committed, and is left with a half-imported file. Catching it here turns that
+ * into a line in the "skipped" list naming the field.
  *
  * Header matching is case- and separator-insensitive, so "Post Name",
  * "post_name" and "postName" are the same column. The admin is pasting from a

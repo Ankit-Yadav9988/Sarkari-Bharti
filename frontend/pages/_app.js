@@ -1,6 +1,7 @@
 import Head from 'next/head';
 import { LangProvider } from '../lib/i18n';
 import Analytics from '../components/Analytics';
+import RouteProgress from '../components/RouteProgress';
 import { API_ORIGIN } from '../lib/api';
 import { SITE, ANALYTICS } from '../lib/site';
 import '../styles/globals.css';
@@ -49,6 +50,9 @@ export default function App({ Component, pageProps }) {
             the cheap hint rather than a held-open connection. */}
         <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
       </Head>
+      {/* Before <Component>, so the bar is mounted and painted independently of
+          whatever the incoming page renders. */}
+      <RouteProgress />
       <Component {...pageProps} />
       <Analytics />
     </LangProvider>

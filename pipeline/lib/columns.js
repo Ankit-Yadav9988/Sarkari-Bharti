@@ -3,7 +3,7 @@
  *
  * Everything this pipeline writes has to be readable by
  * `frontend/lib/csv.js` → `parseCsv` → `mapRows`, which is the code the admin
- * import screen runs and which has 142 assertions and 51 differential cases
+ * import screen runs and which has 151 assertions and 54 differential cases
  * behind it. The surest way to stay compatible with it is to not have a second
  * opinion about what the columns are.
  *
@@ -16,23 +16,22 @@ import path from 'node:path';
 
 register('./extensionless-hook.mjs', import.meta.url);
 
-// Node warns MODULE_TYPELESS_PACKAGE_JSON because frontend/package.json has no
-// "type" field, so it has to sniff csv.js and reparse it as ESM. The fix Node
-// suggests -- adding "type": "module" -- would change how Next.js treats every
-// file in the frontend, which is not a trade worth making for a performance note
-// about one file.
-//
-// Suppressed rather than tolerated because this runs in CI, where the whole
-// value of the output is that something unexpected stands out. A warning printed
-// on every single run teaches you to skim past the place real warnings appear.
-// Only this one code is filtered; everything else still prints.
-const emitWarning = process.emitWarning.bind(process);
-process.emitWarning = (warning, ...rest) => {
-  const code = rest.find(a => typeof a === 'string' && a === a.toUpperCase())
-    ?? (typeof rest[0] === 'object' && rest[0] ? rest[0].code : undefined);
-  if (code === 'MODULE_TYPELESS_PACKAGE_JSON') return;
-  return emitWarning(warning, ...rest);
-};
+/* There was a `process.emitWarning` monkey-patch here that filtered
+   MODULE_TYPELESS_PACKAGE_JSON, on the reasoning that frontend/package.json has
+   no "type" field so Node has to sniff csv.js and reparse it as ESM.
+
+   The warning is real -- `node -e "import('../../frontend/lib/csv.js')"` prints
+   it -- but it never appeared on *this* path, because the resolve hook
+   registered above loads csv.js and the warning is not emitted through it.
+   Removing the patch changed no output at all, on Node 22 or with the
+   `--disable-warning` flag, which is what a dead workaround looks like.
+
+   No flag replaces it, for the same reason: there is no warning here to
+   disable. If one ever does appear -- CI runs Node 24, and this was only
+   confirmed on 22 -- the fix is
+   `--disable-warning=MODULE_TYPELESS_PACKAGE_JSON` in the npm script, not a
+   patch on process.emitWarning, which also hides the warning from every
+   unrelated module loaded afterwards. */
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 export const FRONTEND_LIB = path.resolve(HERE, '../../frontend/lib');

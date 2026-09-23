@@ -58,24 +58,60 @@ export function datesInText(text, { now = new Date() } = {}) {
 }
 
 /**
+ * How much the gap between a label and the date it "labels" is worth.
+ *
+ * "Last Date: 31/10/2026" is a label and its value. But a table flattened by
+ * pdftotext puts the whole header row before the whole data row, so the text
+ * reads "... Start Date Last Date Direct Recruitment D-2/E-1/2026 14/09/2026
+ * 14/09/2026 14/10/2026" -- and the first date after the words "Last Date" is
+ * the advertisement date, three columns too early. The label is real; the
+ * adjacency is an illusion.
+ *
+ * What separates the two is what sits in between. Punctuation and a word or
+ * two mean the date belongs to the label. Digits in the gap mean another cell
+ * has already intervened, and the reading is unsafe -- which is what `low`
+ * says, and what the pipeline's confidence gate then withholds.
+ */
+function confidenceForGap(gap) {
+  if (gap.length <= 24 && !/\d/.test(gap) && !/[A-Za-z]{3,}/.test(gap)) return 'high';
+  if (gap.length <= 80 && !/\d/.test(gap)) return 'medium';
+  return 'low';
+}
+
+/**
  * Finds a date following one of the supplied labels.  A 180-character window
  * covers table cells flattened by pdftotext without letting an unrelated date
  * from another paragraph drift in.
+ *
+ * Every label is tried before settling for a weak reading, so a document that
+ * mentions the deadline twice -- once in a table and once as plain text -- is
+ * read from the plain text.
  */
 export function dateNearLabel(text, labels, { now = new Date(), window = 180 } = {}) {
   const source = String(text || '').replace(/\u00a0/g, ' ').replace(/\s+/g, ' ');
+  let weakest = null;
   for (const label of labels) {
     const labelRe = new RegExp(label, 'ig');
     let labelMatch;
     while ((labelMatch = labelRe.exec(source))) {
-      const slice = source.slice(labelMatch.index + labelMatch[0].length, labelMatch.index + labelMatch[0].length + window);
+      const after = labelMatch.index + labelMatch[0].length;
+      const slice = source.slice(after, after + window);
       const dateMatch = new RegExp(DATE_PATTERN, 'i').exec(slice);
       if (!dateMatch) continue;
       const value = parseIndianDate(dateMatch[0]);
-      if (isSaneNoticeDate(value, now)) return { value, confidence: 'medium', label: labelMatch[0] };
+      if (!isSaneNoticeDate(value, now)) continue;
+      const gap = slice.slice(0, dateMatch.index);
+      const confidence = confidenceForGap(gap);
+      if (confidence !== 'low') return { value, confidence, label: labelMatch[0] };
+      weakest ||= {
+        value,
+        confidence,
+        label: labelMatch[0],
+        reason: `"${labelMatch[0]}" is separated from ${value} by "${gap.trim().slice(0, 40)}", so the label probably belongs to a different column`,
+      };
     }
   }
-  return { value: null, confidence: 'none', reason: 'no labelled, in-range date found' };
+  return weakest || { value: null, confidence: 'none', reason: 'no labelled, in-range date found' };
 }
 
 export function extractApplicationDates(text, options) {

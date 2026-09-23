@@ -160,14 +160,29 @@ For each new candidate link: download it, get text out of it (PDFs via
 
 ### The rule: never guess. Leave it blank.
 
-Every extractor returns a value **and a confidence**. If confidence is low, the
-cell is written **empty**.
+Every extractor returns a value **and a confidence**. If confidence is below
+`medium`, the cell is written **empty**, and the report says what was read and
+why it was not trusted.
+
+That last part was not true in the first build. Every extractor returned a
+confidence and nothing looked at it, so a `low` guess and a `medium` reading
+were written to the CSV identically. The first live run filled `totalPosts` on
+93 of 93 rows, which is not a sign of a good extractor — it is the sign of one
+matching noise. It read the year out of "Bihar STET 2026 Post" as a vacancy
+count of 2026, and a news headline as 100000. The gate is now enforced in code
+(`MIN_PUBLISHABLE` in `pipeline/lib/extract.js`), so the fill rate is lower and
+what remains is worth reading.
 
 A blank cell costs you thirty seconds of typing. A wrong last date that looks
 right costs a reader the job. These are not comparable, so the pipeline is
 built to be under-confident on purpose.
 
 ### What it can realistically fill, graded honestly
+
+"Realistic" below is how often the field can be filled *at `medium` or better*.
+Anything that can only be read at `low` is withheld, so the low rows in this
+table are mostly blank in practice and are listed to tell you what not to
+expect.
 
 | Field | Realistic | Why |
 |---|---|---|
@@ -178,23 +193,29 @@ built to be under-confident on purpose.
 | `advertisementNo` | **Medium** | `Advt. No.` / `Advertisement No.` patterns are common but far from universal |
 | `applicationStartDate` | **Medium-low** | Many date formats, often inside a table, often revised later |
 | `lastDate` | **Medium-low** | Same, and frequently extended by a separate corrigendum |
-| `totalPosts` | **Medium-low** | Sometimes a stated total, often only a per-post table that has to be summed |
-| `officialApplyLink` | **Low** | Often not in the PDF at all; the portal opens later |
+| `totalPosts` | **Medium when labelled, blank otherwise** | A stated "Total Posts: N" is trusted; a bare "N posts" is not, because that shape also matches years and headlines |
+| `officialApplyLink` | **Medium only when a link or sentence introduces it** | A URL merely sitting near the word "online" is often a results page, so it is withheld |
 | `ageMin` / `ageMax` | **Low** | Usually varies per post within one notification |
 | `eligibility` | **Low** | Prose, and different for every post in the same advert |
 | `selectionProcess` | **Low** | Same |
-| `fee*` / `relax*` | **Low** | A table by category, layout varies by department |
+| `fee*` / `relax*` | **Medium only with a ₹/Rs. marker or a stated unit** | A table by category, layout varies by department. "See Annexure 1" used to be read as a ₹1 fee |
 
 Read that table again before you approve, because it is the real answer to
 "can we automate this". **The pipeline finds the notification, identifies it, and
 types the skeleton. You still read the PDF for the details.**
 
-Concretely: `applicationStartDate` and `lastDate` are **required** by your own
-validator. So a row where the dates could not be read with confidence will be
-written into the CSV with blanks, and your import screen will list it under
+Concretely: `applicationStartDate` and `lastDate` are **required by your own
+validator for every section except Upcoming**. Upcoming jobs are exempt because
+the dates genuinely are not announced yet — that exemption is a database
+migration (`V6__upcoming_dates_optional.sql`), a rule in `JobService` and a
+matching check in the import screen, so it behaves the same whether a row
+arrives by CSV or by hand.
+
+So a row in any other section whose dates could not be read with confidence is
+still written into the CSV with blanks, and your import screen lists it under
 "skipped" with the reason — which is the correct outcome. It appears in front of
 you, with its PDF link, asking to be filled in. It does not get published with a
-guessed date.
+guessed date. An Upcoming row with blank dates, by contrast, imports cleanly.
 
 ### Dates specifically
 
@@ -207,6 +228,21 @@ A date is only accepted when it appears near a label that says what it is
 ("last date", "closing date", "online application begins"). A date floating in
 the text with no label is ignored. Sanity bounds: nothing before today minus one
 year, nothing after today plus two years.
+
+Being near a label is necessary but not sufficient, and this caused a real bug.
+`pdftotext` flattens a table into the whole header row followed by the whole
+data row, so a UPPSC advertisement read as "… Advertisement Date Application
+Filling Start Date Application Filling Last Date D-2/E-1/2026 14/09/2026
+14/09/2026 14/10/2026". The words "Application Filling Last Date" are there, and
+the first date after them is the *advertisement* date — 30 days early. The label
+was real; the adjacency was an illusion.
+
+So the gap between a label and its date is now graded. Punctuation and a word or
+two means the date belongs to the label. Digits in the gap mean another cell has
+already intervened, and the reading drops to `low` and is withheld. For UPPSC
+specifically, when the table's header is present the dates are read by column
+position instead — and if that header is missing, nothing is read rather than
+guessed.
 
 ---
 
@@ -242,10 +278,22 @@ having.
 |---|---|
 | Source site redesigns | Link-count floor trips → run reported as FAILED for that source |
 | Source site is down | 2 retries, then that source is marked failed; **the other sources still produce their rows** |
+| **Most sources are down at once** | The CSV and report are still written and committed, but the run goes **red** in the Actions tab with the reason. One source failing thins the results; most of them failing bends them, and the two should not look the same |
+| **Only the aggregator answers** | Also red. This is the shape that looks most productive and is least trustworthy — every row is second-hand and none could be checked against the issuing body |
 | PDF is a scanned image with no text | Row is written with name + link only, flagged `needs-manual` in the report |
 | A date is extended by a corrigendum | The PDF is content-hashed as well as URL-keyed, so a re-issued file at the same URL is re-flagged as a candidate |
 | Nothing new for a week | Reported loudly in the summary rather than passing quietly |
 | Anything unexpected | The run fails. **It never writes a partial CSV**, because a partial file that looks complete is worse than no file |
+
+On 2026-09-21, seven of nine sources failed — the government sites time out or
+refuse GitHub's US datacentre addresses — and the run exited 0, committed a CSV
+and looked like a normal day. 94 of its 100 candidates came from the aggregator.
+Nothing was wrong with the code; the run was simply not worth trusting, and
+nothing said so. That is what the two new rows above are for.
+
+Note the deliberate ordering: the output is written and committed **first**, and
+only then does the run mark itself failed. A red run whose output you can still
+read is useful. A red run that threw its output away tells you nothing.
 
 ---
 

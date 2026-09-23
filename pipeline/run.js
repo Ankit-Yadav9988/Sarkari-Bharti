@@ -202,6 +202,54 @@ export async function runPipeline({ sources = SOURCES, now = new Date(), state: 
   return { date, discovery, rows, preview, warnings, skippedPublished };
 }
 
+/**
+ * Decides whether a run's *sources* were healthy enough to trust its output.
+ *
+ * This is separate from "did the code throw". On 2026-09-21 seven of nine
+ * sources failed -- the government sites time out or refuse GitHub's US
+ * datacentre addresses -- and the run still exited 0, committed a CSV and
+ * reported success. The aggregator was the only healthy source, so 94 of 100
+ * candidates came from a site that copies other people's notices, and every one
+ * of them was marked PENDING_MANUAL. Nothing was wrong with the code; the run
+ * was simply not worth trusting, and nothing said so.
+ *
+ * The three conditions below are the ones where the output is systematically
+ * skewed rather than merely thinner:
+ *
+ *   - Most sources failed. What came back is not a sample of the day's
+ *     vacancies, it is a sample of whichever sites happened to answer.
+ *   - Every official source failed but the aggregator answered. This is the
+ *     worst shape: the run looks productive precisely because the least
+ *     authoritative source is the only one left.
+ *   - Nothing was found at all, from anywhere.
+ *
+ * A single source timing out is normal and stays a warning: it thins the
+ * results without bending them.
+ *
+ * The run still writes its CSV and report before this is consulted. A red run
+ * with usable output is useful; a red run that threw its output away is not.
+ */
+export function sourceHealth(reports, candidateCount) {
+  const reasons = [];
+  if (!reports.length) return { ok: false, reasons: ['No sources were configured, so nothing could be collected.'] };
+
+  const failed = reports.filter(r => !r.ok);
+  const official = reports.filter(r => r.source.kind !== 'aggregator');
+  const aggregators = reports.filter(r => r.source.kind === 'aggregator');
+  const name = list => list.map(r => r.source.name).join(', ');
+
+  if (failed.length * 2 > reports.length) {
+    reasons.push(`${failed.length} of ${reports.length} sources failed (${name(failed)}), so this run saw only part of the day's vacancies.`);
+  }
+  if (official.length && official.every(r => !r.ok) && aggregators.some(r => r.ok)) {
+    reasons.push(`Every official source failed (${name(official)}) while the aggregator answered, so all of today's candidates are second-hand and none could be checked against the issuing body.`);
+  }
+  if (candidateCount === 0) {
+    reasons.push('No candidates were found by any source.');
+  }
+  return { ok: reasons.length === 0, reasons };
+}
+
 async function main() {
   try {
     const outcome = await runPipeline();
@@ -211,6 +259,13 @@ async function main() {
     // safe output from other sources. A failed source is actionable in the
     // report and Action log; a missing CSV for healthy sources is not.
     if (outcome.discovery.reports.some(r => !r.ok)) console.warn('WARNING: one or more sources failed; see the report source-health table.');
+
+    const health = sourceHealth(outcome.discovery.reports, outcome.discovery.candidates.length);
+    if (!health.ok) {
+      for (const reason of health.reasons) console.error(`UNHEALTHY: ${reason}`);
+      console.error('The CSV and report above were still written and are still worth reading. This run is marked failed so it is not mistaken for a normal day.');
+      process.exitCode = 1;
+    }
   } catch (error) { console.error(`Pipeline failed: ${error.message}`); process.exitCode = 1; }
 }
 

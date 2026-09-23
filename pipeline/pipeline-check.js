@@ -5,6 +5,7 @@ import { createPoliteClient, robotsAllows } from './lib/http.js';
 import { extractJob } from './lib/extract.js';
 import { canonicalUrl, inspectSource, linksFromJson, isCandidate } from './discover.js';
 import { header, toCsv, previewValidation } from './lib/csv-out.js';
+import { sourceHealth } from './run.js';
 
 let checks = 0;
 function check(value, message) { assert.ok(value, message); checks += 1; }
@@ -122,5 +123,38 @@ const preview = previewValidation(quoted);
 equal(preview.valid, 1, 'quoted row round-trips through the real importer');
 const incomplete = previewValidation(toCsv([{ postName: 'Missing dates', organization: 'Test', category: 'SSC' }]));
 equal(incomplete.invalid, 1, 'missing required dates are reported for human completion');
+
+/* Source health. The fixture shapes are the ones that actually occurred or
+   that the gate exists to catch; `candidateCount` is passed separately because
+   a run can discover plenty of links and still be untrustworthy. */
+const report = (id, kind, ok) => ({ source: { id, kind, name: id.toUpperCase() }, ok, linksSeen: ok ? 20 : 0, candidates: [] });
+const healthy = [report('ssc', 'official', true), report('upsc', 'official', true), report('sarkariresult', 'aggregator', true)];
+
+check(sourceHealth(healthy, 40).ok, 'a run where every source answered is healthy');
+check(sourceHealth([report('ssc', 'official', true), report('upsc', 'official', false), report('sarkariresult', 'aggregator', true)], 40).ok,
+  'one source timing out thins the results without skewing them, so it stays a warning');
+
+// The 2026-09-21 shape: 7 of 9 failed, aggregator supplied 94 of 100 candidates.
+const collapsed = [
+  report('rrb', 'official', false), report('upsc', 'official', false), report('uppsc', 'official', false),
+  report('bpsc', 'official', false), report('rpsc', 'official', false), report('mppsc', 'official', false),
+  report('ukpsc', 'official', false), report('ssc', 'official', true), report('sarkariresult', 'aggregator', true),
+];
+const collapsedHealth = sourceHealth(collapsed, 100);
+check(!collapsedHealth.ok, 'the run that prompted this gate is now reported unhealthy');
+check(collapsedHealth.reasons.some(r => /7 of 9/.test(r)), 'and the reason counts the failures for the log');
+
+const aggregatorOnly = [report('ssc', 'official', false), report('upsc', 'official', false), report('sarkariresult', 'aggregator', true)];
+const aggregatorHealth = sourceHealth(aggregatorOnly, 94);
+check(!aggregatorHealth.ok, 'an aggregator-only run is unhealthy even when it finds plenty');
+check(aggregatorHealth.reasons.some(r => /second-hand/.test(r)), 'and says why second-hand data alone is not enough');
+
+check(!sourceHealth(healthy, 0).ok, 'finding nothing at all is unhealthy even when every source answered');
+check(!sourceHealth([], 0).ok, 'no configured sources is a failure, not a quiet success');
+/* The aggregator failing while the official sources answer is the good case:
+   it must not trip the official-sources rule, which would make the pipeline
+   depend on the one source it trusts least. */
+check(sourceHealth([report('ssc', 'official', true), report('upsc', 'official', true), report('sarkariresult', 'aggregator', false)], 30).ok,
+  'losing only the aggregator leaves a healthy run');
 
 console.log(`pipeline-check: ${checks} checks passed`);

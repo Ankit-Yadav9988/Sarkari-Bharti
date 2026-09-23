@@ -36,6 +36,13 @@ jobs:
       - name: Collect candidates
         id: collect
         working-directory: pipeline
+        # run.js exits 1 when the sources were too unhealthy to trust the day's
+        # output -- most of them failing, or only the aggregator answering. That
+        # verdict must not throw away the CSV and report, which are still worth
+        # reading and are how you find out what happened. So the step is allowed
+        # to fail here, the files are uploaded and committed either way, and the
+        # last step in the job turns the failure back into a red run.
+        continue-on-error: true
         env:
           # Set this repository secret to the public backend API base, e.g.
           # https://your-api.example/api. If absent the run remains safe but
@@ -43,7 +50,7 @@ jobs:
           SARKARI_API_URL: ${{ secrets.SARKARI_API_URL }}
         run: node run.js
       - name: Upload review files
-        if: steps.collect.outcome == 'success'
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: pipeline-review-${{ github.run_id }}
@@ -53,6 +60,7 @@ jobs:
           if-no-files-found: warn
           retention-days: 30
       - name: Commit state and review files
+        if: always()
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
@@ -61,3 +69,10 @@ jobs:
           git commit -m "chore: collect job review queue"
           git pull --rebase origin main
           git push origin HEAD:main
+      # Deliberately last, so everything above has already run. Without this the
+      # `continue-on-error` above would make an unhealthy run look green.
+      - name: Fail the run if the sources were unhealthy
+        if: steps.collect.outcome == 'failure'
+        run: |
+          echo "::error::Collection ran but its sources were unhealthy. The CSV and report were still committed — read the report's source-health table before importing anything."
+          exit 1
