@@ -2,24 +2,24 @@
   "version": 1,
   "requests": {
     "https://ssc.gov.in/api/general-website/portal/notice-boards?page=1&limit=50&contentType=notice-boards&key=createdAt&order=DESC&isAttachment=true&language=english&attributes=id%2Cheadline%2CexamId%2CcontentType%2CredirectUrl%2CstartDate%2CendDate%2Clanguage%2CcreatedAt": {
-      "etag": "W/\"181e-wkM5WOF/w97+ntqSiv1EA+5gKKU\"",
+      "etag": "W/\"1837-x9eOxLOmEWizopXeMN4fm/eX8Mc\"",
       "lastModified": null,
-      "checkedAt": "2026-09-24T05:13:35.144Z"
+      "checkedAt": "2026-09-25T05:15:25.070Z"
     },
     "https://ssc.gov.in/api/general-website/portal/notice_16092026.pdf": {
       "etag": null,
       "lastModified": null,
-      "checkedAt": "2026-09-24T05:29:37.324Z"
+      "checkedAt": "2026-09-25T05:17:38.981Z"
     },
     "https://ssc.gov.in/api/general-website/portal/English_JE_17092026.pdf": {
       "etag": null,
       "lastModified": null,
-      "checkedAt": "2026-09-24T05:29:36.179Z"
+      "checkedAt": "2026-09-25T05:17:36.981Z"
     },
     "https://ssc.gov.in/api/general-website/portal/Important%20Notice%202026_cgle_2026_12092026.pdf": {
       "etag": null,
       "lastModified": null,
-      "checkedAt": "2026-09-24T05:29:39.323Z"
+      "checkedAt": "2026-09-25T05:17:40.988Z"
     },
     "https://ssc.gov.in/api/general-website/portal/notice_11092026.pdf": {
       "etag": null,
@@ -39,12 +39,12 @@
     "https://uppsc.up.nic.in/": {
       "etag": null,
       "lastModified": null,
-      "checkedAt": "2026-09-24T05:14:17.826Z"
+      "checkedAt": "2026-09-25T05:16:07.714Z"
     },
     "https://uppsc.up.nic.in/CandidatePages/Notifications.aspx": {
       "etag": null,
       "lastModified": null,
-      "checkedAt": "2026-09-24T05:29:44.470Z"
+      "checkedAt": "2026-09-25T05:17:43.808Z"
     },
     "https://uppsc.up.nic.in/PublicPages/Recruitment_Details.aspx?ID=IO": {
       "etag": null,
@@ -1050,6 +1050,11 @@
       "etag": null,
       "lastModified": "Wed, 23 Sep 2026 11:46:31 GMT",
       "checkedAt": "2026-09-24T05:17:00.759Z"
+    },
+    "https://ssc.gov.in/api/general-website/portal/Tentative_vacancy_CGLE2026_24092026.pdf": {
+      "etag": null,
+      "lastModified": null,
+      "checkedAt": "2026-09-25T05:17:35.732Z"
     }
   },
   "candidates": {
@@ -1067,10 +1072,10 @@
       "source": "uppsc"
     },
     "https://uppsc.up.nic.in/CandidatePages/Notifications.aspx": {
-      "hash": "dcd3bb5fe91245f346b1ee07f159305611e8b9a4f5ccf11bc9d6a982bdf4ad47",
+      "hash": "89b077fad640475fe6358bda3619be88f138d55fe8e8741506ccd6ff0cee08f7",
       "status": "processed",
       "extractorVersion": 4,
-      "seenAt": "2026-09-24T05:29:44.991Z",
+      "seenAt": "2026-09-25T05:17:44.356Z",
       "source": "uppsc",
       "row": {
         "postName": "DEPUTY SECRETARY (I.T.) IN UPPSC",
@@ -14629,5 +14634,5 @@
     }
   },
   "zeroCandidateDays": 0,
-  "updatedAt": "2026-09-24T05:29:44.991Z"
+  "updatedAt": "2026-09-25T05:17:44.356Z"
 }
