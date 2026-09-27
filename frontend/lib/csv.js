@@ -70,20 +70,22 @@ export function parseCsv(text) {
 
 /**
  * The columns the importer understands. Two are always required — postName and
- * organization — and the two application dates are required for every listing
- * section except UPCOMING.
+ * organization. The two application dates are not: a row may arrive with
+ * neither, with only a last date, or with both.
  *
- * That exception is not a convenience. An Upcoming notice is routinely published
- * before either date is confirmed, so demanding a date there would mean
- * inventing one. V6__upcoming_dates_optional.sql dropped the NOT NULL these two
- * columns used to carry, and Job.java no longer declares them
- * `nullable = false`, precisely so that case can be stored honestly.
+ * That is not laxity, it is the shape of the source material. A notification is
+ * routinely published weeks before its form dates are announced, so demanding a
+ * date would mean inventing one. V6__upcoming_dates_optional.sql dropped the NOT
+ * NULL these two columns used to carry, and Job.java no longer declares them
+ * `nullable = false`, precisely so that case can be stored honestly. The one
+ * combination the row-level rule still rejects is a start date with no last
+ * date, because that job would compute as Active and never close; see the
+ * `finish` block in mapRows for the full rule and its reasoning.
  *
  * Note the dates are deliberately NOT marked `required: true`. That flag is
- * unconditional and is checked against the header, before any row's
- * listingSection has been read — it would reject a legitimate Upcoming file
- * outright. The conditional check in validateRows below is what implements the
- * real rule.
+ * unconditional and is checked against the header, before any row has been read
+ * at all — it would reject a legitimate file of unopened notifications outright.
+ * The conditional check in mapRows below is what implements the real rule.
  *
  * The rule lives in two places on purpose. JobService.validateDates is the
  * authority and answers a readable 400. The copy here runs in the browser, and
@@ -283,6 +285,7 @@ function validateRows(rows, columnList, opts = {}) {
 
   const mapped = rows.slice(1).map((cells, idx) => {
     const errors = [];
+    const warnings = [];
     const payload = newPayload();
 
     columns.forEach((col, i) => {
@@ -297,24 +300,122 @@ function validateRows(rows, columnList, opts = {}) {
       else if (value !== null && value !== undefined) assign(payload, col, value);
     });
 
-    finish(payload, errors);
+    finish(payload, errors, warnings);
 
     // +2: one for the header row, one because spreadsheets count from 1. The
     // number in the error list has to be the number in the admin's editor.
-    return { line: idx + 2, payload, errors };
+    //
+    // `warnings` is things worth reading that do not stop the row importing.
+    // Kept separate from `errors` rather than folded into it because callers
+    // decide what to skip by asking whether `errors` is empty, so a warning in
+    // that array would silently become a rejection. It is built before `finish`
+    // runs and handed to it, so a cross-field rule can say "imported, but look
+    // at this" instead of having only reject-or-stay-silent to choose from.
+    return { line: idx + 2, payload, errors, warnings };
   });
 
   return { headerErrors, rows: mapped };
 }
 
 /**
- * Turns parsed job rows into { payload, errors } per row.
+ * The same normalisation the server uses, so "SSC  CGL" and "ssc-cgl" are one
+ * name on both sides.
+ *
+ * This is deliberately the same function as normaliseHeader -- trim, lowercase,
+ * collapse away spaces, underscores and hyphens -- but it is given its own name
+ * because it is now doing a second, unrelated job. A future change to how
+ * headers are matched must not silently change what counts as the same posting.
+ */
+const normaliseKey = value => String(value ?? '').trim().toLowerCase().replace(/[\s_-]+/g, '');
+
+/**
+ * Same post, same organisation. Groups postings for review; never enough on its
+ * own to reject one.
+ *
+ * Mirror of DuplicateKeys.looseKey in the backend. The two must agree, because
+ * this one decides what the importer says and that one decides what the server
+ * finds -- and an admin told "no duplicates" by one and shown a duplicate by the
+ * other would rightly stop trusting both.
+ */
+export function jobLooseKey(postName, organization) {
+  return `${normaliseKey(postName)}|${normaliseKey(organization)}`;
+}
+
+/**
+ * Same post, same organisation, same last date. This is the one that means the
+ * same notification was entered twice.
+ *
+ * The last date is what separates a mistake from a normal year-on-year repeat.
+ * "Combined Graduate Level Exam" at the SSC is a real posting in 2025 and again
+ * in 2026 with a different deadline; only a matching deadline makes two rows the
+ * same notification. Mirror of DuplicateKeys.strictKey.
+ */
+export function jobStrictKey(postName, organization, lastDate) {
+  return `${jobLooseKey(postName, organization)}|${lastDate || 'no-last-date'}`;
+}
+
+/**
+ * Marks rows that repeat an earlier row in the same file.
+ *
+ * The paste-it-twice mistake, which the jobs importer had no defence against at
+ * all -- the notices importer has had one since it was written, and jobs are the
+ * half of the site where a duplicate is more visible.
+ *
+ * An exact repeat becomes an error, so only the first copy imports. A loose
+ * match becomes a warning and still imports, because that is what next year's
+ * recruitment for the same post looks like and refusing it would be wrong.
+ */
+function flagRepeatsWithinFile(rows) {
+  const byStrict = new Map();
+  const byLoose = new Map();
+
+  for (const row of rows) {
+    // A row that is already being skipped must not claim the first-copy slot.
+    // If line 2 has a bad date and line 5 is the same posting entered correctly,
+    // line 5 is the one that should import -- not the one rejected for matching
+    // a row that never made it in.
+    if (row.errors.length) continue;
+
+    const { postName, organization, lastDate } = row.payload;
+    if (!normaliseKey(postName)) continue;      // nothing to compare on
+
+    const strict = jobStrictKey(postName, organization, lastDate);
+    const loose = jobLooseKey(postName, organization);
+
+    const strictAt = byStrict.get(strict);
+    if (strictAt) {
+      row.errors.push(
+        `same posting as line ${strictAt} — same post name, organization and last date`
+      );
+      continue;                                  // leave the first copy registered
+    }
+
+    const looseAt = byLoose.get(loose);
+    if (looseAt) {
+      row.warnings.push(
+        `line ${looseAt} has the same post name and organization but a different `
+        + 'last date — fine if it is a different year, check it is not a typo'
+      );
+    }
+
+    byStrict.set(strict, row.line);
+    if (!byLoose.has(loose)) byLoose.set(loose, row.line);
+  }
+}
+
+/**
+ * Turns parsed job rows into { payload, errors, warnings } per row.
  *
  * The generic work is in validateRows; what lives here is everything specific
- * to a job posting — the two nested maps, and the cross-field rules.
+ * to a job posting — the two nested maps, the cross-field rules, and the
+ * within-file duplicate pass.
+ *
+ * This catches duplicates *inside one file* only. It cannot see the database, so
+ * a row that repeats a posting already on the site looks perfectly fine here;
+ * that half of the problem is the importer's duplicate-check call to the server.
  */
 export function mapRows(rows) {
-  return validateRows(rows, CSV_COLUMNS, {
+  const result = validateRows(rows, CSV_COLUMNS, {
     newPayload: () => ({ feeByCategory: {}, ageRelaxationByCategory: {} }),
 
     // fee* and relax* columns are flat in the CSV and nested in the payload,
@@ -325,24 +426,92 @@ export function mapRows(rows) {
       else payload[col.key] = value;
     },
 
-    finish: (payload, errors) => {
+    finish: (payload, errors, warnings) => {
       if (!payload.category) payload.category = 'CENTRAL_GOVT';
       if (!payload.listingSection) payload.listingSection = 'AUTO';
 
-      if (payload.listingSection !== 'UPCOMING') {
-        if (!payload.applicationStartDate) errors.push('applicationStartDate is required outside UPCOMING');
-        if (!payload.lastDate) errors.push('lastDate is required outside UPCOMING');
+      // What each section actually needs in order to behave on the site.
+      //
+      // This rule used to be "anything except UPCOMING needs both dates", and it
+      // was the single biggest reason real notifications never got published. A
+      // notification is very often out weeks before the form dates are
+      // announced, and the pipeline writes listingSection=AUTO on every row it
+      // produces -- so every dateless vacancy was rejected outright rather than
+      // listed as upcoming.
+      //
+      // The rejection was not even protecting anything. AUTO means "work the
+      // status out from the dates", and both halves of that calculation already
+      // read a missing start date as Upcoming: JobService.computeStatus returns
+      // UPCOMING when applicationStartDate is null, and the UPCOMING branch of
+      // JobSpecifications.hasStatus matches an AUTO row whose start date is null
+      // and whose last date is null or still ahead. A dateless AUTO job lands in
+      // Upcoming by itself; there was nothing left for the validator to prevent.
+      //
+      // So: UPCOMING asks for nothing (unchanged). LATEST is a hand-made pin
+      // meaning "this is open now", which needs a real window or it sits on the
+      // homepage for ever. AUTO rejects exactly one combination -- a start date
+      // with no last date -- because that row computes as ACTIVE and then never
+      // closes, which is the "everything says Active" complaint all over again.
+      //
+      // JobService.validateDates is the server-side twin of this block. They
+      // have to agree: if the file passes here and fails there, the importer
+      // stops part-way through a batch with some rows published and some not.
+      if (payload.listingSection === 'LATEST') {
+        if (!payload.applicationStartDate || !payload.lastDate) {
+          errors.push(
+            'applicationStartDate and lastDate are both needed to pin a row to LATEST. '
+            + 'Either fill both dates in, or leave listingSection blank so it is decided '
+            + 'from the dates, or put UPCOMING if the form has not opened yet.'
+          );
+        }
+      } else if (payload.listingSection !== 'UPCOMING') {
+        if (payload.applicationStartDate && !payload.lastDate) {
+          errors.push(
+            'lastDate is missing. With a start date and no last date this job would show '
+            + 'as Active for ever, because nothing tells the site when it closed. Add the '
+            + 'last date, or clear applicationStartDate to list it as upcoming.'
+          );
+        } else if (!payload.applicationStartDate && !payload.lastDate) {
+          warnings.push(
+            'no application dates, so this is listed under Upcoming. '
+            + 'It moves to Latest on its own once you add the dates.'
+          );
+        } else if (!payload.applicationStartDate) {
+          warnings.push(
+            'no applicationStartDate, so this is listed under Upcoming even though the '
+            + 'last date is filled in. Add the start date to have it counted as open.'
+          );
+        }
       }
 
-      // Dates that contradict each other. The backend accepts them; a visitor
-      // seeing a last date before the start date will assume the whole listing
-      // is wrong, which is the reputational cost this site cannot afford.
+      // Dates that contradict each other, refused in every section including
+      // UPCOMING. An estimated date may be missing or already past -- that is
+      // why UPCOMING needs no dates at all -- but a last date before the start
+      // date is not an estimate, it is a misread, and a visitor who sees one
+      // will assume the whole listing is wrong.
+      //
+      // JobService.validateDates refuses the same pair, so a row that slips past
+      // the browser is caught server-side rather than published. It did not
+      // always: it used to return early for UPCOMING and never reach this check.
       if (payload.applicationStartDate && payload.lastDate && payload.lastDate < payload.applicationStartDate) {
         errors.push('lastDate is before applicationStartDate');
       }
+
+      // A maximum age below the minimum is not a borderline call, it is a
+      // misread -- the age pattern reaching past the age sentence into a fee, a
+      // post count or a relaxation table. Age is an optional field, so throwing
+      // the whole vacancy away over it traded the thing students need for a
+      // detail they can live without. Both numbers go instead, with a note. Not
+      // swapped: a swap would be inventing a range nobody wrote down.
       if (payload.ageMin != null && payload.ageMax != null && payload.ageMax < payload.ageMin) {
-        errors.push('ageMax is below ageMin');
+        warnings.push(
+          `age range ignored: maximum ${payload.ageMax} is below minimum ${payload.ageMin}, `
+          + 'which cannot be right, so both were left blank. Fill them in by hand if you want them.'
+        );
+        delete payload.ageMin;
+        delete payload.ageMax;
       }
+
       if (payload.category === 'STATE_GOVT' && !payload.state) {
         errors.push('state is required for a STATE_GOVT posting');
       }
@@ -351,6 +520,9 @@ export function mapRows(rows) {
       if (!Object.keys(payload.ageRelaxationByCategory).length) delete payload.ageRelaxationByCategory;
     },
   });
+
+  flagRepeatsWithinFile(result.rows);
+  return result;
 }
 
 // ---------------------------------------------------------------------------

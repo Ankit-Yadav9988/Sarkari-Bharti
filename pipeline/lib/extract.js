@@ -149,12 +149,38 @@ function labelledText(text, labels, stops, max = 1200) {
   return value.length >= 5 ? result(value, 'medium') : result(null, 'none', 'no clearly labelled section found');
 }
 
+/**
+ * The age limit, as a pair that has to make sense together.
+ *
+ * Two numbers out of one sentence is the easy part; the part that matters is
+ * refusing a pair that cannot be an age range. The patterns below read a window
+ * of up to 180 characters after an "age limit" style label, and that window
+ * regularly runs past the end of the age sentence into a fee table, a post count
+ * or a relaxation list -- so the second number captured is sometimes not a
+ * maximum age at all. When that happens the pair comes back inverted.
+ *
+ * A maximum below a minimum is not a borderline reading, it is proof the match
+ * was wrong, and one number from a broken pair is worth less than nothing on a
+ * page a student is using to decide whether they are eligible. So both are
+ * dropped with the reason attached, which the confidence gate then leaves blank
+ * and the report lists for a human.
+ *
+ * Deliberately not swapped. A swap looks like a tidy fix and is actually the
+ * worst option available: it publishes a range that nobody wrote down, sourced
+ * from a match already known to be faulty, with full confidence attached.
+ */
 export function extractAge(text) {
   const section = /(?:age\s*limit|age\s*criteria|age\s*as\s*on)[^\n]{0,180}/i.exec(text)?.[0] || '';
   const range = /(\d{1,2})\s*(?:years?\s*)?(?:to|[-–—])\s*(\d{1,3})\s*years?/i.exec(section)
     || /minimum\s*(?:age)?\s*[:\-]?\s*(\d{1,2}).{0,80}?maximum\s*(?:age)?\s*[:\-]?\s*(\d{1,3})/i.exec(section);
   if (!range) return { ageMin: result(null, 'none', 'no labelled age range found'), ageMax: result(null, 'none', 'no labelled age range found') };
-  return { ageMin: result(Number(range[1]), 'medium'), ageMax: result(Number(range[2]), 'medium') };
+  const ageMin = Number(range[1]);
+  const ageMax = Number(range[2]);
+  if (ageMax < ageMin) {
+    const why = `age read as ${ageMin} to ${ageMax}, which cannot be an age range, so the match was wrong`;
+    return { ageMin: result(null, 'none', why), ageMax: result(null, 'none', why) };
+  }
+  return { ageMin: result(ageMin, 'medium'), ageMax: result(ageMax, 'medium') };
 }
 
 /**

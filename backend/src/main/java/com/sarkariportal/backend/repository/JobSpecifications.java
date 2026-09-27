@@ -24,11 +24,35 @@ import java.util.Locale;
  * computed from dates, so it cannot be compared directly in SQL. Each status is
  * instead expressed as the date and listing-section conditions that produce it,
  * mirroring JobService.computeStatus() exactly. If one changes, the other has
- * to change with it -- JobServiceTest pins them together.
+ * to change with it.
+ *
+ * Nothing enforces that. An earlier version of this comment claimed
+ * "JobServiceTest pins them together"; there is no JobServiceTest, and
+ * backend/src/test is empty. The two implementations are kept in step by hand,
+ * so treat any edit to either one as an edit to both.
  */
 public final class JobSpecifications {
 
     private JobSpecifications() {
+    }
+
+    /**
+     * Excludes trashed jobs. Every listing query must carry this.
+     *
+     * Unlike every other method here it never returns null, because null is how
+     * {@link #combine} is told "no filter" -- a notDeleted() that could return
+     * null would be a filter that silently disappears. JobService passes it as
+     * the first argument unconditionally rather than in response to a parameter,
+     * so there is no request shape that can switch it off.
+     *
+     * This is the single place the public site is protected from trashed rows on
+     * the Specification path. The other path is the explicit
+     * {@code deletedAt IS NULL} in JobRepository's own JPQL. Between them they
+     * cover every read; the inherited findAll()/findById()/count() are blind to
+     * soft delete and must not be called for public data.
+     */
+    public static Specification<Job> notDeleted() {
+        return (root, query, cb) -> cb.isNull(root.get("deletedAt"));
     }
 
     public static Specification<Job> hasCategory(JobCategory category) {

@@ -8,15 +8,33 @@ const noticeTabActive = (r, type) =>
   (r.pathname.startsWith('/admin/notices') || r.pathname === '/admin/import-notices')
   && r.query.type === type;
 
+// Every screen that belongs to the Jobs section, so the tab stays lit while the
+// admin is inside one of them.
+//
+// The prefix matches cover the forms that live beneath a screen
+// (/admin/edit-job/5). The exact matches are exact on purpose: there are two
+// importers whose paths share a prefix, so `startsWith('/admin/import')` would
+// light Jobs while the admin is on the results importer. The same trap is
+// waiting for any future /admin/trash-something, which is why the housekeeping
+// screens are matched by equality too.
+const jobsTabActive = r =>
+  r.pathname.startsWith('/admin/manage')
+  || r.pathname.startsWith('/admin/add-job')
+  || r.pathname.startsWith('/admin/edit-job')
+  || r.pathname === '/admin/import'
+  || r.pathname === '/admin/trash'
+  || r.pathname === '/admin/duplicates';
+
 // Sub-navigation shown at the top of every admin screen so the admin can move
 // between the content types. Nine tabs is a lot, but the alternative — a nested
 // menu — costs a click on every single edit, and .admin-nav wraps to a second row
 // rather than overflowing.
-// A tab is lit by pathname, and there are now two importers whose paths share a
-// prefix. `startsWith('/admin/import')` would light Jobs while the admin is on
-// the results importer, so the jobs one is matched exactly.
+// The trash and duplicate-finder screens deliberately do not get tabs of their
+// own: they are reached from the header of the Jobs screen, because a tenth and
+// eleventh tab would cost every other screen a row of height to surface two
+// links that are only wanted while working through the job queue.
 const LINKS = [
-  { href: '/admin/manage', label: 'Jobs', isActive: r => r.pathname.startsWith('/admin/manage') || r.pathname.startsWith('/admin/add-job') || r.pathname.startsWith('/admin/edit-job') || r.pathname === '/admin/import' },
+  { href: '/admin/manage', label: 'Jobs', isActive: jobsTabActive },
   { href: '/admin/notices?type=ADMIT_CARD', label: 'Admit cards', isActive: r => noticeTabActive(r, 'ADMIT_CARD') },
   { href: '/admin/notices?type=RESULT', label: 'Results', isActive: r => noticeTabActive(r, 'RESULT') },
   { href: '/admin/notices?type=ANSWER_KEY', label: 'Answer keys', isActive: r => noticeTabActive(r, 'ANSWER_KEY') },

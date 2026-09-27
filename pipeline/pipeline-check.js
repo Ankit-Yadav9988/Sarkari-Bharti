@@ -5,7 +5,7 @@ import { createPoliteClient, robotsAllows } from './lib/http.js';
 import { extractJob } from './lib/extract.js';
 import { canonicalUrl, inspectSource, linksFromJson, isCandidate } from './discover.js';
 import { header, toCsv, previewValidation } from './lib/csv-out.js';
-import { sourceHealth } from './run.js';
+import { createDuplicateFilter, duplicateSection, hasPostName, isoDate, rowKey, sourceHealth } from './run.js';
 
 let checks = 0;
 function check(value, message) { assert.ok(value, message); checks += 1; }
@@ -122,7 +122,34 @@ const quoted = toCsv([{ postName: 'Engineer, Civil', organization: 'Test', categ
 const preview = previewValidation(quoted);
 equal(preview.valid, 1, 'quoted row round-trips through the real importer');
 const incomplete = previewValidation(toCsv([{ postName: 'Missing dates', organization: 'Test', category: 'SSC' }]));
-equal(incomplete.invalid, 1, 'missing required dates are reported for human completion');
+/* This assertion used to read `incomplete.invalid === 1`, and it was wrong about
+   what the pipeline should do -- it encoded the rule that cost Ankit his Upcoming
+   rows. A notification is routinely published weeks before its form dates are
+   announced, and extract.js writes listingSection=AUTO on every row, so the old
+   "both dates required outside UPCOMING" rule rejected exactly the rows the
+   pipeline exists to find. It now imports and is listed under Upcoming, because
+   computeStatus and JobSpecifications.hasStatus both already read a null start
+   date that way.
+
+   The row must still be *reported*, or the change trades skipped rows for silent
+   ones: it comes back under `notes` rather than `problems`, so the admin sees it
+   in the run report without it being withheld from the file. */
+equal(incomplete.invalid, 0, 'a notification with no dates yet is imported rather than skipped');
+equal(incomplete.total, 1, 'the row is still in the file, not quietly dropped before the report');
+equal(incomplete.valid, 1, 'and it is counted as a row the admin will actually get');
+equal(incomplete.notes.length, 1, 'but it is still surfaced, as a note rather than a rejection');
+check(incomplete.notes[0].warnings.some(w => /Upcoming/.test(w)),
+  'and the note says where it will appear until the dates arrive');
+
+/* The one date combination the pipeline must still refuse. A start date with no
+   last date computes as ACTIVE and then never closes, which is the "everything
+   says Active" complaint arriving by a different door. */
+const openEnded = previewValidation(toCsv([
+  { postName: 'No last date', organization: 'Test', category: 'SSC', applicationStartDate: '2026-10-01' },
+]));
+equal(openEnded.invalid, 1, 'a start date with no last date is still reported for human completion');
+check(openEnded.problems[0].errors.some(e => /lastDate is missing/.test(e)),
+  'and the reason names the missing column, in the importer\'s own wording');
 
 /* Source health. The fixture shapes are the ones that actually occurred or
    that the gate exists to catch; `candidateCount` is passed separately because
@@ -156,5 +183,132 @@ check(!sourceHealth([], 0).ok, 'no configured sources is a failure, not a quiet 
    depend on the one source it trusts least. */
 check(sourceHealth([report('ssc', 'official', true), report('upsc', 'official', true), report('sarkariresult', 'aggregator', false)], 30).ok,
   'losing only the aggregator leaves a healthy run');
+
+/* Duplicate filtering. This is what the 20-24 September CSVs needed and did not
+   have: 54 of the 24th's 64 rows were already in the 23rd's file. Each rule
+   below is asserted with the negative control next to it, because every one of
+   them can pass by doing nothing -- a filter that drops everything and a filter
+   that drops nothing both produce a green "no duplicates" line. */
+
+equal(isoDate('2026-07-20'), '2026-07-20', 'an ISO date passes through unchanged');
+equal(isoDate('2026-07-20T00:00:00Z'), '2026-07-20', 'a full instant is reduced to its date');
+equal(isoDate([2026, 7, 20]), '2026-07-20', 'Jackson array dates are normalised and zero-padded');
+equal(isoDate(null), '', 'no date is the empty string, not the word null');
+equal(isoDate('not a date'), '', 'unparseable input does not become a key that half-matches');
+
+const jobRow = (postName, organization, lastDate, extra = {}) => ({ postName, organization, lastDate, ...extra });
+
+equal(
+  rowKey(jobRow('Combined Graduate Level Exam', 'SSC', '2026-07-20')),
+  rowKey(jobRow('  combined-graduate_level   exam ', 'ssc', '2026-07-20')),
+  'spacing, case, hyphens and underscores do not make a different posting',
+);
+assert.notEqual(
+  rowKey(jobRow('Combined Graduate Level Exam', 'SSC', '2026-07-20')),
+  rowKey(jobRow('Combined Graduate Level Exam', 'SSC', '2025-07-20')),
+  'the same exam in a different year is a different posting and must survive',
+); checks += 1;
+equal(
+  rowKey(jobRow('Analyst', 'Test', '2026-07-20T00:00:00.000Z')),
+  rowKey(jobRow('Analyst', 'Test', '2026-07-20')),
+  'a LocalDate serialised with a time still matches the CSV date it came from',
+);
+
+check(hasPostName(jobRow('Analyst', 'Test', null)), 'a real post name is a post name');
+check(!hasPostName(jobRow('', 'Test', null)), 'a blank post name is not');
+check(!hasPostName(jobRow('  --  ', 'Test', null)), 'and neither is punctuation the key normaliser strips');
+
+/* The defect this replaced: the published check only ever compared
+   notificationPdfUrl, and extract.js blanks that field when the confidence gate
+   cannot vouch for it, so the guard was a no-op for a large share of rows. */
+const publishedFilter = createDuplicateFilter({
+  publishedUrls: new Set(['https://ssc.gov.in/cgl.pdf']),
+  publishedKeys: new Set([rowKey(jobRow('Combined Graduate Level Exam', 'SSC', '2026-07-20'))]),
+});
+check(
+  publishedFilter.reasonToDrop(jobRow('Combined Graduate Level Exam', 'SSC', '2026-07-20'))?.published,
+  'a published posting is dropped on its identity alone, with no PDF link to match on',
+);
+check(
+  publishedFilter.reasonToDrop(jobRow('Anything', 'Anyone', '2030-01-01', { notificationPdfUrl: 'https://ssc.gov.in/cgl.pdf' }))?.published,
+  'and the PDF link still works as a second way to recognise it',
+);
+equal(
+  publishedFilter.reasonToDrop(jobRow('Combined Graduate Level Exam', 'SSC', '2027-07-20')),
+  null,
+  'next year\'s sitting of a published exam is not a duplicate of this year\'s',
+);
+equal(
+  publishedFilter.reasonToDrop(jobRow('Stenographer Grade C', 'SSC', '2026-07-20')),
+  null,
+  'a genuinely new posting from the same body is not dropped',
+);
+
+/* Within one run. Two candidate URLs can be the same notification: the
+   aggregator lists a vacancy and the issuing body publishes it too. */
+const runFilter = createDuplicateFilter({});
+const firstCopy = jobRow('Constable Recruitment', 'UP Police', '2026-11-30');
+equal(runFilter.reasonToDrop(firstCopy), null, 'the first copy of a posting is kept');
+runFilter.remember(firstCopy, 'Constable Recruitment');
+const secondCopy = runFilter.reasonToDrop(jobRow('constable  recruitment', 'up police', '2026-11-30'));
+check(secondCopy && !secondCopy.published, 'the second copy is dropped as a repeat within the run, not as published');
+check(/earlier in this run/.test(secondCopy.reason), 'and the report says which run it repeated');
+equal(
+  runFilter.reasonToDrop(jobRow('Constable Recruitment', 'UP Police', '2027-11-30')),
+  null,
+  'a different last date is a different notification even inside one run',
+);
+
+/* Skeleton rows. A candidate whose PDF could not be read has no post name; two
+   of those are two unread notifications, and dropping the second as a duplicate
+   would hide exactly the rows that most need a human. Both halves of the filter
+   have to refuse to key them, so both are checked: the published lookup here,
+   and the within-run memory below. */
+const namelessRow = jobRow('', 'Unknown', null);
+const namelessPublished = createDuplicateFilter({ publishedKeys: new Set([rowKey(namelessRow)]) });
+equal(
+  namelessPublished.reasonToDrop(namelessRow),
+  null,
+  'a nameless row is never matched against published keys, however well its empty key collides',
+);
+const skeletonFilter = createDuplicateFilter({});
+equal(skeletonFilter.reasonToDrop(namelessRow), null, 'a nameless row is not a duplicate of anything');
+skeletonFilter.remember(namelessRow, 'https://a.gov.in/one.pdf');
+equal(skeletonFilter.reasonToDrop(jobRow('', 'Unknown', null)), null, 'and a second nameless row still gets through');
+
+/* The report. An empty section that claims there were no duplicates when there
+   were would be worse than no section at all. */
+const emptySection = duplicateSection({ drops: [], carriedOver: [], notes: [] });
+check(/Nothing repeated/.test(emptySection), 'a clean run says so in plain words');
+const fullSection = duplicateSection({
+  drops: [
+    { postName: 'CGL 2026', url: 'https://ssc.gov.in/cgl', published: true, reason: 'already on the site — same post name, organization and last date' },
+    { postName: 'Constable', url: 'https://uppbpb.gov.in/c', published: false, reason: 'same posting as "Constable" earlier in this run' },
+  ],
+  carriedOver: [{ postName: 'Steno 2026', firstEmittedOn: '2026-09-21', emitCount: 4 }],
+  notes: [{ line: 7, postName: 'CGL 2027', warnings: ['line 3 has the same post name and organization but a different last date'] }],
+});
+check(/Left out as already published: 1/.test(fullSection), 'the counts separate published from within-run');
+check(/Left out as a repeat within this run: 1/.test(fullSection), 'and report the within-run drops on their own line');
+check(/2026-09-21/.test(fullSection), 'a row offered again names the day it first appeared');
+check(/\| 4 \|/.test(fullSection), 'and how many times it has been offered');
+check(!/Nothing repeated/.test(fullSection), 'and a run with duplicates does not also claim to be clean');
+
+/* mapRows is the other half: duplicates inside a single file, caught before the
+   admin presses Publish. previewValidation runs the real importer over the real
+   CSV writer, so this is the same code path the import screen uses. */
+const sameFileTwice = previewValidation(toCsv([
+  { postName: 'Analyst', organization: 'Test', category: 'SSC', applicationStartDate: '2026-10-01', lastDate: '2026-10-31' },
+  { postName: 'analyst', organization: 'test', category: 'SSC', applicationStartDate: '2026-10-01', lastDate: '2026-10-31' },
+]));
+equal(sameFileTwice.valid, 1, 'the same posting twice in one file imports once');
+check(sameFileTwice.problems.some(p => /same posting as line 2/.test(p.errors.join(' '))), 'and the skipped line points at the one that is keeping its place');
+const sameNameNextYear = previewValidation(toCsv([
+  { postName: 'Analyst', organization: 'Test', category: 'SSC', applicationStartDate: '2026-10-01', lastDate: '2026-10-31' },
+  { postName: 'Analyst', organization: 'Test', category: 'SSC', applicationStartDate: '2027-10-01', lastDate: '2027-10-31' },
+]));
+equal(sameNameNextYear.valid, 2, 'next year\'s sitting of the same exam is imported, not skipped');
+equal(sameNameNextYear.notes.length, 1, 'but it is flagged as worth a look in case the year is a typo');
+check(/different last date/.test(sameNameNextYear.notes[0].warnings.join(' ')), 'and the note says what to check');
 
 console.log(`pipeline-check: ${checks} checks passed`);

@@ -1,12 +1,13 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import Link from 'next/link';
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 import AdminGuard from '../../components/AdminGuard';
 import AdminNav from '../../components/AdminNav';
 import { authFetch } from '../../lib/auth';
-import { API_URL } from '../../lib/api';
+import { API_URL, jobHref } from '../../lib/api';
 import { parseCsv, mapRows, csvTemplate, CSV_COLUMNS } from '../../lib/csv';
+import { checkDuplicates } from '../../lib/adminJobs';
 
 /**
  * Bulk import from CSV.
@@ -20,12 +21,23 @@ import { parseCsv, mapRows, csvTemplate, CSV_COLUMNS } from '../../lib/csv';
  * Sequential, not Promise.all: twenty parallel writes would trip the rate
  * limiter added in task #11, and a half-imported file is harder to reason about
  * than a slow one.
+ *
+ * <b>Duplicates are checked in two places</b>, because they arrive two ways.
+ * mapRows catches a row repeated inside the file. The server catches a row that
+ * repeats a posting already published -- which is the common case here, since
+ * the daily pipeline CSVs overlap heavily: the same vacancy is still open
+ * tomorrow, so it appears in tomorrow's file too.
  */
 export default function ImportJobs() {
   const [text, setText] = useState('');
   const [fileName, setFileName] = useState('');
   const [running, setRunning] = useState(false);
   const [results, setResults] = useState(null); // { ok: [], failed: [{line, message}] }
+
+  // status: 'idle' | 'checking' | 'done' | 'failed'
+  // exact:  line -> match, rows that already exist and will be skipped
+  // loose:  line -> match, same post and body but a different last date
+  const [dup, setDup] = useState({ status: 'idle', exact: new Map(), loose: new Map(), error: '' });
 
   const parsed = useMemo(() => {
     if (!text.trim()) return null;
@@ -36,9 +48,75 @@ export default function ImportJobs() {
     }
   }, [text]);
 
-  const valid = parsed ? parsed.rows.filter(r => !r.errors.length) : [];
-  const invalid = parsed ? parsed.rows.filter(r => r.errors.length) : [];
+  // Memoised, not recomputed inline: `valid` is the dependency of the duplicate
+  // check effect below, and a fresh array identity on every render would put
+  // that effect into a loop of requests.
+  const valid = useMemo(() => (parsed ? parsed.rows.filter(r => !r.errors.length) : []), [parsed]);
+  const invalid = useMemo(() => (parsed ? parsed.rows.filter(r => r.errors.length) : []), [parsed]);
   const blocked = parsed ? parsed.headerErrors.some(e => /Missing required column|empty/.test(e)) : false;
+
+  /**
+   * Asks the server which of these rows already exist.
+   *
+   * The response identifies matches by their position in the array sent, so the
+   * array must be `rows` unfiltered and in order. Returning line-keyed maps
+   * rather than indexes means the tables below never have to hold on to that
+   * ordering.
+   */
+  async function lookupDuplicates(rows) {
+    const matches = await checkDuplicates(rows.map(r => ({
+      postName: r.payload.postName,
+      organization: r.payload.organization || null,
+      lastDate: r.payload.lastDate || null,
+    })));
+
+    const exact = new Map();
+    const loose = new Map();
+    for (const match of matches) {
+      const row = rows[match.index];
+      if (!row) continue;                 // index outside what we sent; ignore it
+      (match.exact ? exact : loose).set(row.line, match);
+    }
+    return { exact, loose };
+  }
+
+  useEffect(() => {
+    if (!valid.length || blocked) {
+      setDup({ status: 'idle', exact: new Map(), loose: new Map(), error: '' });
+      return;
+    }
+
+    let cancelled = false;
+    setDup(prev => ({ ...prev, status: 'checking', error: '' }));
+
+    // Debounced because the textarea is a valid way to get rows in here, and a
+    // paste arrives as a burst of changes.
+    const timer = setTimeout(() => {
+      lookupDuplicates(valid)
+        .then(({ exact, loose }) => {
+          if (!cancelled) setDup({ status: 'done', exact, loose, error: '' });
+        })
+        .catch(err => {
+          if (!cancelled) {
+            setDup({ status: 'failed', exact: new Map(), loose: new Map(), error: err.message });
+          }
+        });
+    }, 400);
+
+    return () => { cancelled = true; clearTimeout(timer); };
+  }, [valid, blocked]);
+
+  // What Publish will actually send. Rows that already exist are held back
+  // rather than hidden, so the count on the button matches the table above it.
+  const publishable = useMemo(
+    () => valid.filter(r => !dup.exact.has(r.line)),
+    [valid, dup]
+  );
+
+  const withWarnings = useMemo(
+    () => publishable.filter(r => r.warnings.length > 0 || dup.loose.has(r.line)),
+    [publishable, dup]
+  );
 
   function handleFile(e) {
     const file = e.target.files?.[0];
@@ -60,15 +138,67 @@ export default function ImportJobs() {
     URL.revokeObjectURL(url);
   }
 
+  /** Every note attached to one row, from either duplicate check. */
+  function notesFor(row) {
+    const notes = [...row.warnings];
+    const match = dup.loose.get(row.line);
+    if (match) {
+      const when = match.existingLastDate ? ` (last date ${match.existingLastDate})` : '';
+      notes.push(`already on the site as "${match.existingPostName}"${when} — different last date, so probably a different year`);
+    }
+    return notes;
+  }
+
   async function handleImport() {
-    if (!valid.length) return;
-    if (!confirm(`Publish ${valid.length} posting${valid.length === 1 ? '' : 's'} to the live site?`)) return;
+    if (!publishable.length || running) return;
+
+    // The preview may have been on screen for a while, and the pipeline could
+    // have published in the meantime. Re-check immediately before writing
+    // rather than trusting what is on screen.
+    let toPublish = publishable;
+    let stale = false;
+    let unchecked = dup.status === 'failed';
 
     setRunning(true);
-    const ok = [];
+    try {
+      const fresh = await lookupDuplicates(valid);
+      setDup({ status: 'done', exact: fresh.exact, loose: fresh.loose, error: '' });
+      toPublish = valid.filter(r => !fresh.exact.has(r.line));
+      stale = toPublish.length !== publishable.length;
+      unchecked = false;
+    } catch {
+      // Could not re-check. Going ahead on the preview's verdict is better than
+      // refusing to import because one call failed, but the admin is told.
+      unchecked = true;
+    }
+
+    if (stale) {
+      setRunning(false);
+      alert(
+        'Some of these postings have appeared on the site since this preview was '
+        + 'built, so the list has been updated. Have a look and press Publish again.'
+      );
+      return;
+    }
+
+    if (!toPublish.length) {
+      setRunning(false);
+      alert('Every row in this file is already on the site. Nothing to publish.');
+      return;
+    }
+
+    const skipped = valid.length - toPublish.length;
+    const ok = confirm(
+      `Publish ${toPublish.length} posting${toPublish.length === 1 ? '' : 's'} to the live site?`
+      + (skipped > 0 ? `\n\n${skipped} row${skipped === 1 ? '' : 's'} already on the site will be skipped.` : '')
+      + (unchecked ? '\n\nWarning: the duplicate check could not run, so some of these may already exist.' : '')
+    );
+    if (!ok) { setRunning(false); return; }
+
+    const published = [];
     const failed = [];
 
-    for (const row of valid) {
+    for (const row of toPublish) {
       try {
         const res = await authFetch(`${API_URL}/jobs`, {
           method: 'POST',
@@ -84,15 +214,21 @@ export default function ImportJobs() {
           break;
         }
         if (!res.ok) { failed.push({ line: row.line, message: `Server rejected it (${res.status}).` }); continue; }
-        ok.push({ line: row.line, postName: row.payload.postName });
+        published.push({ line: row.line, postName: row.payload.postName });
       } catch (err) {
         failed.push({ line: row.line, message: err.message || 'Network error.' });
       }
     }
 
-    setResults({ ok, failed });
+    setResults({ ok: published, failed, skipped });
     setRunning(false);
   }
+
+  const publishLabel = running
+    ? 'Importing…'
+    : dup.status === 'checking'
+      ? 'Checking for duplicates…'
+      : `Publish ${publishable.length} posting${publishable.length === 1 ? '' : 's'}`;
 
   return (
     <AdminGuard>
@@ -102,8 +238,9 @@ export default function ImportJobs() {
           <AdminNav />
           <h1 style={{ margin: 0 }}>Import jobs from CSV</h1>
           <p className="muted small">
-            Every row is checked before anything is sent. Rows with problems are listed and skipped —
-            the rest still import, so one bad date does not cost you the whole file.
+            Every row is checked before anything is sent — both against the other rows in the file
+            and against what is already on the site. Rows with problems are listed and skipped,
+            so one bad date does not cost you the whole file.
           </p>
 
           <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap', alignItems: 'center', marginTop: 14 }}>
@@ -130,15 +267,60 @@ export default function ImportJobs() {
 
           {parsed && !blocked && (
             <>
+              {dup.status === 'failed' && (
+                <div className="pill-amber" style={{ padding: '10px 14px', borderRadius: 8, marginTop: 12 }}>
+                  Could not check against the postings already on the site: {dup.error}
+                  {' '}You can still import, but some rows may already exist.
+                </div>
+              )}
+
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 10, marginTop: 18 }}>
                 <p style={{ margin: 0 }}>
-                  <strong>{valid.length}</strong> ready to import
+                  <strong>{publishable.length}</strong> ready to import
+                  {dup.exact.size > 0 && <> · <span className="muted">{dup.exact.size} already on the site</span></>}
                   {invalid.length > 0 && <> · <span style={{ color: '#A32D2D' }}>{invalid.length} skipped</span></>}
                 </p>
-                <button type="button" className="btn-primary" onClick={handleImport} disabled={running || !valid.length}>
-                  {running ? 'Importing…' : `Publish ${valid.length} posting${valid.length === 1 ? '' : 's'}`}
+                <button type="button" className="btn-primary" onClick={handleImport}
+                        disabled={running || dup.status === 'checking' || !publishable.length}>
+                  {publishLabel}
                 </button>
               </div>
+
+              {dup.exact.size > 0 && (
+                <>
+                  <h2 style={{ fontSize: '1rem', marginTop: 18, marginBottom: 6 }}>
+                    Already on the site — will not be imported
+                  </h2>
+                  <p className="muted small" style={{ marginTop: 0 }}>
+                    Same post name, same organization and same last date as a posting
+                    that is already published. This is normally just yesterday&apos;s
+                    vacancy still being open.
+                  </p>
+                  <div className="table-wrap">
+                    <table className="data">
+                      <thead><tr><th style={{ width: 70 }}>Line</th><th>Post name</th><th>Last date</th><th>Existing posting</th></tr></thead>
+                      <tbody>
+                        {valid.filter(r => dup.exact.has(r.line)).map(r => {
+                          const match = dup.exact.get(r.line);
+                          return (
+                            <tr key={r.line}>
+                              <td>{r.line}</td>
+                              <td className="muted">{r.payload.postName}</td>
+                              <td className="muted">{r.payload.lastDate || '—'}</td>
+                              <td>
+                                <a href={jobHref({ slug: match.existingSlug, id: match.existingId })}
+                                   target="_blank" rel="noopener noreferrer">
+                                  #{match.existingId} {match.existingPostName}
+                                </a>
+                              </td>
+                            </tr>
+                          );
+                        })}
+                      </tbody>
+                    </table>
+                  </div>
+                </>
+              )}
 
               {invalid.length > 0 && (
                 <div className="table-wrap" style={{ marginTop: 12 }}>
@@ -157,20 +339,42 @@ export default function ImportJobs() {
                 </div>
               )}
 
-              {valid.length > 0 && (
+              {withWarnings.length > 0 && (
+                <div className="pill-amber" style={{ padding: '10px 14px', borderRadius: 8, marginTop: 12 }}>
+                  <strong>{withWarnings.length} row{withWarnings.length === 1 ? '' : 's'} worth a look.</strong>
+                  {' '}These will still be imported.
+                </div>
+              )}
+
+              {publishable.length > 0 && (
                 <div className="table-wrap" style={{ marginTop: 12 }}>
                   <table className="data">
-                    <thead><tr><th style={{ width: 70 }}>Line</th><th>Post name</th><th>Organization</th><th>Category</th><th>Last date</th></tr></thead>
+                    <thead>
+                      <tr>
+                        <th style={{ width: 70 }}>Line</th>
+                        <th>Post name</th>
+                        <th>Organization</th>
+                        <th>Category</th>
+                        <th>Last date</th>
+                        <th>Notes</th>
+                      </tr>
+                    </thead>
                     <tbody>
-                      {valid.map(r => (
-                        <tr key={r.line}>
-                          <td>{r.line}</td>
-                          <td>{r.payload.postName}</td>
-                          <td className="muted">{r.payload.organization}</td>
-                          <td className="muted">{r.payload.category}</td>
-                          <td>{r.payload.lastDate || <span className="muted">—</span>}</td>
-                        </tr>
-                      ))}
+                      {publishable.map(r => {
+                        const notes = notesFor(r);
+                        return (
+                          <tr key={r.line}>
+                            <td>{r.line}</td>
+                            <td>{r.payload.postName}</td>
+                            <td className="muted">{r.payload.organization}</td>
+                            <td className="muted">{r.payload.category}</td>
+                            <td>{r.payload.lastDate || <span className="muted">—</span>}</td>
+                            <td style={{ color: notes.length ? '#8a5a08' : undefined }}>
+                              {notes.length ? notes.join('; ') : <span className="muted">—</span>}
+                            </td>
+                          </tr>
+                        );
+                      })}
                     </tbody>
                   </table>
                 </div>
@@ -183,6 +387,7 @@ export default function ImportJobs() {
               <h2 style={{ marginBottom: 6 }}>Import finished</h2>
               <p className="pill-green" style={{ padding: '10px 14px', borderRadius: 8, display: 'inline-block' }}>
                 {results.ok.length} published
+                {results.skipped > 0 && ` · ${results.skipped} skipped as already on the site`}
               </p>
               {results.failed.length > 0 && (
                 <div className="pill-red" style={{ padding: '10px 14px', borderRadius: 8, marginTop: 10 }}>

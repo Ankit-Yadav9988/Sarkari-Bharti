@@ -45,6 +45,17 @@ export const NOTICE_CSV_COLUMNS = csv.NOTICE_CSV_COLUMNS;
 export const parseCsv = csv.parseCsv;
 export const mapRows = csv.mapRows;
 export const mapNoticeRows = csv.mapNoticeRows;
+/**
+ * What counts as the same posting, imported for the same reason the columns are.
+ *
+ * There are already two implementations of this rule -- this one and
+ * DuplicateKeys.java, which the server needs because it cannot run JavaScript.
+ * A third copy here, in the code that decides what goes into the CSV, would mean
+ * the pipeline could disagree with the importer about whether a row is a
+ * duplicate, and the admin would be the one to discover it.
+ */
+export const jobLooseKey = csv.jobLooseKey;
+export const jobStrictKey = csv.jobStrictKey;
 export const { CATEGORIES, SECTIONS, STATES, NOTICE_TYPES } = api;
 
 // A load-bearing sanity check. If the import silently produced an empty or
@@ -60,5 +71,15 @@ if (!Array.isArray(CSV_COLUMNS) || CSV_COLUMNS.length < 10) {
 for (const key of ['postName', 'organization', 'applicationStartDate', 'lastDate']) {
   if (!CSV_COLUMNS.some(c => c.key === key)) {
     throw new Error(`CSV_COLUMNS is missing the expected column "${key}" -- refusing to write output.`);
+  }
+}
+
+// Same idea for the duplicate rule. If these came back undefined -- renamed in
+// csv.js, say -- every duplicate check in run.js would throw "not a function" on
+// the first candidate, which reads like a pipeline bug rather than a missing
+// export. Fail at load with the actual cause.
+for (const [name, fn] of [['jobLooseKey', jobLooseKey], ['jobStrictKey', jobStrictKey]]) {
+  if (typeof fn !== 'function') {
+    throw new Error(`${name} did not load from frontend/lib/csv.js -- the pipeline cannot detect duplicates without it.`);
   }
 }

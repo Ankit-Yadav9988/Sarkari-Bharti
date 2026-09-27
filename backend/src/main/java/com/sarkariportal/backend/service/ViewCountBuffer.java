@@ -189,8 +189,19 @@ public class ViewCountBuffer {
         return batch;
     }
 
-    /** Drops all state for a job that no longer exists. */
-    private void forget(Long jobId) {
+    /**
+     * Drops all state for a job that is no longer public.
+     *
+     * Called from two places. The flush calls it when an increment updates zero
+     * rows, which means the job was hard-deleted or trashed while its views were
+     * buffered. JobService calls it directly when a job is trashed or purged:
+     * knownTotals is an in-memory cache that no database change can invalidate,
+     * so without this a trashed job would keep answering the view endpoint from
+     * memory with a number it is no longer entitled to have. Package-private
+     * rather than public because only JobService, in this same package, has any
+     * business calling it.
+     */
+    void forget(Long jobId) {
         knownTotals.remove(jobId);
         pending.remove(jobId);
     }

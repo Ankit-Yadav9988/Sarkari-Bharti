@@ -93,6 +93,19 @@ public class Job {
     // POST /api/jobs/{id}/view - shown as social proof ("2.3k views").
     private Long views = 0L;
 
+    // When the job was moved to the trash. NULL means live; anything else means
+    // the row still exists but must not appear anywhere on the public site.
+    //
+    // No @Column annotation on purpose: there is no naming strategy configured,
+    // so Spring Boot's default maps deletedAt -> deleted_at, which is exactly
+    // what V7 creates. Adding @Column(name = ...) here would be a second place
+    // to keep in sync for no benefit.
+    //
+    // Deliberately absent from JobSummaryResponse and JobDetailResponse. The
+    // public API has no reason to know this field exists, and a trashed job is
+    // never fetched by those paths anyway -- see JobService.requireLiveJob.
+    private Instant deletedAt;
+
     @PrePersist
     void onCreate() {
         if (createdAt == null) createdAt = Instant.now();
@@ -186,6 +199,12 @@ public class Job {
 
     public Long getViews() { return views; }
     public void setViews(Long views) { this.views = views; }
+
+    public Instant getDeletedAt() { return deletedAt; }
+    public void setDeletedAt(Instant deletedAt) { this.deletedAt = deletedAt; }
+
+    /** Convenience for the many places that only care live-or-trashed. */
+    public boolean isDeleted() { return deletedAt != null; }
 
     public JobStatus getStatus() { return status; }
     public void setStatus(JobStatus status) { this.status = status; }

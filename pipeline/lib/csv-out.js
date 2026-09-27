@@ -55,22 +55,28 @@ export function toCsv(rows) {
  * What it is for is the report: telling you, before you open the file, which
  * rows need you and why. The reasons come from `mapRows`, so they are worded
  * identically to what the import screen will show.
+ *
+ * `notes` is the other half of that: mapRows also flags rows it will happily
+ * import but thinks are worth a second look -- most usefully, two rows with the
+ * same post name and organisation but different last dates, which is either next
+ * year's exam or a mistyped year. Those are not problems and must not be counted
+ * as invalid, so they come back in their own list.
  */
 export function previewValidation(csvText) {
   // parseCsv -> array of arrays (row 0 is the header).
-  // mapRows  -> { headerErrors, rows: [{ line, payload, errors }] }
+  // mapRows  -> { headerErrors, rows: [{ line, payload, errors, warnings }] }
   // Shapes confirmed against frontend/lib/csv.js, not assumed.
   const { headerErrors, rows } = mapRows(parseCsv(csvText));
   const invalid = rows.filter(r => r.errors.length > 0);
+  const describe = r => ({ line: r.line, postName: r.payload.postName || '(no post name)' });
   return {
     total: rows.length,
     valid: rows.length - invalid.length,
     invalid: invalid.length,
     headerErrors,
-    problems: invalid.map(r => ({
-      line: r.line,
-      postName: r.payload.postName || '(no post name)',
-      errors: r.errors,
-    })),
+    problems: invalid.map(r => ({ ...describe(r), errors: r.errors })),
+    notes: rows
+      .filter(r => (r.warnings || []).length > 0)
+      .map(r => ({ ...describe(r), warnings: r.warnings })),
   };
 }
