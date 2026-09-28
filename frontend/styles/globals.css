@@ -291,9 +291,7 @@ p  { font-size: 0.95rem; }
   flex: 1;
 }
 
-.linklist > * {
-  flex: 1;
-}
+
 .box-foot {
   border-top: 1px solid var(--line-soft);
   padding: 7px 11px;
