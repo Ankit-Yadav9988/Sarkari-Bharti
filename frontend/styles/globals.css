@@ -288,7 +288,7 @@ p  { font-size: 0.95rem; }
 .linklist {
   display: flex;
   flex-direction: column;
-  gap:0;
+ 
 }
 
 
@@ -333,9 +333,18 @@ p  { font-size: 0.95rem; }
 }
 .linklist-item:hover { background: #fff8e6; text-decoration: none; }
 .linklist-item:visited { color: var(--link-visited); }
-.linklist-title { font-weight: 500; }
+.linklist-title {
+  font-weight: 500;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+}
 .linklist-meta {
-  display: block;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+  overflow: hidden;
   font-size: 0.78rem;
   color: var(--muted);
   margin-top: 1px;
