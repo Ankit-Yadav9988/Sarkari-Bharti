@@ -316,7 +316,7 @@ p  { font-size: 0.95rem; }
 .linklist-item {
   display: block;
   box-sizing: border-box;
-  height: 68px;
+  height: 64px;
   padding: 7px 11px 7px 22px;
   position: relative;
   font-size: 0.9rem;
