@@ -95,8 +95,4 @@ robots.txt, under both locale prefixes.
 
 Details, and how to rotate either secret, are in [DEPLOY.md](DEPLOY.md).
 
-## Known limitations
 
-Content entry is manual — there is no scraper and no RSS ingestion. `about`,
-`contact`, `privacy`, `disclaimer` and the whole admin area are English only.
-Notification PDFs are linked by URL rather than uploaded.
