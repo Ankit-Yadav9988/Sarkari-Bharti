@@ -291,6 +291,7 @@ p  { font-size: 0.95rem; }
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 12px;
+  align-items: start;
 }
 @media (max-width: 940px) { .box-grid { grid-template-columns: repeat(2, 1fr); } }
 @media (max-width: 620px) { .box-grid { grid-template-columns: 1fr; } }
