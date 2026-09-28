@@ -315,12 +315,15 @@ p  { font-size: 0.95rem; }
 .linklist { display: flex; flex-direction: column; }
 .linklist-item {
   display: block;
+  box-sizing: border-box;
+  height: 68px;
   padding: 7px 11px 7px 22px;
   position: relative;
   font-size: 0.9rem;
   line-height: 1.4;
   border-bottom: 1px dotted var(--line-soft);
   color: var(--link);
+  overflow: hidden;
 }
 .linklist-item:last-child { border-bottom: none; }
 .linklist-item::before {
@@ -338,12 +341,15 @@ p  { font-size: 0.95rem; }
   display: -webkit-box;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 2;
+  line-clamp: 2;
   overflow: hidden;
 }
+
 .linklist-meta {
   display: -webkit-box;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 1;
+  line-clamp: 1;
   overflow: hidden;
   font-size: 0.78rem;
   color: var(--muted);
