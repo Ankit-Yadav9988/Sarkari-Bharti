@@ -31,13 +31,13 @@ export async function getServerSideProps({ res }) {
     // closes tomorrow is exactly what the ticker exists to surface, and it sits
     // nowhere near the top of a newest-first list. Twelve, then filtered to the
     // ones actually inside the week.
-    fetchJobs({ status: 'ACTIVE', sort: 'closing', size: 12 }),
-    fetchJobs({ status: 'UPCOMING', sort: 'opening', size: 8 }),
-    fetchNotices({ type: 'ADMIT_CARD', size: 8 }),
-    fetchNotices({ type: 'RESULT', size: 8 }),
-    fetchNotices({ type: 'ANSWER_KEY', size: 8 }),
-    fetchSyllabi({ size: 8 }),
-    fetchJobs({ category: 'ADMISSION', size: 8 }),
+    fetchJobs({ status: 'ACTIVE', sort: 'closing', size: 10 }),
+    fetchJobs({ status: 'UPCOMING', sort: 'opening', size: 10 }),
+    fetchNotices({ type: 'ADMIT_CARD', size: 10 }),
+    fetchNotices({ type: 'RESULT', size: 10 }),
+    fetchNotices({ type: 'ANSWER_KEY', size: 10 }),
+    fetchSyllabi({ size: 10 }),
+    fetchJobs({ category: 'ADMISSION', size: 10 }),
   ]);
 
   setListingCache(res, { backendError: activeRes.backendError });
