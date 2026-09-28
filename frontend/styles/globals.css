@@ -288,8 +288,6 @@ p  { font-size: 0.95rem; }
 .linklist {
   display: flex;
   flex-direction: column;
-  flex: 1;
-  justify-content: space-between;
 }
 .box-foot {
   border-top: 1px solid var(--line-soft);
