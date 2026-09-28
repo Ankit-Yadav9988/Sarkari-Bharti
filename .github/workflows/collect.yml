@@ -24,8 +24,26 @@ jobs:
       - uses: actions/setup-node@v5
         with:
           node-version: 24
+      # Restore and save are split deliberately, rather than using the combined
+      # actions/cache. The combined action saves in a post step, and whether that
+      # post step still saves after the job has been marked failed is behaviour I
+      # could not confirm from here. It matters because this job is *designed* to
+      # end red when the sources are unhealthy, which on 2026-09-27 was every
+      # single day. If a red job does not save, the document cache is never
+      # written, and then `pipeline/state/seen.json` -- which is committed on
+      # every run regardless -- keeps remembering etags for bodies that are not
+      # on disk. That mismatch is what produced five `Received 304 ... but its
+      # local cache is unavailable` failures in one run.
+      #
+      # `if: always()` on an explicit save step makes the question moot. The key
+      # carries the run id so it is always unique and the save never collides;
+      # restore-keys makes it a rolling cache that picks up the newest one.
+      #
+      # lib/http.js no longer depends on any of this being right: it only sends a
+      # validator when the body is actually on disk. This is belt as well as
+      # braces -- it stops the cache going cold, rather than coping with it.
       - name: Restore document cache
-        uses: actions/cache@v5
+        uses: actions/cache/restore@v5
         with:
           path: pipeline/cache
           key: official-notice-cache-${{ runner.os }}-${{ github.run_id }}
@@ -49,6 +67,15 @@ jobs:
           # cannot remove jobs already published on the site.
           SARKARI_API_URL: ${{ secrets.SARKARI_API_URL }}
         run: node run.js
+      # Immediately after collection, and unconditionally. Placed here rather
+      # than at the end of the job so that a failure in the commit or upload
+      # steps cannot also cost us the documents we just paid to download.
+      - name: Save document cache
+        if: always()
+        uses: actions/cache/save@v5
+        with:
+          path: pipeline/cache
+          key: official-notice-cache-${{ runner.os }}-${{ github.run_id }}
       - name: Upload review files
         if: always()
         uses: actions/upload-artifact@v4

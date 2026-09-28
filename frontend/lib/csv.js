@@ -629,6 +629,29 @@ export const NOTICE_CSV_COLUMNS = [
   { key: 'note' },
 ];
 
+/**
+ * Same notice, entered twice. Type plus title, normalised.
+ *
+ * Exported for the same reason `jobStrictKey` is: the notice collector in
+ * `pipeline/` has to decide whether a result it just found is already on the
+ * site, and if it answered that question with its own copy of this rule the two
+ * could disagree. Then the pipeline would say "new" about something the importer
+ * calls a duplicate, or -- far worse -- the other way round, and the same result
+ * would be published twice with nothing but a manual delete to fix it.
+ *
+ * Unlike a job, a notice has no date to separate a legitimate repeat from a
+ * mistake. "SSC CGL Tier-1 Result" is published once; there is no next year's
+ * sitting under the same title, because the year is part of how these are
+ * titled. So the key is deliberately blunt, and the first occurrence wins.
+ *
+ * Built on `normaliseKey`, not `normaliseHeader`: this is a duplicate-detection
+ * rule, and it must not change because someone adjusts how CSV headers are
+ * matched.
+ */
+export function noticeKey(type, title) {
+  return `${type || ''}|${normaliseKey(title)}`;
+}
+
 /** A downloadable template, one example row per type. */
 export function noticeCsvTemplate() {
   const header = NOTICE_CSV_COLUMNS.map(c => c.key).join(',');
@@ -676,7 +699,7 @@ export function mapNoticeRows(rows, { defaultType = 'RESULT', jobs = null } = {}
   const seen = new Map();
   for (const row of result.rows) {
     if (row.errors.length || !row.payload.title) continue;
-    const key = `${row.payload.type}|${normaliseHeader(row.payload.title)}`;
+    const key = noticeKey(row.payload.type, row.payload.title);
     if (seen.has(key)) row.errors.push(`line ${seen.get(key)} already has this title and type`);
     else seen.set(key, row.line);
   }

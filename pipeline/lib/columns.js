@@ -56,6 +56,16 @@ export const mapNoticeRows = csv.mapNoticeRows;
  */
 export const jobLooseKey = csv.jobLooseKey;
 export const jobStrictKey = csv.jobStrictKey;
+/**
+ * The notice duplicate rule, imported for exactly the same reason.
+ *
+ * `mapNoticeRows` uses this to reject a second copy of a result inside one
+ * file. The collector uses it to decide whether a result it just found is
+ * already published. Two definitions of "same notice" would let the collector
+ * write a row the importer then silently drops -- or write one it happily
+ * imports on top of a result already on the site.
+ */
+export const noticeKey = csv.noticeKey;
 export const { CATEGORIES, SECTIONS, STATES, NOTICE_TYPES } = api;
 
 // A load-bearing sanity check. If the import silently produced an empty or
@@ -78,8 +88,19 @@ for (const key of ['postName', 'organization', 'applicationStartDate', 'lastDate
 // csv.js, say -- every duplicate check in run.js would throw "not a function" on
 // the first candidate, which reads like a pipeline bug rather than a missing
 // export. Fail at load with the actual cause.
-for (const [name, fn] of [['jobLooseKey', jobLooseKey], ['jobStrictKey', jobStrictKey]]) {
+for (const [name, fn] of [['jobLooseKey', jobLooseKey], ['jobStrictKey', jobStrictKey], ['noticeKey', noticeKey], ['mapNoticeRows', mapNoticeRows]]) {
   if (typeof fn !== 'function') {
     throw new Error(`${name} did not load from frontend/lib/csv.js -- the pipeline cannot detect duplicates without it.`);
   }
+}
+
+// The notice collector writes against this list the same way run.js writes
+// against CSV_COLUMNS. An empty or renamed list would produce a header the
+// notice importer does not understand, which looks like bad data rather than a
+// bad import.
+if (!Array.isArray(NOTICE_CSV_COLUMNS) || !['type', 'title', 'link'].every(key => NOTICE_CSV_COLUMNS.some(c => c.key === key))) {
+  throw new Error(
+    `NOTICE_CSV_COLUMNS did not load from frontend/lib/csv.js, or lost one of type/title/link (got ${JSON.stringify(NOTICE_CSV_COLUMNS)}). `
+    + 'The notice collector will not write a CSV against a column list it cannot read.'
+  );
 }

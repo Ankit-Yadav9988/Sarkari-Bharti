@@ -1,0 +1,109 @@
+name: Collect results and admit cards
+
+on:
+  schedule:
+    # 07:30 and 19:30 IST (UTC+05:30). Twice a day, unlike the job collector's
+    # once, because these two notice types are time-critical in a way a vacancy
+    # list is not: a result is refreshed by thousands of people the hour it is
+    # declared, and an admit card is only useful before the exam. A morning run
+    # catches the overnight declarations and an evening run catches the rest of
+    # the working day.
+    - cron: '0 2,14 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+# A group of its own. The job collector and this one write different files
+# (state/notices.json vs state/seen.json, out/notices-*.csv vs out/jobs-*.csv)
+# and their schedules do not overlap, so there is no reason for either to wait
+# on the other. They must not share a group: an hour-long job run would cancel
+# or queue a result run that needed to go out now.
+concurrency:
+  group: notice-collection
+  cancel-in-progress: false
+
+jobs:
+  collect-notices:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 24
+      # `pipeline/cache-notices`, not `pipeline/cache`. Two workflows restoring
+      # and saving one cache path would each overwrite the other's entry on every
+      # run, and because `state/notices.json` and `state/seen.json` remember
+      # etags independently, the result would be exactly the 2026-09-27 failure
+      # again: a validator sent for a body that is no longer on disk.
+      #
+      # Restore and save are split, with `if: always()` on the save, for the
+      # reason set out at length in collect.yml -- this job is designed to end
+      # red when the sources are unhealthy, and a cache that only saves on green
+      # would go cold on precisely the days it is needed.
+      - name: Restore notice page cache
+        uses: actions/cache/restore@v5
+        with:
+          path: pipeline/cache-notices
+          key: notice-cache-${{ runner.os }}-${{ github.run_id }}
+          restore-keys: |
+            notice-cache-${{ runner.os }}-
+      # No poppler-utils step here, and that is deliberate rather than forgotten.
+      # This collector reads notice-board listing pages and never downloads the
+      # linked result or admit-card documents: every column it writes (type,
+      # title, organisation, category, link, release date) is on the listing
+      # page, so there is nothing in the PDF to extract. See the header comment
+      # in pipeline/collect-notices.js for what that costs -- a dead link is not
+      # detected here, and the import screen is the check.
+      - name: Collect results and admit cards
+        id: collect
+        working-directory: pipeline
+        # Allowed to fail so the CSV and report are still uploaded and committed
+        # when the sources were unhealthy. The last step turns that back into a
+        # red run; without it, `continue-on-error` would make a bad day green.
+        continue-on-error: true
+        env:
+          # The public backend API base, e.g. https://your-api.example/api.
+          # Used only to read GET /api/notices so a result already on the site is
+          # not offered again -- no token, no writes. Without it the run still
+          # produces a CSV and says in the report that it could not check.
+          SARKARI_API_URL: ${{ secrets.SARKARI_API_URL }}
+        run: node collect-notices.js
+      - name: Save notice page cache
+        if: always()
+        uses: actions/cache/save@v5
+        with:
+          path: pipeline/cache-notices
+          key: notice-cache-${{ runner.os }}-${{ github.run_id }}
+      - name: Upload review files
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: notice-review-${{ github.run_id }}
+          path: |
+            pipeline/out/notices-*.csv
+            pipeline/out/notices-*.report.md
+          if-no-files-found: warn
+          retention-days: 30
+      - name: Commit state and review files
+        if: always()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          # Directory paths, not `pipeline/state/notices.json`. On the very first
+          # run that file does not exist yet, and if the collector throws before
+          # writing it (every source failing, say) a named pathspec would make
+          # `git add` fail with "did not match any files" -- turning a source
+          # problem into a confusing git error. Both directories are already
+          # tracked, so this form always works.
+          git add pipeline/state pipeline/out
+          if git diff --cached --quiet; then exit 0; fi
+          git commit -m "chore: collect result and admit-card review queue"
+          git pull --rebase origin main
+          git push origin HEAD:main
+      - name: Fail the run if the sources were unhealthy
+        if: steps.collect.outcome == 'failure'
+        run: |
+          echo "::error::Notice collection ran but its sources were unhealthy. The CSV and report were still committed — read the report's source-health table before importing anything."
+          exit 1

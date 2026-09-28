@@ -1,1 +1,7 @@
+# Downloaded document bodies. Restored from the Actions cache, not from git:
+# they are large, they change daily, and their validators live in state/*.json.
 cache/
+# The notice collector's page cache. A separate directory on purpose -- the two
+# workflows remember etags in separate state files, so sharing one cache would
+# let each send a validator for a body the other had overwritten.
+cache-notices/

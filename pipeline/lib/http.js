@@ -81,12 +81,20 @@ export function createPoliteClient({ state = {}, fetchImpl = fetch, delayMs = 20
     if (!robotsAllows(robotsByOrigin.get(origin), parsed.pathname)) throw new Error(`robots.txt disallows ${parsed.href}`);
   }
 
-  async function get(url) {
+  async function get(url, { conditional = true } = {}) {
     await ensureRobots(url);
     const remembered = state.requests[url] || {};
     const headers = {};
-    if (remembered.etag) headers['If-None-Match'] = remembered.etag;
-    if (remembered.lastModified) headers['If-Modified-Since'] = remembered.lastModified;
+    /* A conditional request is a claim that we already hold the body. When that
+       claim is false the server answers 304 and we have nothing to show for it.
+       `conditional: false` is how a caller says "I checked, and I do not have
+       it" -- see fetchCached below. Sending the header anyway is not merely
+       wasteful: it is the difference between collecting a notification and
+       losing it. */
+    if (conditional) {
+      if (remembered.etag) headers['If-None-Match'] = remembered.etag;
+      if (remembered.lastModified) headers['If-Modified-Since'] = remembered.lastModified;
+    }
     let response = await raw(url, headers);
     // Some public government sites return 403 to descriptive crawler UAs but
     // serve the same public page to a normal browser UA. This does not bypass
@@ -105,16 +113,60 @@ export function createPoliteClient({ state = {}, fetchImpl = fetch, delayMs = 20
   return { get };
 }
 
-/** Disk cache used for PDFs/HTML documents; a 304 reuses the prior body. */
+/**
+ * Read a cached body and its metadata, or null if either is missing or damaged.
+ *
+ * Both halves are required. A body without metadata has no content type and no
+ * hash, and returning it would make an unchanged document look like a new one
+ * with an empty hash; metadata without a body is the exact state that lost the
+ * five notifications described below. Either way the honest answer is "I do not
+ * have this", which sends an unconditional request and refills the cache.
+ */
+async function readCached(bodyPath, metaPath) {
+  try {
+    const [body, meta] = await Promise.all([readFile(bodyPath), readFile(metaPath, 'utf8')]);
+    const parsed = JSON.parse(meta);
+    if (!parsed.hash) return null;
+    return { body, contentType: parsed.contentType || '', hash: parsed.hash };
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * Disk cache used for PDFs/HTML documents; a 304 reuses the prior body.
+ *
+ * The validators (etag, last-modified) live in `state/seen.json`, which the
+ * workflow commits on every run. The bodies live in `pipeline/cache`, which is
+ * gitignored and restored separately by actions/cache. The two therefore go out
+ * of sync routinely -- the 2026-09-27 run lost five notifications to "Received
+ * 304 ... but its local cache is unavailable", among them the Bank of Baroda SO
+ * and Rajasthan Safai Karmchari notices, because it remembered the validator for
+ * a body it no longer had.
+ *
+ * So the validator is only sent when the body is actually on disk, and a 304
+ * that arrives anyway is answered by re-fetching unconditionally rather than by
+ * throwing. Either layer alone would fix today's failure; both are here because
+ * they fail differently. The first is an optimisation that assumes the disk
+ * check is accurate. The second makes no assumptions at all, and is what saves
+ * the run when the cache is evicted mid-flight, half-written, or unreadable.
+ */
 export async function fetchCached(client, url, cacheDir, { readOnly = false } = {}) {
   const key = keyFor(url); const bodyPath = path.join(cacheDir, `${key}.bin`); const metaPath = path.join(cacheDir, `${key}.json`);
   if (!readOnly) await mkdir(cacheDir, { recursive: true });
-  const { response, metadata } = await client.get(url);
+
+  const cached = await readCached(bodyPath, metaPath);
+  let { response, metadata } = await client.get(url, { conditional: cached !== null });
+
   if (response.status === 304) {
-    try {
-      const [body, meta] = await Promise.all([readFile(bodyPath), readFile(metaPath, 'utf8')]);
-      return { body, contentType: JSON.parse(meta).contentType || '', hash: JSON.parse(meta).hash, unchanged: true };
-    } catch { throw new Error(`Received 304 for ${url}, but its local cache is unavailable`); }
+    if (cached) return { body: cached.body, contentType: cached.contentType, hash: cached.hash, unchanged: true };
+    /* Not reachable through the check above unless the cache vanished between
+       the stat and the request, or a proxy answered 304 to an unconditional
+       request (which is a protocol violation, and happens). Re-ask plainly. */
+    ({ response, metadata } = await client.get(url, { conditional: false }));
+    if (response.status === 304) {
+      throw new Error(`Received 304 for ${url} even without a validator, so its body cannot be retrieved`);
+    }
   }
   if (!response.ok) throw new Error(`HTTP ${response.status} for ${url}`);
   const body = Buffer.from(await response.arrayBuffer()); const hash = crypto.createHash('sha256').update(body).digest('hex');

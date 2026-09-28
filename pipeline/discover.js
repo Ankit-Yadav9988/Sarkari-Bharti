@@ -3,6 +3,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { linksFromHtml } from './lib/html.js';
 import { createPoliteClient, fetchCached } from './lib/http.js';
+import { classifyNotice } from './lib/notices.js';
 import { SOURCES, RECRUITMENT_KEYWORDS, NOTICE_KEYWORDS } from './lib/sources.js';
 
 export function canonicalUrl(value) {
@@ -14,18 +15,34 @@ export function canonicalUrl(value) {
   return url.href;
 }
 
-export function isCandidate(link, source, { includeNotices = false } = {}) {
+/**
+ * The checks that have nothing to do with what we are collecting.
+ *
+ * Pulled out of `isCandidate` so the notice filter can reuse them instead of
+ * keeping its own copy. Every rule here rejects a link for being part of the
+ * page rather than part of its content: another host, an unrendered Angular
+ * template, a pagination link, the page linking to itself. None of them know or
+ * care whether we are after vacancies or results, and all of them would
+ * otherwise have to be remembered twice.
+ */
+export function looksLikeChrome(link, source) {
   const host = new URL(link.url).hostname.toLowerCase();
-  if (!source.allowedHosts.some(allowed => host === allowed || host.endsWith(`.${allowed}`))) return false;
+  if (!source.allowedHosts.some(allowed => host === allowed || host.endsWith(`.${allowed}`))) return true;
   // Angular/Vue government portals expose untranslated keys and generic
   // placeholder links in their initial HTML shell. They are not notices.
-  if (/\{\{|\}\}|_HM\b|_E_HM\b|_I_HM\b/i.test(link.text)) return false;
+  if (/\{\{|\}\}|_HM\b|_E_HM\b|_I_HM\b/i.test(link.text)) return true;
   const parsed = new URL(link.url);
   const id = parsed.searchParams.get('ID');
-  if (id && id.length < 5 && source.id !== 'uppsc') return false;
+  if (id && id.length < 5 && source.id !== 'uppsc') return true;
+  if (parsed.searchParams.has('page')) return true;
+  if (canonicalUrl(link.url) === canonicalUrl(source.url)) return true;
+  return false;
+}
+
+export function isCandidate(link, source, { includeNotices = false } = {}) {
+  if (looksLikeChrome(link, source)) return false;
+  const parsed = new URL(link.url);
   const haystack = `${link.text} ${link.context || ''} ${link.url}`.toLowerCase();
-  if (parsed.searchParams.has('page')) return false;
-  if (canonicalUrl(link.url) === canonicalUrl(source.url)) return false;
   if (source.kind === 'aggregator') {
     if (!/(?:online\s+form|recruitment|vacanc(?:y|ies)|bharti|apply\s+online|apprentice|walk[- ]?in|notification|employment)/i.test(haystack)) return false;
     if (/(?:admit\s+card|answer\s+key|\bresult\b|correction|counselling|document\s+upload|option\s+form|fee\s+payment|exam\s+city|syllabus)/i.test(haystack)
@@ -40,6 +57,26 @@ export function isCandidate(link, source, { includeNotices = false } = {}) {
     ? RECRUITMENT_KEYWORDS.filter(word => word !== 'notice' && word !== 'advt')
     : includeNotices ? [...RECRUITMENT_KEYWORDS, ...NOTICE_KEYWORDS] : RECRUITMENT_KEYWORDS;
   return words.some(word => haystack.includes(word.toLowerCase()));
+}
+
+/**
+ * The filter for the result / admit-card collector.
+ *
+ * Deliberately not built from keyword lists the way `isCandidate` is. The
+ * question "is this a result or an admit card" already has one answer, in
+ * `classifyNotice`, and that answer is what the CSV's `type` column is filled
+ * from. Asking it twice -- once loosely to decide whether to look, once strictly
+ * to decide what it is -- is how a link gets collected and then dropped with no
+ * explanation, or worse, collected under one rule and typed under another.
+ *
+ * It follows that this filter and `isCandidate` cannot both accept the same
+ * link: `classifyNotice` rejects anything whose anchor text reads as a vacancy,
+ * and `isCandidate` rejects any aggregator link whose anchor says "result"
+ * without also saying "online form". The two collectors partition the page.
+ */
+export function isNoticeCandidate(link, source) {
+  if (looksLikeChrome(link, source)) return false;
+  return classifyNotice({ text: link.text, context: link.context, url: link.url }).type !== null;
 }
 
 /**
@@ -67,17 +104,57 @@ export function linksFromJson(json, baseUrl) {
   visit(json); return links;
 }
 
-export function inspectSource({ source, html, links, includeNotices = false }) {
+/**
+ * One source page -> its candidates, under whichever filter is supplied.
+ *
+ * `filter` defaults to the vacancy rule, so every existing caller is unchanged.
+ * The notice collector passes `isNoticeCandidate`. Everything else here -- the
+ * canonicalisation, the dedupe by URL, the cap, and the "fewer than five links
+ * means the source failed" rule -- is shared, because all of it is about whether
+ * the page was fetched properly rather than what we wanted from it.
+ */
+/* How many rejected links are kept per source for the report. A cap rather than
+   everything: an aggregator page can carry several hundred links, almost all of
+   them rejected, and a report nobody scrolls to the end of is not a report. */
+export const MAX_RECORDED_REJECTIONS = 60;
+
+export function inspectSource({ source, html, links, includeNotices = false, filter }) {
+  const accept = filter || ((link, src) => isCandidate(link, src, { includeNotices }));
   const all = (links || linksFromHtml(html, source.url)).map(link => ({ ...link, url: canonicalUrl(link.url) }));
   if (all.length < 5) throw new Error(`${source.name}: only ${all.length} links found (minimum is 5); treating this as a source failure.`);
   const unique = new Map();
-  for (const link of all) if (isCandidate(link, source, { includeNotices })) unique.set(link.url, link);
+  /* Links the filter turned down are handed back rather than dropped on the
+     floor. A collector that silently discards most of a notice board is
+     indistinguishable from one whose rules have gone wrong, and the only way to
+     tell the two apart is to see what it passed over.
+
+     What `looksLikeChrome` removes is excluded from the record: other hosts,
+     paginated views, template placeholders, and the page linking to itself.
+     Those are structural and identical on every run. Ordinary in-site
+     navigation is *not* excluded -- "About us" will appear in the table reading
+     "no result or admit-card wording", because the filter judges anchor text
+     and has no separate notion of a menu. That is accepted noise: the cost is a
+     few dull rows, and the alternative is a second keyword list whose false
+     positives would hide real notices. */
+  const rejected = new Map();
+  let rejectedTotal = 0;
+  for (const link of all) {
+    if (accept(link, source)) { unique.set(link.url, link); continue; }
+    if (looksLikeChrome(link, source)) continue;
+    rejectedTotal += 1;
+    if (rejected.size < MAX_RECORDED_REJECTIONS) rejected.set(link.url, link);
+  }
   const candidates = [...unique.values()];
-  return { linksSeen: all.length, candidates: source.maxCandidates ? candidates.slice(0, source.maxCandidates) : candidates };
+  return {
+    linksSeen: all.length,
+    candidates: source.maxCandidates ? candidates.slice(0, source.maxCandidates) : candidates,
+    rejected: [...rejected.values()],
+    rejectedTotal,
+  };
 }
 
 export async function discover({
-  sources = SOURCES, state = {}, includeNotices = false, client = createPoliteClient({ state }),
+  sources = SOURCES, state = {}, includeNotices = false, filter, client = createPoliteClient({ state }),
   cacheDir = path.join(path.dirname(fileURLToPath(import.meta.url)), 'cache'), readOnly = false,
 } = {}) {
   const reports = []; const candidates = [];
@@ -100,10 +177,10 @@ export async function discover({
         try { links = linksFromJson(JSON.parse(body), source.url); }
         catch { throw new Error(`${source.name}: official JSON feed returned invalid JSON.`); }
       }
-      const report = inspectSource({ source, html: body, links, includeNotices });
+      const report = inspectSource({ source, html: body, links, includeNotices, filter });
       reports.push({ source, ok: true, ...report });
       candidates.push(...report.candidates.map(link => ({ source, ...link })));
-    } catch (error) { reports.push({ source, ok: false, error: error.message, linksSeen: 0, candidates: [] }); }
+    } catch (error) { reports.push({ source, ok: false, error: error.message, linksSeen: 0, candidates: [], rejected: [], rejectedTotal: 0 }); }
   }
   return { reports, candidates };
 }

@@ -1,9 +1,43 @@
 /** Small dependency-free HTML helpers. They intentionally do not depend on a page's CSS. */
 
+const NAMED_ENTITIES = {
+  amp: '&', quot: '"', apos: "'", lt: '<', gt: '>', nbsp: ' ',
+  // Punctuation the aggregator actually emits. `ndash` is the common one: its
+  // job titles are written "... Online Form 2026 &#8211; Date Extend", and an
+  // en dash left undecoded travels all the way to the public page.
+  ndash: '–', mdash: '—', hellip: '…', lsquo: '‘', rsquo: '’',
+  ldquo: '“', rdquo: '”', middot: '·', bull: '•', deg: '°',
+  laquo: '«', raquo: '»', times: '×', rupee: '₹', ensp: ' ', emsp: ' ', thinsp: ' ',
+};
+
+/**
+ * Decode the entity forms that appear in real source pages.
+ *
+ * Numeric entities are the reason this is not a five-line replace chain any
+ * more. Every CSV this pipeline has produced carries post names like
+ * "Bank of Baroda SO Online Form 2026 (1100 Posts) &#8211; Date Extend" --
+ * `&#8211;` is an en dash written numerically, which the old decoder did not
+ * recognise, so it survived extraction, survived the importer, and would have
+ * been rendered literally on the job page. It matters more for notices than for
+ * jobs: a notice's title *is* the row the public Result page shows, with no
+ * other field to fall back on.
+ *
+ * Unknown entities are left exactly as they are rather than being stripped. A
+ * visible `&#8216;` in a title is a bug you can see and report; a silently
+ * deleted character is one you cannot.
+ */
 export function decodeEntities(value) {
-  return String(value || '')
-    .replace(/&amp;/gi, '&').replace(/&quot;/gi, '"').replace(/&#39;|&apos;/gi, "'")
-    .replace(/&lt;/gi, '<').replace(/&gt;/gi, '>').replace(/&nbsp;/gi, ' ');
+  return String(value || '').replace(/&(#x[0-9a-f]+|#\d+|[a-z]+);/gi, (whole, body) => {
+    const lower = body.toLowerCase();
+    if (lower[0] === '#') {
+      const code = lower[1] === 'x' ? parseInt(lower.slice(2), 16) : Number(lower.slice(1));
+      // Control characters and lone surrogates are not text. Refusing them also
+      // keeps `&#0;` from becoming a NUL in a database column.
+      if (!Number.isInteger(code) || code < 32 || (code >= 0xd800 && code <= 0xdfff) || code > 0x10ffff) return whole;
+      try { return String.fromCodePoint(code); } catch { return whole; }
+    }
+    return Object.hasOwn(NAMED_ENTITIES, lower) ? NAMED_ENTITIES[lower] : whole;
+  });
 }
 
 export function textFromHtml(html) {

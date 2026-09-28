@@ -8,6 +8,7 @@
     "discover": "node discover.js",
     "dry-run": "node discover.js --dry-run",
     "run": "node run.js",
+    "notices": "node collect-notices.js",
     "test": "node pipeline-check.js"
   },
   "engines": {

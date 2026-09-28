@@ -281,8 +281,29 @@ export function duplicateSection({ drops, carriedOver, notes }) {  const publish
   return lines.join('\n');
 }
 
-function reportMarkdown({ date, discovery, rows, preview, skippedPublished, warnings, state, drops, carriedOver }) {
-  const sourceLines = discovery.reports.map(r => `| ${r.source.name} | ${r.ok ? 'OK' : 'FAILED'} | ${r.linksSeen} | ${r.candidates.length} | ${escapeMd(r.error || '')} |`).join('\n');
+function reportMarkdown({ date, discovery, rows, preview, skippedPublished, warnings, state, drops, carriedOver, health }) {
+  /* A failed source still reads FAILED. What the "Since" column adds is how long
+     it has been that way, which is the difference between a site to go and look
+     at this morning and one that has been refusing GitHub's addresses for a
+     fortnight. Both are failures; only one is news. */
+  const sourceLines = discovery.reports.map(r => {
+    const verdict = classifySource(r, state.sources || {});
+    const since = {
+      OK: '',
+      KNOWN_BLOCKED: `known block, ${verdict.consecutiveFailures} runs${verdict.firstFailedOn ? ` since ${verdict.firstFailedOn}` : ''}`,
+      NEWLY_FAILING: verdict.lastOkOn
+        ? `**new** — last worked ${verdict.lastOkOn}`
+        : `**new** — has never answered`,
+    }[verdict.state];
+    return `| ${r.source.name} | ${r.ok ? 'OK' : 'FAILED'} | ${since} | ${r.linksSeen} | ${r.candidates.length} | ${escapeMd(r.error || '')} |`;
+  }).join('\n');
+  const healthVerdict = health
+    ? [
+      `- Run verdict: ${health.ok ? 'sources healthy enough to trust' : '**unhealthy — this run is marked failed**'}`,
+      ...health.reasons.map(r => `- Why it is red: ${escapeMd(r)}`),
+      ...health.notes.map(n => `- Standing condition: ${escapeMd(n)}`),
+    ].join('\n')
+    : '- Run verdict: not evaluated.';
   const issues = preview.problems.length
     ? preview.problems.map(p => `| ${p.line} | ${escapeMd(p.postName)} | ${escapeMd(p.errors.join('; '))} |`).join('\n')
     : '| — | — | None |';
@@ -299,7 +320,7 @@ function reportMarkdown({ date, discovery, rows, preview, skippedPublished, warn
     carriedOver: carriedOver || [],
     notes: preview.notes || [],
   });
-  return `# Pipeline report — ${date}\n\nThis file is a review aid. It never publishes jobs; import the accompanying CSV through the existing admin screen and approve each valid row.\n\n## Source health\n\n| Source | Status | Links seen | Candidates | Detail |\n| --- | --- | ---: | ---: | --- |\n${sourceLines}\n\n## Output\n\n- Current review-queue rows written: ${rows.length}\n- Rows left out as duplicates: ${(drops || []).length} (${skippedPublished} already published)\n- Importer-valid rows: ${preview.valid}/${preview.total}\n- Rows needing manual completion: ${preview.invalid}\n- Consecutive zero-candidate runs: ${state.zeroCandidateDays}\n${warnings.map(w => `- Warning: ${w}`).join('\n')}\n\n${duplicates}\n## Verification queue\n\n| Post | Status | Official link found | Aggregator page | Official notification/apply link |\n| --- | --- | --- | --- | --- |\n${verificationRows}\n\n## Importer validation\n\n| CSV line | Post | Why it will be skipped |\n| ---: | --- | --- |\n${issues}\n\n## Fields deliberately left blank\n\n${fieldNotes}\n`;
+  return `# Pipeline report — ${date}\n\nThis file is a review aid. It never publishes jobs; import the accompanying CSV through the existing admin screen and approve each valid row.\n\n## Source health\n\n${healthVerdict}\n\n| Source | Status | Since | Links seen | Candidates | Detail |\n| --- | --- | --- | ---: | ---: | --- |\n${sourceLines}\n\n## Output\n\n- Current review-queue rows written: ${rows.length}\n- Rows left out as duplicates: ${(drops || []).length} (${skippedPublished} already published)\n- Importer-valid rows: ${preview.valid}/${preview.total}\n- Rows needing manual completion: ${preview.invalid}\n- Consecutive zero-candidate runs: ${state.zeroCandidateDays}\n${warnings.map(w => `- Warning: ${w}`).join('\n')}\n\n${duplicates}\n## Verification queue\n\n| Post | Status | Official link found | Aggregator page | Official notification/apply link |\n| --- | --- | --- | --- | --- |\n${verificationRows}\n\n## Importer validation\n\n| CSV line | Post | Why it will be skipped |\n| ---: | --- | --- |\n${issues}\n\n## Fields deliberately left blank\n\n${fieldNotes}\n`;
 }
 
 function mergeExtracted(aggregatorExtracted, officialExtracted) {
@@ -332,6 +353,10 @@ export async function runPipeline({ sources = SOURCES, now = new Date(), state: 
   const rows = []; const drops = []; const carriedOver = [];
   let skippedPublished = 0; const warnings = warning ? [warning] : [];
   const today = isoToday();
+  // Before anything else that can throw, and before the state is written: the
+  // per-source failure history is what decides whether today's failures are
+  // news, and it is worth keeping even if the rest of the run goes wrong.
+  recordSourceOutcomes(discovery.reports, state, today);
   const duplicates = createDuplicateFilter({ publishedUrls, publishedKeys });
 
   /**
@@ -467,14 +492,74 @@ export async function runPipeline({ sources = SOURCES, now = new Date(), state: 
     );
   }
 
-  const report = reportMarkdown({ date, discovery, rows, preview, skippedPublished, warnings, state, drops, carriedOver });
+  // Computed before the report so the verdict, and the reasons behind it, are
+  // written into the file itself. The report is the artefact that survives; a
+  // red X in the Actions list tells you nothing three weeks later.
+  const health = sourceHealth(discovery.reports, candidateCount, state.sources);
+
+  const report = reportMarkdown({ date, discovery, rows, preview, skippedPublished, warnings, state, drops, carriedOver, health });
   // All writes happen only after every fetch/extraction has settled. The state
   // write is last, so an interrupted run cannot mark unseen work as completed.
   await mkdir(OUT_DIR, { recursive: true });
   await writeTextAtomic(path.join(OUT_DIR, `jobs-${date}.csv`), csv);
   await writeTextAtomic(path.join(OUT_DIR, `jobs-${date}.report.md`), report);
   await writeJsonAtomic(STATE_PATH, state);
-  return { date, discovery, rows, preview, warnings, skippedPublished, drops, carriedOver };
+  return { date, discovery, rows, preview, warnings, skippedPublished, drops, carriedOver, health, state };
+}
+
+/**
+ * How many consecutive failures make a source's silence the status quo.
+ *
+ * Three runs, so a site has to be down for three days before its failure stops
+ * being news. Two days could be a bad week at the hosting provider; three days
+ * running is a standing condition, and a red X for a standing condition is a red
+ * X you learn to click past.
+ */
+export const KNOWN_BLOCKED_AFTER = 3;
+
+/**
+ * Folds today's source outcomes into the run state, in place.
+ *
+ * This is what lets the health gate tell "this broke today" from "this has been
+ * broken since the day we added it". The counter resets to zero on any success,
+ * so a site that recovers immediately becomes newsworthy again if it re-breaks.
+ */
+export function recordSourceOutcomes(reports, state, today) {
+  state.sources ||= {};
+  for (const report of reports) {
+    const id = report.source.id;
+    const prior = state.sources[id] || {};
+    state.sources[id] = report.ok
+      ? { consecutiveFailures: 0, lastOkOn: today, firstFailedOn: null, lastError: null }
+      : {
+        consecutiveFailures: (prior.consecutiveFailures || 0) + 1,
+        lastOkOn: prior.lastOkOn || null,
+        firstFailedOn: prior.firstFailedOn || today,
+        lastError: report.error || null,
+      };
+  }
+  return state.sources;
+}
+
+/**
+ * How a single source's outcome should be read, given its history.
+ *
+ * `NEWLY_FAILING` covers two cases that are worth separating in the message but
+ * not in the verdict: a source that has worked before and has stopped, and a
+ * source that has never answered at all. Both are things to look at. A source
+ * with no history is deliberately not given the benefit of the doubt -- the
+ * first time something does not work is exactly when you want to be told.
+ */
+export function classifySource(report, sourceState = {}) {
+  const entry = sourceState[report.source.id] || {};
+  if (report.ok) return { state: 'OK', consecutiveFailures: 0, lastOkOn: entry.lastOkOn || null };
+  const consecutiveFailures = entry.consecutiveFailures || 0;
+  return {
+    state: consecutiveFailures >= KNOWN_BLOCKED_AFTER ? 'KNOWN_BLOCKED' : 'NEWLY_FAILING',
+    consecutiveFailures,
+    lastOkOn: entry.lastOkOn || null,
+    firstFailedOn: entry.firstFailedOn || null,
+  };
 }
 
 /**
@@ -488,41 +573,85 @@ export async function runPipeline({ sources = SOURCES, now = new Date(), state: 
  * of them was marked PENDING_MANUAL. Nothing was wrong with the code; the run
  * was simply not worth trusting, and nothing said so.
  *
- * The three conditions below are the ones where the output is systematically
- * skewed rather than merely thinner:
+ * The first version of this gate fixed that and then broke the other way. It
+ * failed the run whenever more than half the sources failed, and more than half
+ * of them fail *every single day*: RRB refuses the connection outright, UPSC,
+ * MPPSC and UKPSC time out, BPSC serves an incomplete certificate chain and RPSC
+ * simply does not answer. Eight consecutive runs, the same six sources, a red X
+ * every morning. A signal that fires daily is not a signal, and the cost is
+ * real: it trains you to ignore the one morning it means something.
  *
- *   - Most sources failed. What came back is not a sample of the day's
- *     vacancies, it is a sample of whichever sites happened to answer.
- *   - Every official source failed but the aggregator answered. This is the
- *     worst shape: the run looks productive precisely because the least
- *     authoritative source is the only one left.
- *   - Nothing was found at all, from anywhere.
+ * So red is reserved for *change*:
  *
- * A single source timing out is normal and stays a warning: it thins the
- * results without bending them.
+ *   - A source that was working has stopped. This is the shape the old rule
+ *     missed entirely -- UPPSC breaking on 2026-09-21, the aggregator breaking
+ *     on 2026-09-25 -- because one extra failure out of nine never crossed the
+ *     "more than half" line.
+ *   - A source has never answered and is not yet established as blocked. A new
+ *     source with a typo in its URL looks exactly like a blocked one; the
+ *     difference is that this one has never worked.
+ *   - Every official source failed while the aggregator answered. Unchanged,
+ *     and deliberately not subject to the known-blocked exemption: however
+ *     routine it becomes, a day when the only voice is a site that copies other
+ *     people's notices is a day whose output cannot be checked against anybody.
+ *   - Nothing was found at all, from anywhere. Also unchanged.
+ *
+ * Sources that have failed for three runs or more are still listed FAILED in the
+ * report -- they are not hidden, and `notes` says how long each has been down --
+ * they simply stop being the reason the run is red. The structural observation
+ * that only three of nine sources are really reachable belongs in the report,
+ * where it can be read once, rather than in the exit code, where it would be
+ * shouted every day.
  *
  * The run still writes its CSV and report before this is consulted. A red run
  * with usable output is useful; a red run that threw its output away is not.
  */
-export function sourceHealth(reports, candidateCount) {
-  const reasons = [];
-  if (!reports.length) return { ok: false, reasons: ['No sources were configured, so nothing could be collected.'] };
+export function sourceHealth(reports, candidateCount, sourceState = {}) {
+  const reasons = []; const notes = [];
+  if (!reports.length) return { ok: false, reasons: ['No sources were configured, so nothing could be collected.'], notes };
 
-  const failed = reports.filter(r => !r.ok);
+  const classified = reports.map(report => ({ report, ...classifySource(report, sourceState) }));
+  const knownBlocked = classified.filter(c => c.state === 'KNOWN_BLOCKED');
+  const newlyFailing = classified.filter(c => c.state === 'NEWLY_FAILING');
   const official = reports.filter(r => r.source.kind !== 'aggregator');
   const aggregators = reports.filter(r => r.source.kind === 'aggregator');
-  const name = list => list.map(r => r.source.name).join(', ');
+  const names = list => list.map(c => c.report.source.name).join(', ');
 
-  if (failed.length * 2 > reports.length) {
-    reasons.push(`${failed.length} of ${reports.length} sources failed (${name(failed)}), so this run saw only part of the day's vacancies.`);
+  const regressed = newlyFailing.filter(c => c.lastOkOn);
+  if (regressed.length) {
+    const detail = regressed.map(c => `${c.report.source.name} (last worked ${c.lastOkOn})`).join('; ');
+    reasons.push(`${regressed.length} source(s) that were working have started failing: ${detail}. This is new, which is why the run is red.`);
   }
+
+  const neverWorked = newlyFailing.filter(c => !c.lastOkOn);
+  if (neverWorked.length) {
+    reasons.push(
+      `${neverWorked.length} source(s) have never answered and are not yet established as blocked (${names(neverWorked)}). `
+      + `Check the URL and robots policy. If it really is blocked, this stops failing the run after ${KNOWN_BLOCKED_AFTER} runs.`
+    );
+  }
+
   if (official.length && official.every(r => !r.ok) && aggregators.some(r => r.ok)) {
-    reasons.push(`Every official source failed (${name(official)}) while the aggregator answered, so all of today's candidates are second-hand and none could be checked against the issuing body.`);
+    reasons.push(`Every official source failed (${official.map(r => r.source.name).join(', ')}) while the aggregator answered, so all of today's candidates are second-hand and none could be checked against the issuing body.`);
   }
   if (candidateCount === 0) {
     reasons.push('No candidates were found by any source.');
   }
-  return { ok: reasons.length === 0, reasons };
+
+  if (knownBlocked.length) {
+    const detail = knownBlocked
+      .map(c => `${c.report.source.name} (${c.consecutiveFailures} runs${c.firstFailedOn ? `, since ${c.firstFailedOn}` : ''})`)
+      .join('; ');
+    notes.push(`${knownBlocked.length} of ${reports.length} sources have been failing for ${KNOWN_BLOCKED_AFTER} runs or more and are treated as a known block: ${detail}.`);
+  }
+  if (knownBlocked.length * 2 > reports.length) {
+    notes.push(
+      `Only ${reports.length - knownBlocked.length} of ${reports.length} sources are actually reachable, so every run is a partial view of the day's vacancies. `
+      + `This is not today's news, which is why it does not fail the run -- but it is the ceiling on what this pipeline can see.`
+    );
+  }
+
+  return { ok: reasons.length === 0, reasons, notes };
 }
 
 async function main() {
@@ -541,7 +670,8 @@ async function main() {
     // report and Action log; a missing CSV for healthy sources is not.
     if (outcome.discovery.reports.some(r => !r.ok)) console.warn('WARNING: one or more sources failed; see the report source-health table.');
 
-    const health = sourceHealth(outcome.discovery.reports, outcome.discovery.candidates.length);
+    const health = outcome.health;
+    for (const note of health.notes) console.warn(`NOTE: ${note}`);
     if (!health.ok) {
       for (const reason of health.reasons) console.error(`UNHEALTHY: ${reason}`);
       console.error('The CSV and report above were still written and are still worth reading. This run is marked failed so it is not mistaken for a normal day.');
