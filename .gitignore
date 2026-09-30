@@ -54,3 +54,7 @@ desktop.ini
 # a public repo. Added ahead of running init rather than after, because the
 # window in which it is untracked is the window in which it gets committed.
 .reticle/
+pipeline-inspection.txt
+
+*.md
+!README.md

@@ -29,7 +29,8 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { noticeKey } from './lib/columns.js';
 import {
-  buildNoticeRow, classifyNotice, createNoticeDuplicateFilter, previewNoticeValidation, toNoticeCsv,
+  buildNoticeRow, classifyNotice, collapseTruncatedTitles, createNoticeDuplicateFilter,
+  previewNoticeValidation, toNoticeCsv,
 } from './lib/notices.js';
 import { createPoliteClient } from './lib/http.js';
 import { SOURCES } from './lib/sources.js';
@@ -300,7 +301,7 @@ export async function runNoticeCollection({
     source: report.source.name,
     text: link.text,
     url: link.url,
-    reason: classifyNotice({ text: link.text, context: link.context, url: link.url }).reason,
+    reason: classifyNotice({ text: link.text, context: link.context, url: link.url, source: report.source }).reason,
   })));
   const rejectedOmitted = discovery.reports
     .reduce((total, r) => total + Math.max(0, r.rejectedTotal - r.rejected.length), 0);
@@ -308,10 +309,30 @@ export async function runNoticeCollection({
   const rows = []; const drops = []; const carriedOver = [];
   let skippedPublished = 0;
 
-  for (const link of discovery.candidates) {
-    const built = buildNoticeRow({ link, source: link.source, now, sources });
+  /* Built in full before any of them is judged. The clipped-ticker rule needs
+     to compare each row against every other row in the run, and the loop below
+     cannot do that while it is still deciding what the rows are. */
+  const builtRows = discovery.candidates.map(link => ({
+    link,
+    built: buildNoticeRow({ link, source: link.source, now, sources }),
+  }));
+  const collapse = collapseTruncatedTitles(builtRows.map(({ link, built }) => ({
+    type: built.skipped ? null : built.row.type,
+    title: built.skipped ? '' : built.row.title,
+    truncated: Boolean(built.truncated),
+    sourceId: link.source.id,
+  })));
+
+  for (const [index, { link, built }] of builtRows.entries()) {
     if (built.skipped) {
       rejected.push({ source: link.source.name, text: link.text, url: link.url, reason: built.reason });
+      continue;
+    }
+    // Listed with the duplicates, because that is what it is: the same notice
+    // twice, caught by a rule the type-and-title key cannot express.
+    const clipped = collapse[index];
+    if (clipped) {
+      drops.push({ type: built.row.type, title: built.row.title, url: link.url, published: false, reason: clipped.reason });
       continue;
     }
     const drop = duplicates.reasonToDrop(built.row);

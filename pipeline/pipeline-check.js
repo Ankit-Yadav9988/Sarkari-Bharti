@@ -9,12 +9,13 @@ import { parseIndianDate, dateNearLabel, datesInText, extractApplicationDates } 
 import { decodeEntities, linksFromHtml } from './lib/html.js';
 import { createPoliteClient, fetchCached, robotsAllows } from './lib/http.js';
 import { extractJob } from './lib/extract.js';
-import { canonicalUrl, inspectSource, linksFromJson, isCandidate, isNoticeCandidate } from './discover.js';
+import { canonicalUrl, inspectSource, linksFromJson, isCandidate, isNoticeCandidate, looksLikeChrome } from './discover.js';
 import { header, toCsv, previewValidation } from './lib/csv-out.js';
 import { createDuplicateFilter, duplicateSection, hasPostName, isoDate, rowKey, sourceHealth, recordSourceOutcomes, classifySource, KNOWN_BLOCKED_AFTER } from './run.js';
 import {
-  buildNoticeRow, classifyNotice, createNoticeDuplicateFilter, inferOrigin, noticeRowToLine,
-  noticeTitle, previewNoticeValidation, releaseDateFrom, toNoticeCsv,
+  buildNoticeRow, classifyNotice, cleanNoticeTitle, collapseTruncatedTitles, createNoticeDuplicateFilter,
+  inferOrigin, isOwnBrandText, isSectionPage, isShouting, namesSomething, noticeRowToLine, noticeTitle,
+  previewNoticeValidation, releaseDateFrom, toNoticeCsv, toTitleCase,
 } from './lib/notices.js';
 import { noticeKey, mapNoticeRows, parseCsv } from './lib/columns.js';
 import { noticeReportMarkdown, publishedNoticeIdentity, runNoticeCollection } from './collect-notices.js';
@@ -846,6 +847,225 @@ check(longTitle.startsWith(cutTitle.value), 'and what is kept is a real prefix o
 equal(longTitle[cutTitle.value.length], ' ', 'the cut falls on a word boundary, so the title does not end mid-word');
 check(!/[.…]$/.test(cutTitle.value), 'with no ellipsis, which would read as part of the title');
 check(/cut short/.test(cutTitle.reason), 'and the report records that it was truncated');
+
+/* ---------------------------------------------------------------------------
+   Cleaning a board heading down to the name of the post.
+
+   Every raw string below is a real anchor from the UPPSC and SSC boards on
+   2026-09-28, copied out of that day's committed CSV. They are used verbatim
+   rather than paraphrased because the shapes are the point: UPPSC writes the
+   advertisement number three different ways on one page, and a rule tuned
+   against a tidied-up example would miss two of them.
+--------------------------------------------------------------------------- */
+const RAW_VETERINARY = '03 Oct 2026 NOTICE REGARDING ADMIT CARD FOR ADVT.NO.D-6/E-1/2025, VETERINARY OFFICER (SCREENING) EXAM-2025, (EXAM. DATED:-03/10/2026)';
+equal(noticeTitle({ text: RAW_VETERINARY }).value, 'Veterinary Officer (Screening) Exam-2025',
+  'the board heading Ankit objected to becomes just the name of the post');
+
+/* The four strips asserted one at a time. Together they are the line above;
+   separately they stop one over-broad rule from being credited for all four
+   removals, which is how a rule that eats real titles hides. */
+equal(cleanNoticeTitle('03 Oct 2026 Veterinary Officer Screening Exam').value, 'Veterinary Officer Screening Exam',
+  'the release date the board prints in front of the heading is removed');
+equal(cleanNoticeTitle('NOTICE REGARDING ADMIT CARD FOR Veterinary Officer Screening').value, 'Veterinary Officer Screening',
+  'so is the "notice regarding admit card for" wording, which only repeats the type column');
+equal(cleanNoticeTitle('CLICK HERE TO DOWNLOAD ADMIT CARD FOR Veterinary Officer Screening').value, 'Veterinary Officer Screening',
+  'and the "click here to download" form of the same wording');
+equal(cleanNoticeTitle('RESULT OF ADVT.NO.D-6/E-1/2025, Veterinary Officer Screening').value, 'Veterinary Officer Screening',
+  'and the advertisement number, which means nothing to anyone who did not apply');
+equal(cleanNoticeTitle('RESULT OF D-1/E-1/2026, Medical Education Department').value, 'Medical Education Department',
+  'including the bare form UPPSC also uses, with the words "advt no" left off');
+equal(cleanNoticeTitle('Veterinary Officer Screening Exam-2025, (EXAM. DATED:-03/10/2026)').value, 'Veterinary Officer Screening Exam-2025',
+  'and the exam date on the end, which is not the release date and has no column');
+
+/* Negative controls for the strips. Each of these contains something that
+   looks like the thing being stripped and must survive. */
+equal(cleanNoticeTitle('SSC CGL Tier-1 Result 2026').value, 'SSC CGL Tier-1 Result 2026',
+  'a title with none of that noise in it comes back exactly as it was');
+check(cleanNoticeTitle('Medical Education Department, Professor Nephrology, S-08/19').value.includes('S-08/19'),
+  'a post serial in the middle of a title is not mistaken for an advertisement number: it is what tells two postings apart');
+/* A headline that is nothing but boilerplate. `cleanNoticeTitle` is a strip
+   function and strips it -- that is its job. The guarantee belongs one layer up,
+   in the function the collector actually calls: an over-eager strip must produce
+   an ugly title, never a wrong one. Both fragments below clear the length test,
+   and the second one clears GENERIC_TEXT too, so this is the guard's own case
+   and not a restatement of theirs. */
+equal(cleanNoticeTitle('Result of 2026').value, '2026',
+  'the strip function itself does cut a nothing-but-boilerplate heading to a fragment');
+equal(noticeTitle({ text: 'Result of 2026' }).value, 'Result of 2026',
+  'but the title the collector publishes keeps the board\'s own words instead');
+equal(noticeTitle({ text: 'Result of 2026 Exam' }).value, 'Result of 2026 Exam',
+  'and so does one whose fragment is long enough to look plausible: "2026 Exam" names no job');
+check(namesSomething('Veterinary Officer (Screening) Exam-2025'),
+  'a real cleaned title names something');
+check(!namesSomething('2026 Exam'), 'a year and the word "exam" name nothing');
+check(!namesSomething('Admit Card Result'), 'nor does a pile of notice words');
+check(namesSomething('प्रवेश पत्र सूचना'), 'a Hindi headline is never judged a fragment: no strip rule here is Hindi');
+equal(noticeTitle({ text: 'Download Admit Card for Junior Engineer Exam 2026' }).value, 'Junior Engineer Exam 2026',
+  'and the guard does not block a strip that leaves a real name behind');
+equal(noticeTitle({ text: 'Result of Peon' }).value, 'Peon',
+  'a genuinely short post name survives the strip: "namesSomething" replaced a character-count floor that threw "Peon" away');
+equal(noticeTitle({ text: 'Admit Card for AE' }).value, 'Admit Card for AE',
+  'while a two-letter leftover still falls back to the board\'s words — the word test does the work a length test only approximated');
+equal(cleanNoticeTitle('Admit Card').value, 'Admit Card',
+  'a heading that is only the type word is left alone, not emptied: the boilerplate rule requires a connector after it');
+equal(noticeTitle({ text: 'Download PDF' }).value, null,
+  'and a generic anchor is still refused outright — cleaning can never rescue one into looking specific');
+
+/* Undoing the shouting. */
+check(isShouting('VETERINARY OFFICER (SCREENING) EXAM-2025'), 'a heading in capitals is recognised as the board\'s stylesheet, not a title');
+check(!isShouting('SSC CGL Tier-1 Result 2026'),
+  'but a title whose only capitals are abbreviations is not, so "Ssc Cgl" can never be produced');
+check(!isShouting('UPPSC Veterinary Officer Admit Card 2026'), 'nor is an ordinary title that opens with a commission\'s initials');
+check(isShouting('UTTAR PRADESH AYUSH (AYURVEDA) DEPARTMENT, Reader Rachna Shareer, S-9/04'),
+  'a real UPPSC heading with three words typed properly is still shouting — a letter ratio would score this 0.71 and miss it');
+/* The three numbers inside `isShouting`. Each of these titles is left exactly
+   as the board typed it only because of one of them, and re-casing any of them
+   would invent a spelling: the commissions below are not in the acronym list
+   and cannot be, because the list has to stay short enough to read. */
+check(!isShouting('UPHESC Assistant Professor RESULT'),
+  'half the long words shouting is not enough: a 0.3 threshold would turn "UPHESC" into "Uphesc"');
+check(!isShouting('UP TET Result 2026'),
+  'short words are not counted at all: they are where the abbreviations live, and counting them would make "UP TET" read as a board heading');
+check(!isShouting('UPHESC 2026'),
+  'and one long word is never re-cased on a sample of one');
+equal(cleanNoticeTitle('UPHESC Assistant Professor RESULT').value, 'UPHESC Assistant Professor RESULT',
+  'so all three survive cleaning untouched');
+equal(cleanNoticeTitle('UP TET Result 2026').value, 'UP TET Result 2026', 'the second of them too');
+equal(cleanNoticeTitle('UPHESC 2026').value, 'UPHESC 2026', 'and the third');
+equal(toTitleCase('MEDICAL EDUCATION DEPARTMENT U.P. AND REHABILITATION'), 'Medical Education Department U.P. and Rehabilitation',
+  'dotted initials keep their capitals and a joining word goes lowercase');
+check(toTitleCase('GNM A.N.M. NURSING STAFF').includes('A.N.M.'),
+  'and the dotted-initials guard is load-bearing for one of them: "A.N.M." opens with "a", a small word, and without the guard comes back as "a.N.M."');
+equal(toTitleCase('SSC CGL RESULT'), 'SSC CGL Result', 'a known abbreviation stays in capitals while the ordinary word does not');
+equal(toTitleCase('ASSISTANT TOWN PLANNER (SPL. RECT.) EXAM.-2025'), 'Assistant Town Planner (Spl. Rect.) Exam.-2025',
+  'brackets, stops and trailing years survive the re-casing');
+equal(toTitleCase('AND THE RESULT'), 'And the Result', 'a joining word at the very front is still capitalised');
+
+/* The truncation mark. This is the load-bearing distinction for
+   `collapseTruncatedTitles`: read a single full stop as truncation and the
+   collapse rule starts deleting complete notices. */
+check(noticeTitle({ text: 'NOTICE REGARDING ADMIT CARD FOR ADVT.NO.D-6/E-1/2025, VETERINARY OFFICER (SCREEN..' }).truncated,
+  'the ".." UPPSC leaves when it clips a heading to eighty characters is detected');
+check(!noticeTitle({ text: 'CLICK HERE TO DOWNLOAD ADMIT CARD FOR ADVT. NO. A-7/E-1/2025, ASSISTANT PROFESSOR, GOVT. DEGREE COLLEGE MAINS EXAM-2025.' }).truncated,
+  'but a heading that simply ends in a full stop is not, so a complete notice is never deleted as a clipping');
+check(cutTitle.truncated, 'and a title we cut ourselves at 255 characters is flagged too');
+
+/* ---------------------------------------------------------------------------
+   The clipped-ticker collapse.
+--------------------------------------------------------------------------- */
+const clipped = { type: 'ADMIT_CARD', title: 'Veterinary Officer (Screen', truncated: true, sourceId: 'uppsc' };
+const full = { type: 'ADMIT_CARD', title: 'Veterinary Officer (Screening) Exam-2025', truncated: false, sourceId: 'uppsc' };
+const tickerPair = collapseTruncatedTitles([clipped, full]);
+check(tickerPair[0], 'the clipped half of a UPPSC ticker/table pair is dropped');
+equal(tickerPair[1], null, 'and the full one is kept');
+check(/in full as "Veterinary Officer \(Screening\) Exam-2025"/.test(tickerPair[0].reason),
+  'with the reason naming the row that replaced it, so the report is readable');
+/* Order independence. The ticker is printed above the table, so the clipped
+   row always arrives first; a rule that only worked in one order would look
+   correct here and drop the good row on the real board. */
+const reversed = collapseTruncatedTitles([full, clipped]);
+equal(reversed[0], null, 'the same pair in the other order still keeps the full row');
+check(reversed[1], 'and still drops the clipped one');
+
+/* Negative controls. Each changes exactly one thing about the matching pair
+   above, and each must stop the collapse. */
+equal(collapseTruncatedTitles([{ ...clipped, truncated: false }, full])[0], null,
+  'a row that is a prefix but was never clipped is kept: "Assistant Professor" must not be eaten by "Assistant Professor (Mains)"');
+equal(collapseTruncatedTitles([clipped, { ...full, type: 'RESULT' }])[0], null,
+  'a longer row of the other type is not the same notice');
+equal(collapseTruncatedTitles([clipped, { ...full, sourceId: 'ssc' }])[0], null,
+  'nor is a longer row from a different board — two boards wording one result differently is the key rule\'s job');
+equal(collapseTruncatedTitles([clipped, { ...full, title: 'Veterinary Surgeon (Screening) Exam-2025' }])[0], null,
+  'and a longer row that is not actually a continuation is left alone');
+equal(collapseTruncatedTitles([clipped, { ...clipped }])[0], null,
+  'two clippings of the same length collapse into neither, because nothing longer is present to keep');
+equal(collapseTruncatedTitles([clipped])[0], null,
+  'a clipping with no full twin in the run is kept rather than lost — the report flags it for a human instead');
+check(buildNoticeRow({
+  link: { url: 'https://uppsc.up.nic.in/Open_PDF_DB.aspx?x', text: 'NOTICE REGARDING ADMIT CARD FOR ADVT.NO.D-6/E-1/2025, VETERINARY OFFICER (SCREEN..' },
+  source: { id: 'uppsc', kind: 'official', name: 'UPPSC', organization: 'Uttar Pradesh Public Service Commission', category: 'STATE_PSC' },
+}).notes.some(n => /cut this heading short/.test(n)),
+  'and that flag reaches the report through the row notes, not just the return value');
+
+/* ---------------------------------------------------------------------------
+   The aggregator's own furniture.
+
+   Ankit asked for sarkariresult.com.cm to stay as a discovery source, so these
+   rules refuse its menu rather than the site. All five junk rows published on
+   2026-09-28 are in here as the positive cases.
+--------------------------------------------------------------------------- */
+const aggSource = {
+  id: 'sarkariresult', kind: 'aggregator', name: 'Sarkari Result discovery (.com.cm)',
+  url: 'https://sarkariresult.com.cm/latest-jobs/', allowedHosts: ['sarkariresult.com.cm', 'www.sarkariresult.com.cm'],
+};
+const officialSource = { id: 'ssc', kind: 'official', name: 'SSC', allowedHosts: ['ssc.gov.in'] };
+const junkRows = [
+  ['Sarkari Result™', 'https://sarkariresult.com.cm/'],
+  ['Admit Card', 'https://sarkariresult.com.cm/admit-card/'],
+  ['official Sarkari Result', 'http://sarkariresult.com.cm/latest-posts/'],
+  ['Let’s update', 'http://sarkariresult.com.cm/result/'],
+  ['SarkariResult.com.cm', 'http://sarkariresult.com.cm/'],
+];
+for (const [text, url] of junkRows) {
+  equal(classifyNotice({ text, url, source: aggSource }).type, null,
+    `"${text}" is refused: it is the aggregator's own menu, not a notice`);
+}
+check(/section page/.test(classifyNotice({ text: 'Admit Card', url: 'https://sarkariresult.com.cm/admit-card/', source: aggSource }).reason),
+  'and the reason says it is a section page, so the report explains the refusal');
+/* The rule that was missing. `looksLikeChrome` compares a link against the
+   *configured* source page, which is /latest-jobs/, so the bare home page was
+   never chrome and reached the site titled "Sarkari Result™". */
+check(!looksLikeChrome({ url: 'https://sarkariresult.com.cm/', text: 'Sarkari Result™' }, aggSource),
+  'the existing self-link test genuinely does not catch the home page — this is the gap, stated as a fact');
+check(!isNoticeCandidate({ url: 'https://sarkariresult.com.cm/', text: 'Sarkari Result™' }, aggSource),
+  'and the notice filter now refuses it anyway');
+
+/* Negative controls: the rule must be narrow in two directions at once. */
+equal(classifyNotice({ text: 'UPSC NDA Result 2026', url: 'https://sarkariresult.com.cm/upsc-nda-result-2026/', source: aggSource }).type, 'RESULT',
+  'a real post on the aggregator is still collected — the source stays, only its furniture goes');
+equal(classifyNotice({ text: 'Result', url: 'https://ssc.gov.in/result/', source: officialSource }).type, 'RESULT',
+  'and /result/ on an official board is still a result: there it really is where the notice lives');
+equal(classifyNotice({ text: 'Result', url: 'https://ssc.gov.in/result/' }).type, 'RESULT',
+  'omitting the source entirely leaves the old behaviour untouched, so no official board loses a notice');
+check(isSectionPage('https://sarkariresult.com.cm/result/'), 'a one-segment section path is recognised');
+check(!isSectionPage('https://sarkariresult.com.cm/upsc-nda-result-2026/'), 'but a post slug that merely contains "result" is not');
+/* Each of the two aggregator tests has to be provable on its own. All five junk
+   rows from 2026-09-28 happen to fail both, so the five cases above would still
+   pass with either test deleted. These four do not. */
+equal(classifyNotice({ text: 'SarkariResult.com.cm', url: 'https://sarkariresult.com.cm/ssc-cgl-2026-result/', source: aggSource }).type, null,
+  'the site\'s own name as the anchor is refused even on a deep post link, where the section test cannot help');
+check(/own name/.test(classifyNotice({ text: 'SarkariResult.com.cm', url: 'https://sarkariresult.com.cm/ssc-cgl-2026-result/', source: aggSource }).reason),
+  'and it is refused for that reason, not by accident');
+equal(classifyNotice({ text: 'Junior Engineer Result 2026', url: 'https://sarkariresult.com.cm/', source: aggSource }).type, null,
+  'and the bare home page is refused even under a headline anchor, where the brand test cannot help');
+check(isSectionPage('https://sarkariresult.com.cm/'), 'because a path with no segments at all is the home page, which is the biggest section page there is');
+/* `every`, not `some`: a real post lives *under* a section, so its path
+   contains a section segment and one more. Reading it as `some` would refuse
+   every result the aggregator files tidily. */
+equal(classifyNotice({ text: 'SSC CGL 2026 Final Result', url: 'https://sarkariresult.com.cm/result/ssc-cgl-2026-final-result/', source: aggSource }).type, 'RESULT',
+  'a post filed under /result/ is collected: only a path that is *nothing but* section names is a section page');
+check(!isSectionPage('https://sarkariresult.com.cm/result/ssc-cgl-2026-final-result/'), 'stated as the unit rule too');
+check(isOwnBrandText('Sarkari Result™', aggSource), 'anchor text that is only the site\'s own name is recognised');
+check(isOwnBrandText('SarkariResult.com.cm', aggSource), 'including the form with the domain written out');
+check(!isOwnBrandText('Sarkari Result UPSC NDA 2026', aggSource),
+  'but the site\'s name in front of a real post name is not — that is how the aggregator titles half its rows');
+check(!isOwnBrandText('Sarkari Result™', officialSource), 'and a source with a different host does not match its own name at all');
+check(!isOwnBrandText('SSC', officialSource),
+  'a host label of three letters is not a brand: "ssc" and "upsc" are how real notices name the commission, and matching those would refuse them');
+
+/* ---------------------------------------------------------------------------
+   The city-intimation trap.
+--------------------------------------------------------------------------- */
+const RAW_CITY = 'Information regarding the city of examination and Admission Certificate for the candidates of Combined Graduate level Examination, 2026 (Tier-I)';
+equal(classifyNotice({ text: RAW_CITY }).type, null,
+  'SSC\'s city-intimation notice is not an admit card, even though it says "Admission Certificate"');
+check(/city of examination/.test(classifyNotice({ text: RAW_CITY }).reason),
+  'and the reason names the wording that refused it, so this cannot be passing for some other cause');
+/* Negative control: the same document type without the city wording. If the
+   new entries were too broad, this would be refused too and the collector
+   would stop finding SSC admit cards altogether. */
+equal(classifyNotice({ text: 'Admission Certificate for the candidates of Combined Graduate level Examination, 2026 (Tier-I)' }).type, 'ADMIT_CARD',
+  'while the admission certificate itself is still collected as an admit card');
 
 /* inferOrigin. Evidence or blank -- never a guess from an abbreviation table. */
 const sourcesForOrigin = [

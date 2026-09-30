@@ -76,7 +76,7 @@ export function isCandidate(link, source, { includeNotices = false } = {}) {
  */
 export function isNoticeCandidate(link, source) {
   if (looksLikeChrome(link, source)) return false;
-  return classifyNotice({ text: link.text, context: link.context, url: link.url }).type !== null;
+  return classifyNotice({ text: link.text, context: link.context, url: link.url, source }).type !== null;
 }
 
 /**
