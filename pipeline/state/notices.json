@@ -4,17 +4,17 @@
     "https://sarkariresult.com.cm/latest-jobs/": {
       "etag": null,
       "lastModified": "Mon, 28 Sep 2026 10:34:38 GMT",
-      "checkedAt": "2026-10-01T07:53:30.803Z"
+      "checkedAt": "2026-10-01T19:05:51.394Z"
     },
     "https://ssc.gov.in/api/general-website/portal/notice-boards?page=1&limit=50&contentType=notice-boards&key=createdAt&order=DESC&isAttachment=true&language=english&attributes=id%2Cheadline%2CexamId%2CcontentType%2CredirectUrl%2CstartDate%2CendDate%2Clanguage%2CcreatedAt": {
-      "etag": "W/\"1834-ZOtBTjIlSFVsINjziDKIxmbkFzw\"",
+      "etag": "W/\"1848-RxcA00Nv8ZDxbpAyfY5D0Jfcg0A\"",
       "lastModified": null,
-      "checkedAt": "2026-10-01T07:53:33.843Z"
+      "checkedAt": "2026-10-01T19:05:54.422Z"
     },
     "https://uppsc.up.nic.in/": {
       "etag": null,
       "lastModified": null,
-      "checkedAt": "2026-10-01T07:54:16.723Z"
+      "checkedAt": "2026-10-01T19:06:37.627Z"
     }
   },
   "notices": {
@@ -276,13 +276,13 @@
       "lastError": null
     },
     "rrb": {
-      "consecutiveFailures": 7,
+      "consecutiveFailures": 8,
       "lastOkOn": null,
       "firstFailedOn": "2026-09-28",
       "lastError": "fetch failed for https://rrbcdg.gov.in/robots.txt: connect ECONNREFUSED 203.176.113.43:443"
     },
     "upsc": {
-      "consecutiveFailures": 7,
+      "consecutiveFailures": 8,
       "lastOkOn": null,
       "firstFailedOn": "2026-09-28",
       "lastError": "fetch failed for https://upsc.gov.in/robots.txt: Connect Timeout Error (attempted address: upsc.gov.in:443, timeout: 10000ms)"
@@ -294,30 +294,30 @@
       "lastError": null
     },
     "bpsc": {
-      "consecutiveFailures": 7,
+      "consecutiveFailures": 8,
       "lastOkOn": null,
       "firstFailedOn": "2026-09-28",
       "lastError": "fetch failed for https://bpsc.bihar.gov.in/robots.txt: unable to verify the first certificate; if the root CA is installed locally, try running Node.js with --use-system-ca"
     },
     "rpsc": {
-      "consecutiveFailures": 7,
+      "consecutiveFailures": 8,
       "lastOkOn": null,
       "firstFailedOn": "2026-09-28",
       "lastError": "fetch failed for https://rpsc.rajasthan.gov.in/robots.txt: fetch failed"
     },
     "mppsc": {
-      "consecutiveFailures": 7,
+      "consecutiveFailures": 8,
       "lastOkOn": null,
       "firstFailedOn": "2026-09-28",
       "lastError": "fetch failed for https://mppsc.mp.gov.in/robots.txt: Connect Timeout Error (attempted address: mppsc.mp.gov.in:443, timeout: 10000ms)"
     },
     "ukpsc": {
-      "consecutiveFailures": 7,
+      "consecutiveFailures": 8,
       "lastOkOn": null,
       "firstFailedOn": "2026-09-28",
       "lastError": "fetch failed for https://psc.uk.gov.in/robots.txt: Connect Timeout Error (attempted address: psc.uk.gov.in:443, timeout: 10000ms)"
     }
   },
   "zeroCandidateDays": 0,
-  "updatedAt": "2026-10-01T07:55:44.788Z"
+  "updatedAt": "2026-10-01T19:07:59.727Z"
 }
