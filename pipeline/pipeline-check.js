@@ -911,6 +911,87 @@ equal(cleanNoticeTitle('Admit Card').value, 'Admit Card',
 equal(noticeTitle({ text: 'Download PDF' }).value, null,
   'and a generic anchor is still refused outright — cleaning can never rescue one into looking specific');
 
+/* The advertisement number written with hyphens instead of slashes.
+   UPPSC uses both on the same board -- "ADVT.NO.D-6/E-1/2025" in one row and
+   "ADVT. NO. D-5-E-1-2025" in the next -- and the slashed rule cannot match the
+   second, so the number that was supposed to have been removed was still in the
+   2026-09-29 CSV. Both spellings must now land on the same title. */
+const RAW_HYPHEN_ADVT = 'NOTICE REGARDING ADMIT CARD FOR ADVT. NO. D-5-E-1-2025, VETERINARY OFFICER (SCREENING) EXAM-2025';
+equal(noticeTitle({ text: RAW_HYPHEN_ADVT }).value, 'Veterinary Officer (Screening) Exam-2025',
+  'an advertisement number written with hyphens is stripped like the slashed one');
+equal(noticeTitle({ text: RAW_HYPHEN_ADVT }).value, noticeTitle({ text: RAW_VETERINARY }).value,
+  'and the two spellings of one notice produce the identical title');
+check(!noticeTitle({ text: RAW_HYPHEN_ADVT }).needsTitle,
+  'a row that does name a post is not flagged for a hand-written title');
+
+/* The anchor is load-bearing, and so is the tightness. Without the "advt" in
+   front, any hyphenated code in a heading would go; with spaces allowed inside,
+   the rule could run past the number and eat a hyphenated post name. */
+check(cleanNoticeTitle('Veterinary Officer D-5-E-1-2025').value.includes('D-5-E-1-2025'),
+  'a hyphen code with no "advt" in front of it is left alone');
+/* Both halves matter. A loosened rule that ate "ASSISTANT-TOWN-PLANNER" would
+   empty the headline, `namesSomething` would refuse it, and the fallback would
+   hand back the board's raw words -- which still contain the post name. So
+   testing the title alone cannot tell "the rule behaved" from "the rule ate
+   everything and the safety net caught it". The flag is what separates them. */
+const TOWN_PLANNER = noticeTitle({ text: 'RESULT OF ADVT. NO. A-7/E-1/2025, ASSISTANT-TOWN-PLANNER, S-01/02' });
+check(TOWN_PLANNER.value.includes('Assistant-Town-Planner') && !TOWN_PLANNER.needsTitle,
+  'and the rule does not eat a hyphenated post name that follows the number');
+
+/* "Notice regarding" on either side of the verb. The board writes both
+   "CLICK HERE TO DOWNLOAD MARKSHEET ..." and "NOTICE REGARDING DOWNLOAD
+   MARKSHEET ...", and with only one order accepted those two came out
+   differently: one fell back to the board's words, the other kept "Notice
+   Regarding Download Marksheet & Cut Off for" glued to the front. */
+equal(noticeTitle({ text: 'Notice Regarding Download Admit Card for Junior Engineer Exam 2026' }).value, 'Junior Engineer Exam 2026',
+  'the "notice regarding" lead-in is stripped when it comes before the verb as well as after it');
+
+/* The marksheet and cut-off notices, which name no post at all: the board gives
+   an advertisement number and a post code and nothing else. Both keep the
+   board's own wording -- a title of "[S-10-04]" would be worse than an ugly one
+   -- and both are flagged so the admin writes the name before importing. The
+   dates still come off even in that fallback, which is both what Ankit asked for
+   and what lets the clipped twin below pair with its full copy. */
+const RAW_MARKSHEET = 'NOTICE REGARDING DOWNLOAD MARKSHEET & CUT OFF FOR ADVT. NO. D-5-E-1-2025, [S-10-04]';
+const RAW_MARKSHEET_DATED = '06 Oct 2026 NOTICE REGARDING DOWNLOAD MARKSHEET & CUT OFF FOR ADVT. NO. D-5-E-1-2025, [S-10-04]';
+const RAW_MARKSHEET_CLICK = 'CLICK HERE TO DOWNLOAD MARKSHEET & CUT OFF FOR ADVT. NO. D-2-E-1-2025, [S-06-01].';
+const BOARD_MARKSHEET = 'Notice Regarding Download Marksheet & Cut Off for Advt. No. D-5-E-1-2025, [S-10-04]';
+for (const raw of [RAW_MARKSHEET, RAW_MARKSHEET_DATED, RAW_MARKSHEET_CLICK]) {
+  const got = noticeTitle({ text: raw });
+  check(got.needsTitle, `a headline that names no post is flagged for a hand-written title: ${raw.slice(0, 30)}...`);
+  check(/marksheet/i.test(got.value) && /cut off/i.test(got.value),
+    `and keeps the board's own words rather than a fragment: ${raw.slice(0, 30)}...`);
+  check(!/^\d{1,2}\s+\w{3}\s+\d{4}/.test(got.value),
+    `and carries no leading date even in that fallback: ${raw.slice(0, 30)}...`);
+}
+equal(noticeTitle({ text: RAW_MARKSHEET_DATED }).value, BOARD_MARKSHEET,
+  'the dated ticker copy and the plain copy of one marksheet notice land on the identical title');
+equal(noticeTitle({ text: RAW_MARKSHEET }).value, BOARD_MARKSHEET,
+  'and that title is the board\'s wording in Title Case, with the date gone');
+
+/* The pairing that the leading date used to break. UPPSC prints this notice
+   twice: clipped to 80 characters in a list, and in full in a dated ticker. On
+   2026-09-29 both reached the CSV, because the dated copy did not start with the
+   same characters as the clipped one. */
+const MARKSHEET_CLIPPED = noticeTitle({ text: 'NOTICE REGARDING DOWNLOAD MARKSHEET & CUT OFF FOR ADVT. NO. D-5-E-1-2025, [S-10-..' });
+const markCollapse = collapseTruncatedTitles([
+  { type: 'RESULT', title: MARKSHEET_CLIPPED.value, truncated: true, sourceId: 'uppsc' },
+  { type: 'RESULT', title: noticeTitle({ text: RAW_MARKSHEET_DATED }).value, truncated: false, sourceId: 'uppsc' },
+]);
+check(markCollapse[0] && /cut this heading short/.test(markCollapse[0].reason),
+  'the clipped copy of a no-post headline is dropped in favour of its full copy');
+check(!markCollapse[1], 'and the full copy is the one that survives');
+
+check(/does not name a post/.test(buildNoticeRow({
+  link: { text: RAW_MARKSHEET, context: '', url: 'https://uppsc.up.nic.in/Open_PDF.aspx?x' },
+  // A local stand-in rather than the shared source fixtures, which are declared
+  // further down this file.
+  source: { id: 'uppsc', name: 'Uttar Pradesh Public Service Commission', kind: 'board', organization: 'Uttar Pradesh Public Service Commission', category: 'STATE_PSC' },
+  now: new Date('2026-09-29T00:00:00Z'),
+  sources: [],
+}).notes.join(' | ')),
+  'and the report says so in that row\'s own notes, which is where the admin reads it');
+
 /* Undoing the shouting. */
 check(isShouting('VETERINARY OFFICER (SCREENING) EXAM-2025'), 'a heading in capitals is recognised as the board\'s stylesheet, not a title');
 check(!isShouting('SSC CGL Tier-1 Result 2026'),
@@ -1219,6 +1300,26 @@ check(reportMd.includes('Looked at and left out'), 'the report shows what was re
 check(reportMd.includes('mentions "answer key"'), 'with the rule that rejected each link');
 check(reportMd.includes('Answer Key \\| 2026'), 'and a pipe in a link text is escaped instead of breaking the table');
 check(/Answer keys are not collected/.test(reportMd), 'the report states the answer-key decision, so it does not read as a gap');
+
+/* The hand-written-title count. A flag nobody reads is not a flag, and the
+   summary at the top of the report is the one part of it that always gets read.
+   Two rows in, one of them flagged, so a hard-coded "0" or a count of every row
+   would both show up here. */
+const reportWithFlagged = noticeReportMarkdown({
+  date: '2026-09-29',
+  discovery: { reports: [{ source: { id: 'uppsc', name: 'UPPSC' }, ok: true, linksSeen: 9, candidates: [1, 2] }] },
+  rows: [
+    { row: sampleRows[0], notes: [], needsTitle: false, link: { url: 'https://uppsc.up.nic.in/a.pdf', source: { name: 'UPPSC' } } },
+    { row: sampleRows[0], notes: [], needsTitle: true, link: { url: 'https://uppsc.up.nic.in/b.pdf', source: { name: 'UPPSC' } } },
+  ],
+  preview: { total: 2, valid: 2, invalid: 0, headerErrors: [], problems: [], notes: [] },
+  skippedPublished: 0, warnings: [], state: { sources: {}, zeroCandidateDays: 0 },
+  drops: [], carriedOver: [], health: { ok: true, reasons: [], notes: [] }, rejected: [],
+});
+check(/Rows whose title must be written by hand: 1\b/.test(reportWithFlagged),
+  'the report counts the rows whose title a person must write, and counts only those');
+check(/Rows whose title must be written by hand: 0\b/.test(reportMd),
+  'and reports zero when every row named a post, rather than omitting the line');
 
 if (failures.length) {
   console.error(`pipeline-check: ${failures.length} of ${checks} checks FAILED\n`);

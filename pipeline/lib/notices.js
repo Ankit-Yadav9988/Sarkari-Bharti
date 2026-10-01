@@ -255,7 +255,11 @@ const TRAILING_EXAM_DATE = /[\s,;|(-]*\b(?:exam|examination)\.?\s*dat(?:e|ed|es)
 /** The words that only repeat the `type` column. */
 const TYPE_WORDS = 'admit\\s*cards?|e-?\\s*call\\s*letters?|call\\s*letters?|hall\\s*tickets?'
   + '|admission\\s*certificates?|final\\s*results?|results?|merit\\s*lists?|selection\\s*lists?'
-  + '|score\\s*cards?|scorecards?';
+  + '|score\\s*cards?|scorecards?'
+  // The marksheet and cut-off family. UPPSC files these under results, and the
+  // pair goes before the singles so "MARKSHEET & CUT OFF" is consumed whole
+  // rather than leaving "& CUT OFF" behind for the connector to choke on.
+  + '|mark\\s*sheets?\\s*(?:&|and)\\s*cut\\s*-?\\s*offs?|mark\\s*sheets?|cut\\s*-?\\s*offs?';
 
 /**
  * "NOTICE REGARDING ADMIT CARD FOR", "CLICK HERE TO DOWNLOAD ADMIT CARD FOR",
@@ -264,16 +268,39 @@ const TYPE_WORDS = 'admit\\s*cards?|e-?\\s*call\\s*letters?|call\\s*letters?|hal
  * The connector is required. Without it "Admit Card" on its own would be cut to
  * nothing, and a row whose whole title is the type word should be reported as
  * having no usable title rather than quietly emptied.
+ *
+ * `notice regarding` is accepted on either side of the verb, because the board
+ * writes it both ways: "CLICK HERE TO DOWNLOAD MARKSHEET ..." and "NOTICE
+ * REGARDING DOWNLOAD MARKSHEET ...". With only one order accepted the two halves
+ * of one pair of near-identical headlines came out differently -- one fell back
+ * to the board's own words, the other kept its whole lead-in glued to the front.
  */
+const NOTICE_LEAD_IN = '(?:notice\\s*(?:regarding|for|of|about)\\s*)?';
 const BOILERPLATE_PREFIX = new RegExp(
-  '^(?:click\\s*here\\s*)?(?:to\\s*)?(?:download|view|see|check|get|obtain)?\\s*'
-  + '(?:notice\\s*(?:regarding|for|of|about)\\s*)?(?:the\\s*)?'
+  '^(?:click\\s*here\\s*)?(?:to\\s*)?'
+  + NOTICE_LEAD_IN
+  + '(?:download|view|see|check|get|obtain)?\\s*'
+  + NOTICE_LEAD_IN + '(?:the\\s*)?'
   + `(?:${TYPE_WORDS})\\s*(?:for|of|:|–|—|-)\\s*`,
   'i',
 );
 
 /** "ADVT. NO. D-6/E-1/2025", "ADVT.NO.D-6/E-1/2025", "Advertisement No 5/2026". */
 const ADVERT_NUMBER = /\b(?:advt|advertisement|adv|notification)\.?\s*(?:no|number)?\.?\s*:?\s*[A-Za-z]{0,4}[-–]?\s?\d+(?:\s*\/\s*[A-Za-z0-9.()-]+)*\s*\/\s*\d{2,4}\s*[,;:.-]*\s*/gi;
+
+/**
+ * The same number written with hyphens throughout: "ADVT. NO. D-5-E-1-2025".
+ *
+ * UPPSC uses both spellings on the same board, one row apart, and the slashed
+ * rule above cannot match this one -- which is why the advertisement number
+ * survived into the 2026-09-29 CSV after it had supposedly been removed.
+ *
+ * Deliberately tight: no spaces anywhere inside the code, and the whole thing
+ * still has to follow the word "advt". A looser version that allowed spaces
+ * around the hyphens could run on past the number and eat a hyphenated post
+ * name ("ASSISTANT-TOWN-PLANNER"), which is the failure this rule must not have.
+ */
+const ADVERT_NUMBER_HYPHEN = /\b(?:advt|advertisement|adv|notification)\.?\s*(?:no|number)?\.?\s*:?\s*[A-Za-z]{1,4}-\d+(?:-[A-Za-z0-9]{1,4})*-\d{2,4}\s*[,;:.-]*\s*/gi;
 
 /**
  * The same code with the words left off: "RESULT OF D-1/E-1/2026, MEDICAL ...".
@@ -422,12 +449,43 @@ export function cleanNoticeTitle(raw) {
   value = value.replace(TRAILING_EXAM_DATE, '');
   value = value.replace(BOILERPLATE_PREFIX, '');
   value = value.replace(ADVERT_NUMBER, '');
+  value = value.replace(ADVERT_NUMBER_HYPHEN, '');
   value = value.replace(BARE_ADVERT_CODE, '');
   value = tidyEdges(value);
 
   if (isShouting(value)) value = toTitleCase(value);
 
   return { value, truncated, changed: value !== before };
+}
+
+/**
+ * The fallback title: the board's own words, with only the dates and the
+ * clipping mark taken off.
+ *
+ * Used when the strips empty a headline of everything except the words that say
+ * it is a notice. The board's wording is kept, because an over-eager strip
+ * should produce an ugly title and never a wrong one -- but the dates come off
+ * even here, for two reasons.
+ *
+ * A date is never part of the name of a post, and `LEADING_DATE` is anchored at
+ * the start of the string, so taking it off cannot cost a single word of a real
+ * title. Nothing is risked.
+ *
+ * And UPPSC prints the same notice twice -- once in a dated ticker, once clipped
+ * to 80 characters in a list. With the date left on the dated copy, the clipped
+ * copy is no longer a prefix of it, `collapseTruncatedTitles` cannot pair them,
+ * and the same marksheet notice reached the CSV twice on 2026-09-29 for exactly
+ * that reason.
+ */
+function boardWording(value) {
+  let out = String(value || '').replace(TRUNCATION_MARK, '');
+  out = out.replace(LEADING_DATE, '');
+  out = out.replace(TRAILING_EXAM_DATE, '');
+  out = tidyEdges(out);
+  if (isShouting(out)) out = toTitleCase(out);
+  // If a headline were nothing but a date, the stripped version would be empty,
+  // and an empty title is worse than an ugly one.
+  return out || tidyEdges(value);
 }
 
 /**
@@ -462,16 +520,17 @@ export function noticeTitle({ text = '', context = '' } = {}) {
        and "2026" while accepting "Peon", a real four-letter post name that a
        floor of five would have thrown away. */
     const usable = !GENERIC_TEXT.test(cleaned.value) && namesSomething(cleaned.value);
-    const value = usable ? cleaned.value : candidate;
+    const value = usable ? cleaned.value : boardWording(candidate);
     const trimmedNote = usable && cleaned.changed
       ? 'the board\'s date, "notice regarding" wording and advertisement number were trimmed off the title'
       : null;
 
     if (value.length <= 255) {
-      // Flagged on the raw headline, not on the cleaned one. The ".." is
-      // something the board did, and it is still there in the fallback value,
-      // so a human should be told about it either way.
-      return { value, truncated: cleaned.truncated, reason: trimmedNote };
+      // Flagged on the raw headline, not on the cleaned one. `boardWording`
+      // takes the ".." off the fallback as well, so by this point the mark is
+      // gone from the value either way -- and a human still has to be told that
+      // the board cut the heading short, because the words it cut are missing.
+      return { value, truncated: cleaned.truncated, needsTitle: !usable, reason: trimmedNote };
     }
     const cut = value.slice(0, 255);
     const boundary = cut.lastIndexOf(' ');
@@ -480,10 +539,11 @@ export function noticeTitle({ text = '', context = '' } = {}) {
       // A title cut by us is truncated in exactly the sense the collapse rule
       // cares about, whatever the board did.
       truncated: true,
+      needsTitle: !usable,
       reason: `title was ${value.length} characters and the column holds 255, so it was cut short`,
     };
   }
-  return { value: null, truncated: false, reason: 'no usable title: the link text is generic and its row gave nothing better' };
+  return { value: null, truncated: false, needsTitle: false, reason: 'no usable title: the link text is generic and its row gave nothing better' };
 }
 
 /**
@@ -590,6 +650,7 @@ export function buildNoticeRow({ link, source, now = new Date(), sources = SOURC
     // this is a fact about how the board printed the headline, not about the
     // notice. `collapseTruncatedTitles` is its only reader.
     truncated: title.truncated,
+    needsTitle: Boolean(title.needsTitle),
     row: {
       type: classification.type,
       title: title.value,
@@ -609,6 +670,12 @@ export function buildNoticeRow({ link, source, now = new Date(), sources = SOURC
       // run is kept, and it will go on the site missing its last few words.
       // The report is the only place that can be noticed before import.
       title.truncated ? 'the board cut this heading short — open the link and check the full name before importing' : null,
+      // The strips emptied this headline of everything except the words that say
+      // it is a notice, so the board's own wording was kept rather than a
+      // fragment. It is not wrong, but it does not name a post, and only a
+      // person can supply that. UPPSC's marksheet and cut-off notices are the
+      // usual case: an advertisement number and a post code, and nothing else.
+      title.needsTitle ? 'the board\'s headline does not name a post, so its own wording was kept — write the title by hand before importing' : null,
     ].filter(Boolean),
   };
 }

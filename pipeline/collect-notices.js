@@ -194,6 +194,7 @@ ${sourceLines}
 - Offered again from an earlier run: ${carriedOver.length}
 - Importer-valid rows: ${preview.valid}/${preview.total}
 - Rows needing manual completion: ${preview.invalid}
+- Rows whose title must be written by hand: ${rows.filter(r => r.needsTitle).length} (the board's headline named no post, so its own wording was kept)
 - Links looked at and left out: ${rejected.length}
 - Consecutive zero-candidate runs: ${state.zeroCandidateDays}
 ${warnings.map(w => `- Warning: ${escapeMd(w)}`).join('\n')}
@@ -358,7 +359,7 @@ export async function runNoticeCollection({
       lastEmittedOn: today,
       emitCount: (prior.emitCount || 0) + 1,
     };
-    rows.push({ row: built.row, notes: built.notes, link });
+    rows.push({ row: built.row, notes: built.notes, needsTitle: built.needsTitle, link });
   }
 
   // This warning is measured against candidates, not against the whole "left
