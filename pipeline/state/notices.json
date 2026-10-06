@@ -4,17 +4,17 @@
     "https://sarkariresult.com.cm/latest-jobs/": {
       "etag": null,
       "lastModified": "Mon, 28 Sep 2026 10:34:38 GMT",
-      "checkedAt": "2026-10-06T08:13:21.126Z"
+      "checkedAt": "2026-10-06T19:09:25.155Z"
     },
     "https://ssc.gov.in/api/general-website/portal/notice-boards?page=1&limit=50&contentType=notice-boards&key=createdAt&order=DESC&isAttachment=true&language=english&attributes=id%2Cheadline%2CexamId%2CcontentType%2CredirectUrl%2CstartDate%2CendDate%2Clanguage%2CcreatedAt": {
-      "etag": "W/\"1848-RxcA00Nv8ZDxbpAyfY5D0Jfcg0A\"",
+      "etag": "W/\"184c-MWaHOQrA2s8zpjq0iRjZAnt2nT4\"",
       "lastModified": null,
-      "checkedAt": "2026-10-06T08:13:24.315Z"
+      "checkedAt": "2026-10-06T19:09:28.264Z"
     },
     "https://uppsc.up.nic.in/": {
       "etag": null,
       "lastModified": null,
-      "checkedAt": "2026-10-06T08:14:06.966Z"
+      "checkedAt": "2026-10-06T19:10:11.420Z"
     }
   },
   "notices": {
@@ -265,10 +265,19 @@
       "type": "RESULT",
       "title": "Medical Education Department U.P. (Allopathy)/Professor Orthopaedics, S-08/28",
       "source": "uppsc",
-      "seenAt": "2026-10-06T08:15:33.308Z",
+      "seenAt": "2026-10-06T19:11:32.487Z",
       "firstEmittedOn": "2026-10-05",
       "lastEmittedOn": "2026-10-06",
-      "emitCount": 2
+      "emitCount": 3
+    },
+    "https://uppsc.up.nic.in/Open_PDF.aspx?I4PnQ0tBagmbO3OUZentgoYzM/hjudv5": {
+      "type": "RESULT",
+      "title": "Uttar Pradesh Ayush (Ayurveda) Department, Professor(Specialist) Shalakya Tantra, S-09/04",
+      "source": "uppsc",
+      "seenAt": "2026-10-06T19:11:32.487Z",
+      "firstEmittedOn": "2026-10-06",
+      "lastEmittedOn": "2026-10-06",
+      "emitCount": 1
     }
   },
   "sources": {
@@ -285,13 +294,13 @@
       "lastError": null
     },
     "rrb": {
-      "consecutiveFailures": 17,
+      "consecutiveFailures": 18,
       "lastOkOn": null,
       "firstFailedOn": "2026-09-28",
       "lastError": "fetch failed for https://rrbcdg.gov.in/robots.txt: connect ECONNREFUSED 203.176.113.43:443"
     },
     "upsc": {
-      "consecutiveFailures": 17,
+      "consecutiveFailures": 18,
       "lastOkOn": null,
       "firstFailedOn": "2026-09-28",
       "lastError": "fetch failed for https://upsc.gov.in/robots.txt: Connect Timeout Error (attempted address: upsc.gov.in:443, timeout: 10000ms)"
@@ -303,30 +312,30 @@
       "lastError": null
     },
     "bpsc": {
-      "consecutiveFailures": 17,
+      "consecutiveFailures": 18,
       "lastOkOn": null,
       "firstFailedOn": "2026-09-28",
       "lastError": "fetch failed for https://bpsc.bihar.gov.in/robots.txt: unable to verify the first certificate; if the root CA is installed locally, try running Node.js with --use-system-ca"
     },
     "rpsc": {
-      "consecutiveFailures": 17,
+      "consecutiveFailures": 18,
       "lastOkOn": null,
       "firstFailedOn": "2026-09-28",
       "lastError": "fetch failed for https://rpsc.rajasthan.gov.in/robots.txt: fetch failed"
     },
     "mppsc": {
-      "consecutiveFailures": 17,
+      "consecutiveFailures": 18,
       "lastOkOn": null,
       "firstFailedOn": "2026-09-28",
       "lastError": "fetch failed for https://mppsc.mp.gov.in/robots.txt: Connect Timeout Error (attempted address: mppsc.mp.gov.in:443, timeout: 10000ms)"
     },
     "ukpsc": {
-      "consecutiveFailures": 17,
+      "consecutiveFailures": 18,
       "lastOkOn": null,
       "firstFailedOn": "2026-09-28",
       "lastError": "fetch failed for https://psc.uk.gov.in/robots.txt: Connect Timeout Error (attempted address: psc.uk.gov.in:443, timeout: 10000ms)"
     }
   },
   "zeroCandidateDays": 0,
-  "updatedAt": "2026-10-06T08:15:33.308Z"
+  "updatedAt": "2026-10-06T19:11:32.487Z"
 }
