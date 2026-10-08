@@ -4,17 +4,17 @@
     "https://sarkariresult.com.cm/latest-jobs/": {
       "etag": null,
       "lastModified": "Mon, 28 Sep 2026 10:34:38 GMT",
-      "checkedAt": "2026-10-08T08:04:45.297Z"
+      "checkedAt": "2026-10-08T19:32:39.825Z"
     },
     "https://ssc.gov.in/api/general-website/portal/notice-boards?page=1&limit=50&contentType=notice-boards&key=createdAt&order=DESC&isAttachment=true&language=english&attributes=id%2Cheadline%2CexamId%2CcontentType%2CredirectUrl%2CstartDate%2CendDate%2Clanguage%2CcreatedAt": {
       "etag": "W/\"17c9-mSuF5Dskk2kjnr4vKag+8qWluk0\"",
       "lastModified": null,
-      "checkedAt": "2026-10-08T08:04:48.032Z"
+      "checkedAt": "2026-10-08T19:32:42.999Z"
     },
     "https://uppsc.up.nic.in/": {
       "etag": null,
       "lastModified": null,
-      "checkedAt": "2026-10-08T08:05:30.711Z"
+      "checkedAt": "2026-10-08T19:33:26.151Z"
     }
   },
   "notices": {
@@ -265,37 +265,37 @@
       "type": "RESULT",
       "title": "Medical Education Department U.P. (Allopathy)/Professor Orthopaedics, S-08/28",
       "source": "uppsc",
-      "seenAt": "2026-10-08T08:06:56.231Z",
+      "seenAt": "2026-10-08T19:34:47.535Z",
       "firstEmittedOn": "2026-10-05",
       "lastEmittedOn": "2026-10-08",
-      "emitCount": 6
+      "emitCount": 7
     },
     "https://uppsc.up.nic.in/Open_PDF.aspx?I4PnQ0tBagmbO3OUZentgoYzM/hjudv5": {
       "type": "RESULT",
       "title": "Uttar Pradesh Ayush (Ayurveda) Department, Professor(Specialist) Shalakya Tantra, S-09/04",
       "source": "uppsc",
-      "seenAt": "2026-10-08T08:06:56.231Z",
+      "seenAt": "2026-10-08T19:34:47.535Z",
       "firstEmittedOn": "2026-10-06",
       "lastEmittedOn": "2026-10-08",
-      "emitCount": 4
+      "emitCount": 5
     },
     "https://ssc.gov.in/api/general-website/portal/writeup_07102026.pdf": {
       "type": "RESULT",
       "title": "Multi Tasking (Non-Technical) Staff, and Havaldar (CBIC and CBN) Examination, 2025: Declaration of additional result of Computer Based Examination to shortlist candidates for PET/ PST for the post of Havaldar.",
       "source": "ssc",
-      "seenAt": "2026-10-08T08:06:56.231Z",
+      "seenAt": "2026-10-08T19:34:47.535Z",
       "firstEmittedOn": "2026-10-07",
       "lastEmittedOn": "2026-10-08",
-      "emitCount": 3
+      "emitCount": 4
     },
     "https://ssc.gov.in/api/general-website/portal/writeup_final_chsl_2025_07102026.pdf": {
       "type": "RESULT",
       "title": "Combined Higher Secondary (10+2) Level Examination, 2025: Declaration of Final Result",
       "source": "ssc",
-      "seenAt": "2026-10-08T08:06:56.231Z",
+      "seenAt": "2026-10-08T19:34:47.535Z",
       "firstEmittedOn": "2026-10-07",
       "lastEmittedOn": "2026-10-08",
-      "emitCount": 2
+      "emitCount": 3
     }
   },
   "sources": {
@@ -312,13 +312,13 @@
       "lastError": null
     },
     "rrb": {
-      "consecutiveFailures": 21,
+      "consecutiveFailures": 22,
       "lastOkOn": null,
       "firstFailedOn": "2026-09-28",
       "lastError": "fetch failed for https://rrbcdg.gov.in/robots.txt: connect ECONNREFUSED 203.176.113.43:443"
     },
     "upsc": {
-      "consecutiveFailures": 21,
+      "consecutiveFailures": 22,
       "lastOkOn": null,
       "firstFailedOn": "2026-09-28",
       "lastError": "fetch failed for https://upsc.gov.in/robots.txt: Connect Timeout Error (attempted address: upsc.gov.in:443, timeout: 10000ms)"
@@ -330,30 +330,30 @@
       "lastError": null
     },
     "bpsc": {
-      "consecutiveFailures": 21,
+      "consecutiveFailures": 22,
       "lastOkOn": null,
       "firstFailedOn": "2026-09-28",
       "lastError": "fetch failed for https://bpsc.bihar.gov.in/robots.txt: unable to verify the first certificate; if the root CA is installed locally, try running Node.js with --use-system-ca"
     },
     "rpsc": {
-      "consecutiveFailures": 21,
+      "consecutiveFailures": 22,
       "lastOkOn": null,
       "firstFailedOn": "2026-09-28",
       "lastError": "fetch failed for https://rpsc.rajasthan.gov.in/robots.txt: fetch failed"
     },
     "mppsc": {
-      "consecutiveFailures": 21,
+      "consecutiveFailures": 22,
       "lastOkOn": null,
       "firstFailedOn": "2026-09-28",
       "lastError": "fetch failed for https://mppsc.mp.gov.in/robots.txt: Connect Timeout Error (attempted address: mppsc.mp.gov.in:443, timeout: 10000ms)"
     },
     "ukpsc": {
-      "consecutiveFailures": 21,
+      "consecutiveFailures": 22,
       "lastOkOn": null,
       "firstFailedOn": "2026-09-28",
       "lastError": "fetch failed for https://psc.uk.gov.in/robots.txt: Connect Timeout Error (attempted address: psc.uk.gov.in:443, timeout: 10000ms)"
     }
   },
   "zeroCandidateDays": 0,
-  "updatedAt": "2026-10-08T08:06:56.231Z"
+  "updatedAt": "2026-10-08T19:34:47.535Z"
 }
