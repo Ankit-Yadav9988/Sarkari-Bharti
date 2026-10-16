@@ -4,17 +4,17 @@
     "https://sarkariresult.com.cm/latest-jobs/": {
       "etag": null,
       "lastModified": "Mon, 28 Sep 2026 10:34:38 GMT",
-      "checkedAt": "2026-10-15T17:55:03.272Z"
+      "checkedAt": "2026-10-16T06:29:21.472Z"
     },
     "https://ssc.gov.in/api/general-website/portal/notice-boards?page=1&limit=50&contentType=notice-boards&key=createdAt&order=DESC&isAttachment=true&language=english&attributes=id%2Cheadline%2CexamId%2CcontentType%2CredirectUrl%2CstartDate%2CendDate%2Clanguage%2CcreatedAt": {
       "etag": "W/\"1863-aPjgQVjVD/Hkr3Ak7y5xEHyMJG0\"",
       "lastModified": null,
-      "checkedAt": "2026-10-15T17:55:06.428Z"
+      "checkedAt": "2026-10-16T06:29:24.495Z"
     },
     "https://uppsc.up.nic.in/": {
       "etag": null,
       "lastModified": null,
-      "checkedAt": "2026-10-15T17:56:19.424Z"
+      "checkedAt": "2026-10-16T06:30:37.499Z"
     }
   },
   "notices": {
@@ -310,68 +310,68 @@
       "type": "RESULT",
       "title": "Notice Regarding Download Marksheet & Cut Off for Advt. No. D-4-E-1-2025, [S-04-01]",
       "source": "uppsc",
-      "seenAt": "2026-10-15T17:57:40.870Z",
+      "seenAt": "2026-10-16T06:31:59.114Z",
       "firstEmittedOn": "2026-10-12",
-      "lastEmittedOn": "2026-10-15",
-      "emitCount": 7
+      "lastEmittedOn": "2026-10-16",
+      "emitCount": 8
     }
   },
   "sources": {
     "sarkariresult": {
       "consecutiveFailures": 0,
-      "lastOkOn": "2026-10-15",
+      "lastOkOn": "2026-10-16",
       "firstFailedOn": null,
       "lastError": null
     },
     "ssc": {
       "consecutiveFailures": 0,
-      "lastOkOn": "2026-10-15",
+      "lastOkOn": "2026-10-16",
       "firstFailedOn": null,
       "lastError": null
     },
     "rrb": {
-      "consecutiveFailures": 36,
+      "consecutiveFailures": 37,
       "lastOkOn": null,
       "firstFailedOn": "2026-09-28",
       "lastError": "fetch failed for https://rrbcdg.gov.in/robots.txt: Connect Timeout Error (attempted address: rrbcdg.gov.in:443, timeout: 10000ms)"
     },
     "upsc": {
-      "consecutiveFailures": 36,
+      "consecutiveFailures": 37,
       "lastOkOn": null,
       "firstFailedOn": "2026-09-28",
       "lastError": "fetch failed for https://upsc.gov.in/robots.txt: Connect Timeout Error (attempted address: upsc.gov.in:443, timeout: 10000ms)"
     },
     "uppsc": {
       "consecutiveFailures": 0,
-      "lastOkOn": "2026-10-15",
+      "lastOkOn": "2026-10-16",
       "firstFailedOn": null,
       "lastError": null
     },
     "bpsc": {
-      "consecutiveFailures": 36,
+      "consecutiveFailures": 37,
       "lastOkOn": null,
       "firstFailedOn": "2026-09-28",
       "lastError": "fetch failed for https://bpsc.bihar.gov.in/robots.txt: unable to verify the first certificate; if the root CA is installed locally, try running Node.js with --use-system-ca"
     },
     "rpsc": {
-      "consecutiveFailures": 36,
+      "consecutiveFailures": 37,
       "lastOkOn": null,
       "firstFailedOn": "2026-09-28",
       "lastError": "fetch failed for https://rpsc.rajasthan.gov.in/robots.txt: fetch failed"
     },
     "mppsc": {
-      "consecutiveFailures": 36,
+      "consecutiveFailures": 37,
       "lastOkOn": null,
       "firstFailedOn": "2026-09-28",
       "lastError": "fetch failed for https://mppsc.mp.gov.in/robots.txt: Connect Timeout Error (attempted address: mppsc.mp.gov.in:443, timeout: 10000ms)"
     },
     "ukpsc": {
-      "consecutiveFailures": 36,
+      "consecutiveFailures": 37,
       "lastOkOn": null,
       "firstFailedOn": "2026-09-28",
       "lastError": "fetch failed for https://psc.uk.gov.in/robots.txt: Connect Timeout Error (attempted address: psc.uk.gov.in:443, timeout: 10000ms)"
     }
   },
   "zeroCandidateDays": 0,
-  "updatedAt": "2026-10-15T17:57:40.870Z"
+  "updatedAt": "2026-10-16T06:31:59.114Z"
 }
