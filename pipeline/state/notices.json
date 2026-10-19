@@ -4,17 +4,17 @@
     "https://sarkariresult.com.cm/latest-jobs/": {
       "etag": null,
       "lastModified": "Mon, 28 Sep 2026 10:34:38 GMT",
-      "checkedAt": "2026-10-19T07:01:34.971Z"
+      "checkedAt": "2026-10-19T19:32:00.987Z"
     },
     "https://ssc.gov.in/api/general-website/portal/notice-boards?page=1&limit=50&contentType=notice-boards&key=createdAt&order=DESC&isAttachment=true&language=english&attributes=id%2Cheadline%2CexamId%2CcontentType%2CredirectUrl%2CstartDate%2CendDate%2Clanguage%2CcreatedAt": {
-      "etag": "W/\"1863-aPjgQVjVD/Hkr3Ak7y5xEHyMJG0\"",
+      "etag": "W/\"f073-cYfUvCWj2COVeRtb9yQ/0ElMzPk\"",
       "lastModified": null,
-      "checkedAt": "2026-10-19T07:01:37.748Z"
+      "checkedAt": "2026-10-19T19:32:04.022Z"
     },
     "https://uppsc.up.nic.in/": {
       "etag": null,
       "lastModified": null,
-      "checkedAt": "2026-10-19T07:02:50.784Z"
+      "checkedAt": "2026-10-19T19:33:17.053Z"
     }
   },
   "notices": {
@@ -319,28 +319,91 @@
       "type": "RESULT",
       "title": "Medical Education Department U.P. (Allopathy)",
       "source": "uppsc",
-      "seenAt": "2026-10-19T07:04:12.584Z",
+      "seenAt": "2026-10-19T19:34:38.799Z",
       "firstEmittedOn": "2026-10-16",
       "lastEmittedOn": "2026-10-19",
-      "emitCount": 6
+      "emitCount": 7
     },
     "https://uppsc.up.nic.in/Open_PDF_DB.aspx?I4PnQ0tBagnr4uATu7lVSyJODCxSObFX": {
       "type": "RESULT",
       "title": "Uttar Pradesh Ayush (Ayurveda) Department, Read",
       "source": "uppsc",
-      "seenAt": "2026-10-19T07:04:12.584Z",
+      "seenAt": "2026-10-19T19:34:38.799Z",
       "firstEmittedOn": "2026-10-16",
       "lastEmittedOn": "2026-10-19",
-      "emitCount": 6
+      "emitCount": 7
     },
     "https://uppsc.up.nic.in/Open_PDF_DB.aspx?I4PnQ0tBagmbO3OUZentgoSSgw34Mkau": {
       "type": "RESULT",
       "title": "Uttar Pradesh Ayush (Ayurveda) Department, Pro",
       "source": "uppsc",
-      "seenAt": "2026-10-19T07:04:12.584Z",
+      "seenAt": "2026-10-19T19:34:38.799Z",
       "firstEmittedOn": "2026-10-17",
       "lastEmittedOn": "2026-10-19",
-      "emitCount": 4
+      "emitCount": 5
+    },
+    "https://ssc.gov.in/api/general-website/portal/Result_writeup_typing_09092026.pdf": {
+      "type": "RESULT",
+      "title": "Declaration of Result of Annual Departmental Typing Test, 2024",
+      "source": "ssc",
+      "seenAt": "2026-10-19T19:34:38.798Z",
+      "firstEmittedOn": "2026-10-19",
+      "lastEmittedOn": "2026-10-19",
+      "emitCount": 1
+    },
+    "https://ssc.gov.in/api/general-website/portal/Result_writeup_stenography_09092026.pdf": {
+      "type": "RESULT",
+      "title": "Declaration of Result of Annual Departmental Stenography Test, 2024",
+      "source": "ssc",
+      "seenAt": "2026-10-19T19:34:38.798Z",
+      "firstEmittedOn": "2026-10-19",
+      "lastEmittedOn": "2026-10-19",
+      "emitCount": 1
+    },
+    "https://ssc.gov.in/api/general-website/portal/Final_Result_Write_up_25082026.pdf": {
+      "type": "RESULT",
+      "title": "Stenographer Grade 'C' and 'D' Examination, 2025: Declaration of Final Result",
+      "source": "ssc",
+      "seenAt": "2026-10-19T19:34:38.798Z",
+      "firstEmittedOn": "2026-10-19",
+      "lastEmittedOn": "2026-10-19",
+      "emitCount": 1
+    },
+    "https://ssc.gov.in/api/general-website/portal/writeup_25082026.pdf": {
+      "type": "RESULT",
+      "title": "Grade ‘C’ Stenographers Limited Departmental Competitive Examination, 2025: Declaration of result of Computer Based Examination for appearing in the Stenography Skill Test",
+      "source": "ssc",
+      "seenAt": "2026-10-19T19:34:38.798Z",
+      "firstEmittedOn": "2026-10-19",
+      "lastEmittedOn": "2026-10-19",
+      "emitCount": 1
+    },
+    "https://ssc.gov.in/api/general-website/portal/writeup_mts_03082026.pdf": {
+      "type": "RESULT",
+      "title": "Multi Tasking (Non-Technical) Staff, and Havaldar (CBIC and CBN) Examination, 2025: Declaration of result of Computer Based Examination to shortlist candidates for PET/ PST for the post of Havaldar.",
+      "source": "ssc",
+      "seenAt": "2026-10-19T19:34:38.799Z",
+      "firstEmittedOn": "2026-10-19",
+      "lastEmittedOn": "2026-10-19",
+      "emitCount": 1
+    },
+    "https://ssc.gov.in/api/general-website/portal/writeup_03082026.pdf": {
+      "type": "RESULT",
+      "title": "Junior Engineer (Civil, Mechanical and Electrical) Examination, 2025- Declaration of Final Result",
+      "source": "ssc",
+      "seenAt": "2026-10-19T19:34:38.799Z",
+      "firstEmittedOn": "2026-10-19",
+      "lastEmittedOn": "2026-10-19",
+      "emitCount": 1
+    },
+    "https://ssc.gov.in/api/general-website/portal/Result%20Writeup_2025_Steno%20C%20and%20Steno%20D.pdf": {
+      "type": "RESULT",
+      "title": "Stenographer Grade 'C' and 'D' Examination, 2025: Declaration of First Round of Tentative Allocation (FRTA)",
+      "source": "ssc",
+      "seenAt": "2026-10-19T19:34:38.799Z",
+      "firstEmittedOn": "2026-10-19",
+      "lastEmittedOn": "2026-10-19",
+      "emitCount": 1
     }
   },
   "sources": {
@@ -357,13 +420,13 @@
       "lastError": null
     },
     "rrb": {
-      "consecutiveFailures": 43,
+      "consecutiveFailures": 44,
       "lastOkOn": null,
       "firstFailedOn": "2026-09-28",
       "lastError": "fetch failed for https://rrbcdg.gov.in/robots.txt: Connect Timeout Error (attempted address: rrbcdg.gov.in:443, timeout: 10000ms)"
     },
     "upsc": {
-      "consecutiveFailures": 43,
+      "consecutiveFailures": 44,
       "lastOkOn": null,
       "firstFailedOn": "2026-09-28",
       "lastError": "fetch failed for https://upsc.gov.in/robots.txt: Connect Timeout Error (attempted address: upsc.gov.in:443, timeout: 10000ms)"
@@ -375,30 +438,30 @@
       "lastError": null
     },
     "bpsc": {
-      "consecutiveFailures": 43,
+      "consecutiveFailures": 44,
       "lastOkOn": null,
       "firstFailedOn": "2026-09-28",
       "lastError": "fetch failed for https://bpsc.bihar.gov.in/robots.txt: unable to verify the first certificate; if the root CA is installed locally, try running Node.js with --use-system-ca"
     },
     "rpsc": {
-      "consecutiveFailures": 43,
+      "consecutiveFailures": 44,
       "lastOkOn": null,
       "firstFailedOn": "2026-09-28",
       "lastError": "fetch failed for https://rpsc.rajasthan.gov.in/robots.txt: fetch failed"
     },
     "mppsc": {
-      "consecutiveFailures": 43,
+      "consecutiveFailures": 44,
       "lastOkOn": null,
       "firstFailedOn": "2026-09-28",
       "lastError": "fetch failed for https://mppsc.mp.gov.in/robots.txt: Connect Timeout Error (attempted address: mppsc.mp.gov.in:443, timeout: 10000ms)"
     },
     "ukpsc": {
-      "consecutiveFailures": 43,
+      "consecutiveFailures": 44,
       "lastOkOn": null,
       "firstFailedOn": "2026-09-28",
       "lastError": "fetch failed for https://psc.uk.gov.in/robots.txt: Connect Timeout Error (attempted address: psc.uk.gov.in:443, timeout: 10000ms)"
     }
   },
   "zeroCandidateDays": 0,
-  "updatedAt": "2026-10-19T07:04:12.584Z"
+  "updatedAt": "2026-10-19T19:34:38.799Z"
 }
