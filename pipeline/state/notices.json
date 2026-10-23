@@ -4,17 +4,17 @@
     "https://sarkariresult.com.cm/latest-jobs/": {
       "etag": null,
       "lastModified": "Mon, 28 Sep 2026 10:34:38 GMT",
-      "checkedAt": "2026-10-23T06:38:17.074Z"
+      "checkedAt": "2026-10-23T17:59:13.654Z"
     },
     "https://ssc.gov.in/api/general-website/portal/notice-boards?page=1&limit=50&contentType=notice-boards&key=createdAt&order=DESC&isAttachment=true&language=english&attributes=id%2Cheadline%2CexamId%2CcontentType%2CredirectUrl%2CstartDate%2CendDate%2Clanguage%2CcreatedAt": {
-      "etag": "W/\"f073-cYfUvCWj2COVeRtb9yQ/0ElMzPk\"",
+      "etag": "W/\"18ae-23HmcSyuKGmV5c1PY7/YbFqfFkA\"",
       "lastModified": null,
-      "checkedAt": "2026-10-23T06:38:20.036Z"
+      "checkedAt": "2026-10-23T17:59:17.212Z"
     },
     "https://uppsc.up.nic.in/": {
       "etag": null,
       "lastModified": null,
-      "checkedAt": "2026-10-23T06:39:33.067Z"
+      "checkedAt": "2026-10-23T18:00:30.245Z"
     }
   },
   "notices": {
@@ -319,28 +319,28 @@
       "type": "RESULT",
       "title": "Medical Education Department U.P. (Allopathy)",
       "source": "uppsc",
-      "seenAt": "2026-10-23T06:40:54.295Z",
+      "seenAt": "2026-10-23T18:01:51.498Z",
       "firstEmittedOn": "2026-10-16",
       "lastEmittedOn": "2026-10-23",
-      "emitCount": 14
+      "emitCount": 15
     },
     "https://uppsc.up.nic.in/Open_PDF_DB.aspx?I4PnQ0tBagnr4uATu7lVSyJODCxSObFX": {
       "type": "RESULT",
       "title": "Uttar Pradesh Ayush (Ayurveda) Department, Read",
       "source": "uppsc",
-      "seenAt": "2026-10-23T06:40:54.295Z",
+      "seenAt": "2026-10-23T18:01:51.498Z",
       "firstEmittedOn": "2026-10-16",
       "lastEmittedOn": "2026-10-23",
-      "emitCount": 14
+      "emitCount": 15
     },
     "https://uppsc.up.nic.in/Open_PDF_DB.aspx?I4PnQ0tBagmbO3OUZentgoSSgw34Mkau": {
       "type": "RESULT",
       "title": "Uttar Pradesh Ayush (Ayurveda) Department, Pro",
       "source": "uppsc",
-      "seenAt": "2026-10-23T06:40:54.295Z",
+      "seenAt": "2026-10-23T18:01:51.498Z",
       "firstEmittedOn": "2026-10-17",
       "lastEmittedOn": "2026-10-23",
-      "emitCount": 12
+      "emitCount": 13
     },
     "https://ssc.gov.in/api/general-website/portal/Result_writeup_typing_09092026.pdf": {
       "type": "RESULT",
@@ -404,6 +404,15 @@
       "firstEmittedOn": "2026-10-19",
       "lastEmittedOn": "2026-10-23",
       "emitCount": 8
+    },
+    "https://ssc.gov.in/api/general-website/portal/writeup_23102026.pdf": {
+      "type": "RESULT",
+      "title": "Constable (GD) in Central Armed Police Forces (CAPFs) and SSF, and Rifleman (GD) in Assam Rifles Examination, 2026– Information regarding status of categories of shortlisted candidates",
+      "source": "ssc",
+      "seenAt": "2026-10-23T18:01:51.498Z",
+      "firstEmittedOn": "2026-10-23",
+      "lastEmittedOn": "2026-10-23",
+      "emitCount": 1
     }
   },
   "sources": {
@@ -420,13 +429,13 @@
       "lastError": null
     },
     "rrb": {
-      "consecutiveFailures": 51,
+      "consecutiveFailures": 52,
       "lastOkOn": null,
       "firstFailedOn": "2026-09-28",
       "lastError": "fetch failed for https://rrbcdg.gov.in/robots.txt: Connect Timeout Error (attempted address: rrbcdg.gov.in:443, timeout: 10000ms)"
     },
     "upsc": {
-      "consecutiveFailures": 51,
+      "consecutiveFailures": 52,
       "lastOkOn": null,
       "firstFailedOn": "2026-09-28",
       "lastError": "fetch failed for https://upsc.gov.in/robots.txt: Connect Timeout Error (attempted address: upsc.gov.in:443, timeout: 10000ms)"
@@ -438,30 +447,30 @@
       "lastError": null
     },
     "bpsc": {
-      "consecutiveFailures": 51,
+      "consecutiveFailures": 52,
       "lastOkOn": null,
       "firstFailedOn": "2026-09-28",
       "lastError": "fetch failed for https://bpsc.bihar.gov.in/robots.txt: unable to verify the first certificate; if the root CA is installed locally, try running Node.js with --use-system-ca"
     },
     "rpsc": {
-      "consecutiveFailures": 51,
+      "consecutiveFailures": 52,
       "lastOkOn": null,
       "firstFailedOn": "2026-09-28",
       "lastError": "fetch failed for https://rpsc.rajasthan.gov.in/robots.txt: fetch failed"
     },
     "mppsc": {
-      "consecutiveFailures": 51,
+      "consecutiveFailures": 52,
       "lastOkOn": null,
       "firstFailedOn": "2026-09-28",
       "lastError": "fetch failed for https://mppsc.mp.gov.in/robots.txt: Connect Timeout Error (attempted address: mppsc.mp.gov.in:443, timeout: 10000ms)"
     },
     "ukpsc": {
-      "consecutiveFailures": 51,
+      "consecutiveFailures": 52,
       "lastOkOn": null,
       "firstFailedOn": "2026-09-28",
       "lastError": "fetch failed for https://psc.uk.gov.in/robots.txt: Connect Timeout Error (attempted address: psc.uk.gov.in:443, timeout: 10000ms)"
     }
   },
   "zeroCandidateDays": 0,
-  "updatedAt": "2026-10-23T06:40:54.295Z"
+  "updatedAt": "2026-10-23T18:01:51.498Z"
 }
