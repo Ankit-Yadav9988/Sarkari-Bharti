@@ -2,9 +2,9 @@
   "version": 1,
   "requests": {
     "https://ssc.gov.in/api/general-website/portal/notice-boards?page=1&limit=50&contentType=notice-boards&key=createdAt&order=DESC&isAttachment=true&language=english&attributes=id%2Cheadline%2CexamId%2CcontentType%2CredirectUrl%2CstartDate%2CendDate%2Clanguage%2CcreatedAt": {
-      "etag": "W/\"192e-WgEG3D5AuJI+cmNh6voJYXOsB+4\"",
+      "etag": "W/\"1911-OdNtTDjZMf7ndD7rzPumv7HDhVY\"",
       "lastModified": null,
-      "checkedAt": "2026-10-29T06:17:53.548Z"
+      "checkedAt": "2026-10-30T06:17:54.917Z"
     },
     "https://ssc.gov.in/api/general-website/portal/notice_16092026.pdf": {
       "etag": null,
@@ -39,12 +39,12 @@
     "https://uppsc.up.nic.in/": {
       "etag": null,
       "lastModified": null,
-      "checkedAt": "2026-10-29T06:19:06.587Z"
+      "checkedAt": "2026-10-30T06:19:07.916Z"
     },
     "https://uppsc.up.nic.in/CandidatePages/Notifications.aspx": {
       "etag": null,
       "lastModified": null,
-      "checkedAt": "2026-10-29T06:33:31.879Z"
+      "checkedAt": "2026-10-30T06:32:36.328Z"
     },
     "https://uppsc.up.nic.in/PublicPages/Recruitment_Details.aspx?ID=IO": {
       "etag": null,
@@ -359,12 +359,12 @@
     "https://sarkariresult.com.cm/latest-jobs/": {
       "etag": null,
       "lastModified": "Sun, 20 Sep 2026 04:31:41 GMT",
-      "checkedAt": "2026-10-29T06:17:50.561Z"
+      "checkedAt": "2026-10-30T06:17:52.099Z"
     },
     "https://sarkariresult.com.cm/bpsc-school-teacher-tre-4-0-2026/": {
       "etag": null,
       "lastModified": "Sun, 20 Sep 2026 04:28:22 GMT",
-      "checkedAt": "2026-10-29T06:22:57.449Z"
+      "checkedAt": "2026-10-30T06:20:35.455Z"
     },
     "https://sarkariresult.com.cm/2026-mp-police-constable-sep26/": {
       "etag": null,
@@ -374,7 +374,7 @@
     "https://sarkariresult.com.cm/upessc-prt-assistant-teacher-2026/": {
       "etag": null,
       "lastModified": "Sun, 20 Sep 2026 04:34:52 GMT",
-      "checkedAt": "2026-10-29T06:21:46.388Z"
+      "checkedAt": "2026-10-30T06:20:44.778Z"
     },
     "https://sarkariresult.com.cm/up-pgt-teacher-2026/": {
       "etag": null,
@@ -559,7 +559,7 @@
     "https://sarkariresult.com.cm/up-anganwadi-bharti-2026/": {
       "etag": null,
       "lastModified": "Sun, 20 Sep 2026 05:02:20 GMT",
-      "checkedAt": "2026-10-29T06:24:45.282Z"
+      "checkedAt": "2026-10-30T06:23:16.921Z"
     },
     "https://upanganwadibharti.in/workernew/uploadOrder/ordercopy_1789130301_94035e97.pdf": {
       "etag": "\"b5805-65b345c135d6a\"",
@@ -754,97 +754,97 @@
     "https://sarkariresult.com.cm/upsssc-otr-2026/": {
       "etag": null,
       "lastModified": "Sun, 20 Sep 2026 06:03:46 GMT",
-      "checkedAt": "2026-10-29T06:26:55.609Z"
+      "checkedAt": "2026-10-30T06:25:52.211Z"
     },
     "https://sarkariresult.com.cm/rssb-support-engineer-recruitment-2025/": {
       "etag": null,
       "lastModified": "Sun, 20 Sep 2026 05:39:01 GMT",
-      "checkedAt": "2026-10-29T06:26:56.938Z"
+      "checkedAt": "2026-10-30T06:25:53.287Z"
     },
     "https://sarkariresult.com.cm/up-police-100000-new-bharti-2026/": {
       "etag": null,
       "lastModified": "Sun, 20 Sep 2026 05:10:14 GMT",
-      "checkedAt": "2026-10-29T06:27:34.108Z"
+      "checkedAt": "2026-10-30T06:26:30.614Z"
     },
     "https://sarkariresult.com.cm/mp-anganwadi-recruitment-2025/": {
       "etag": null,
       "lastModified": "Sun, 20 Sep 2026 06:04:26 GMT",
-      "checkedAt": "2026-10-29T06:27:35.446Z"
+      "checkedAt": "2026-10-30T06:26:31.473Z"
     },
     "https://sarkariresult.com.cm/bihar-shs-ayush-medical-officer-recruitment-2025-start/": {
       "etag": null,
       "lastModified": "Sun, 20 Sep 2026 04:56:49 GMT",
-      "checkedAt": "2026-10-29T06:27:37.448Z"
+      "checkedAt": "2026-10-30T06:26:33.740Z"
     },
     "https://sarkariresult.com.cm/mp-high-court-mphc-class-iv-recruitment-2025-start/": {
       "etag": null,
       "lastModified": "Sun, 20 Sep 2026 05:33:02 GMT",
-      "checkedAt": "2026-10-29T06:27:46.314Z"
+      "checkedAt": "2026-10-30T06:26:41.946Z"
     },
     "https://sarkariresult.com.cm/bssc-laboratory-assistant-recruitment-2025/": {
       "etag": null,
       "lastModified": "Sun, 20 Sep 2026 04:29:34 GMT",
-      "checkedAt": "2026-10-29T06:27:47.592Z"
+      "checkedAt": "2026-10-30T06:26:43.053Z"
     },
     "https://sarkariresult.com.cm/csir-iitr-junior-stenographer-recruitment-2025/": {
       "etag": null,
       "lastModified": "Sun, 20 Sep 2026 06:05:32 GMT",
-      "checkedAt": "2026-10-29T06:28:19.335Z"
+      "checkedAt": "2026-10-30T06:27:18.978Z"
     },
     "https://iitr.res.in/En/jsadv.pdf": {
       "etag": "\"54bff914ebfdb1:0\"",
       "lastModified": "Wed, 07 May 2025 12:50:09 GMT",
-      "checkedAt": "2026-10-29T06:28:22.074Z"
+      "checkedAt": "2026-10-30T06:27:21.617Z"
     },
     "https://sarkariresult.com.cm/army-102-tes-54-recruitment-2025/": {
       "etag": null,
       "lastModified": "Sun, 20 Sep 2026 04:27:32 GMT",
-      "checkedAt": "2026-10-29T06:28:25.074Z"
+      "checkedAt": "2026-10-30T06:27:24.972Z"
     },
     "https://sarkariresult.com.cm/uppsc-various-post-direct-recruitment-2025/": {
       "etag": null,
       "lastModified": "Sun, 20 Sep 2026 05:49:04 GMT",
-      "checkedAt": "2026-10-29T06:29:01.582Z"
+      "checkedAt": "2026-10-30T06:28:01.159Z"
     },
     "https://sarkariresult.com.cm/csir-nbri-lucknow-various-post-recruitment-2025/": {
       "etag": null,
       "lastModified": "Sun, 20 Sep 2026 06:06:17 GMT",
-      "checkedAt": "2026-10-29T06:29:02.879Z"
+      "checkedAt": "2026-10-30T06:28:01.897Z"
     },
     "https://sarkariresult.com.cm/kgmu-nursing-officer-recruitment-2025-start/": {
       "etag": null,
       "lastModified": "Sun, 20 Sep 2026 06:06:19 GMT",
-      "checkedAt": "2026-10-29T06:29:04.895Z"
+      "checkedAt": "2026-10-30T06:28:04.186Z"
     },
     "https://kgmu.edu.in/Notice23-04-2025.pdf": {
       "etag": null,
       "lastModified": "Fri, 25 Apr 2025 13:01:46 GMT",
-      "checkedAt": "2026-10-28T06:21:34.649Z"
+      "checkedAt": "2026-10-30T06:28:07.690Z"
     },
     "https://sarkariresult.com.cm/uiic-apprentice-recruitment-2025/": {
       "etag": null,
       "lastModified": "Sun, 20 Sep 2026 06:06:25 GMT",
-      "checkedAt": "2026-10-29T06:29:12.461Z"
+      "checkedAt": "2026-10-30T06:28:11.080Z"
     },
     "https://uiic.co.in/sites/default/files/uploads/recruitment/NOTIFICATION%20%20NORTH%20SIGNED.pdf": {
       "etag": null,
       "lastModified": null,
-      "checkedAt": "2026-10-29T06:29:19.369Z"
+      "checkedAt": "2026-10-30T06:28:17.701Z"
     },
     "https://sarkariresult.com.cm/bhu-junior-clerk-recruitment-2025-date-extend/": {
       "etag": null,
       "lastModified": "Sun, 20 Sep 2026 05:43:03 GMT",
-      "checkedAt": "2026-10-29T06:29:22.403Z"
+      "checkedAt": "2026-10-30T06:28:21.378Z"
     },
     "https://sarkariresult.com.cm/allahabad-university-teaching-recruitment-2025/": {
       "etag": null,
       "lastModified": "Sun, 20 Sep 2026 06:06:33 GMT",
-      "checkedAt": "2026-10-29T06:29:24.035Z"
+      "checkedAt": "2026-10-30T06:28:21.880Z"
     },
     "https://sarkariresult.com.cm/uksssc-assistant-accountant-and-other-post-recruitment-2025/": {
       "etag": null,
       "lastModified": "Sun, 20 Sep 2026 06:06:35 GMT",
-      "checkedAt": "2026-10-29T06:29:25.740Z"
+      "checkedAt": "2026-10-30T06:28:24.193Z"
     },
     "https://sarkariresult.com.cm/bihar-cet-b-ed-online-form-2025/": {
       "etag": null,
@@ -854,137 +854,137 @@
     "https://sarkariresult.com.cm/mppsc-food-safety-officer-fso-recruitment-2025/": {
       "etag": null,
       "lastModified": "Sun, 20 Sep 2026 06:06:39 GMT",
-      "checkedAt": "2026-10-29T06:29:27.747Z"
+      "checkedAt": "2026-10-30T06:28:26.184Z"
     },
     "https://sarkariresult.com.cm/up-police-jail-warder-recruitment-2025/": {
       "etag": null,
       "lastModified": "Sun, 20 Sep 2026 06:06:41 GMT",
-      "checkedAt": "2026-10-29T06:30:04.883Z"
+      "checkedAt": "2026-10-30T06:29:03.603Z"
     },
     "https://sarkariresult.com.cm/ncrtc-various-post-vacancy-cancelled-notice-2025/": {
       "etag": null,
       "lastModified": "Sun, 20 Sep 2026 06:06:43 GMT",
-      "checkedAt": "2026-10-29T06:30:06.222Z"
+      "checkedAt": "2026-10-30T06:29:04.687Z"
     },
     "https://sarkariresult.com.cm/uppsc-various-post-recruitment-2025/": {
       "etag": null,
       "lastModified": "Sun, 20 Sep 2026 06:06:45 GMT",
-      "checkedAt": "2026-10-29T06:30:08.208Z"
+      "checkedAt": "2026-10-30T06:29:06.691Z"
     },
     "https://sarkariresult.com.cm/allahabad-high-court-research-associates-recruitment-2025-start/": {
       "etag": null,
       "lastModified": "Sun, 20 Sep 2026 06:06:47 GMT",
-      "checkedAt": "2026-10-29T06:30:10.191Z"
+      "checkedAt": "2026-10-30T06:29:08.675Z"
     },
     "https://sarkariresult.com.cm/rail-wheel-factory-rwf-apprentices-online-form-2025/": {
       "etag": null,
       "lastModified": "Sun, 20 Sep 2026 05:20:57 GMT",
-      "checkedAt": "2026-10-29T06:30:12.224Z"
+      "checkedAt": "2026-10-30T06:29:10.688Z"
     },
     "https://sarkariresult.com.cm/upsc-assistant-professor-online-form-2025/": {
       "etag": null,
       "lastModified": "Sun, 20 Sep 2026 06:06:51 GMT",
-      "checkedAt": "2026-10-29T06:30:14.233Z"
+      "checkedAt": "2026-10-30T06:29:12.679Z"
     },
     "https://sarkariresult.com.cm/union-bank-of-india-apprentice-recruitment-2025-date-extend/": {
       "etag": null,
       "lastModified": "Sun, 20 Sep 2026 06:06:53 GMT",
-      "checkedAt": "2026-10-29T06:30:16.242Z"
+      "checkedAt": "2026-10-30T06:29:14.689Z"
     },
     "https://sarkariresult.com.cm/madhya-pradesh-mppsc-assistant-professor-recruitment-2025/": {
       "etag": null,
       "lastModified": "Sun, 20 Sep 2026 06:06:55 GMT",
-      "checkedAt": "2026-10-29T06:30:18.246Z"
+      "checkedAt": "2026-10-30T06:29:16.681Z"
     },
     "https://sarkariresult.com.cm/indian-overseas-bank-iob-apprentice-recruitment-2025/": {
       "etag": null,
       "lastModified": "Sun, 20 Sep 2026 06:06:57 GMT",
-      "checkedAt": "2026-10-29T06:30:20.257Z"
+      "checkedAt": "2026-10-30T06:29:18.682Z"
     },
     "https://sarkariresult.com.cm/iffco-apprentice-recruitment-2025-2/": {
       "etag": null,
       "lastModified": "Sun, 20 Sep 2026 06:06:59 GMT",
-      "checkedAt": "2026-10-29T06:30:22.196Z"
+      "checkedAt": "2026-10-30T06:29:20.675Z"
     },
     "https://sarkariresult.com.cm/secl-apprentice-recruitment-2025/": {
       "etag": null,
       "lastModified": "Sun, 20 Sep 2026 06:07:01 GMT",
-      "checkedAt": "2026-10-29T06:30:24.260Z"
+      "checkedAt": "2026-10-30T06:29:22.663Z"
     },
     "https://sarkariresult.com.cm/indian-army-ncc-special-entry-scheme-58th-course-recruitment-2025/": {
       "etag": null,
       "lastModified": "Sun, 20 Sep 2026 06:07:03 GMT",
-      "checkedAt": "2026-10-29T06:30:26.237Z"
+      "checkedAt": "2026-10-30T06:29:24.680Z"
     },
     "https://sarkariresult.com.cm/mp-rojgar-panjiyan-online-form-2025/": {
       "etag": null,
       "lastModified": "Sun, 20 Sep 2026 06:07:05 GMT",
-      "checkedAt": "2026-10-29T06:30:28.210Z"
+      "checkedAt": "2026-10-30T06:29:26.679Z"
     },
     "https://sarkariresult.com.cm/indian-navy-ssc-officer-january-recruitment-2025/": {
       "etag": null,
       "lastModified": "Sun, 20 Sep 2026 05:16:54 GMT",
-      "checkedAt": "2026-10-29T06:30:30.255Z"
+      "checkedAt": "2026-10-30T06:29:28.672Z"
     },
     "https://sarkariresult.com.cm/ntpc-assistant-executive-recruitment-2025/": {
       "etag": null,
       "lastModified": "Sun, 20 Sep 2026 04:58:49 GMT",
-      "checkedAt": "2026-10-29T06:30:32.227Z"
+      "checkedAt": "2026-10-30T06:29:30.701Z"
     },
     "https://sarkariresult.com.cm/up-aganwadi-recruitment-2024-apply-now/": {
       "etag": null,
       "lastModified": "Sun, 20 Sep 2026 06:01:29 GMT",
-      "checkedAt": "2026-10-29T06:30:34.252Z"
+      "checkedAt": "2026-10-30T06:29:32.757Z"
     },
     "https://www.upanganwadibharti.in/uploadOrder/ordercopy1737811417.pdf": {
       "etag": "\"12036c-62c87c0379e66\"",
       "lastModified": "Sat, 25 Jan 2025 13:23:37 GMT",
-      "checkedAt": "2026-10-29T06:30:37.881Z"
+      "checkedAt": "2026-10-30T06:29:36.098Z"
     },
     "https://sarkariresult.com.cm/csir-iict-junior-secretariat-assistant-recruitment-2025/": {
       "etag": null,
       "lastModified": "Sun, 20 Sep 2026 06:07:17 GMT",
-      "checkedAt": "2026-10-29T06:30:40.924Z"
+      "checkedAt": "2026-10-30T06:29:39.597Z"
     },
     "https://sarkariresult.com.cm/iocl-apprentice-recruitment-2025/": {
       "etag": null,
       "lastModified": "Sun, 20 Sep 2026 06:07:19 GMT",
-      "checkedAt": "2026-10-29T06:30:42.217Z"
+      "checkedAt": "2026-10-30T06:29:40.681Z"
     },
     "https://sarkariresult.com.cm/indian-air-force-airmen-group-y-recruitment-2025/": {
       "etag": null,
       "lastModified": "Sun, 20 Sep 2026 05:20:53 GMT",
-      "checkedAt": "2026-10-29T06:30:44.247Z"
+      "checkedAt": "2026-10-30T06:29:42.682Z"
     },
     "https://sarkariresult.com.cm/railway-rrc-ner-gorakhpur-apprentice-recruitment-2025/": {
       "etag": null,
       "lastModified": "Sun, 20 Sep 2026 06:07:57 GMT",
-      "checkedAt": "2026-10-29T06:31:21.365Z"
+      "checkedAt": "2026-10-30T06:30:20.062Z"
     },
     "https://sarkariresult.com.cm/mpesb-group-4-recruitment-2025/": {
       "etag": null,
       "lastModified": "Sun, 20 Sep 2026 05:51:03 GMT",
-      "checkedAt": "2026-10-29T06:31:22.703Z"
+      "checkedAt": "2026-10-30T06:30:20.855Z"
     },
     "https://sarkariresult.com.cm/bombay-high-court-clerk-recruitment-2025/": {
       "etag": null,
       "lastModified": "Sun, 20 Sep 2026 06:08:01 GMT",
-      "checkedAt": "2026-10-29T06:31:24.695Z"
+      "checkedAt": "2026-10-30T06:30:23.142Z"
     },
     "https://sarkariresult.com.cm/bhel-engineer-trainee-and-supervisor-trainee-recruitment-2025/": {
       "etag": null,
       "lastModified": "Sun, 20 Sep 2026 05:37:02 GMT",
-      "checkedAt": "2026-10-29T06:31:26.689Z"
+      "checkedAt": "2026-10-30T06:30:25.156Z"
     },
     "https://sarkariresult.com.cm/mazagon-dock-mdl-graduate-diploma-apprentice-recruitment-2025/": {
       "etag": null,
       "lastModified": "Sun, 20 Sep 2026 06:08:05 GMT",
-      "checkedAt": "2026-10-29T06:31:28.673Z"
+      "checkedAt": "2026-10-30T06:30:27.126Z"
     },
     "https://mazagondock.in/app/writereaddata/career/MDL_ATS_BOAT_Batch_2024_25_Rules_Regulations_AdvtNo_-_MDLATS-02-2024_15012025_115202534553PM.pdf": {
       "etag": "\"f8869753667db1:0\"",
       "lastModified": "Wed, 15 Jan 2025 10:15:53 GMT",
-      "checkedAt": "2026-10-29T06:31:32.912Z"
+      "checkedAt": "2026-10-30T06:30:31.026Z"
     },
     "https://www.upsc.gov.in/sites/default/files/Notif-CGSPE-2027-Engl-020926.pdf": {
       "etag": null,
@@ -999,17 +999,17 @@
     "https://sarkariresult.com.cm/ksssci-non-teaching-online-form-2024-apply-now/": {
       "etag": null,
       "lastModified": "Mon, 21 Sep 2026 05:36:00 GMT",
-      "checkedAt": "2026-10-29T06:31:35.947Z"
+      "checkedAt": "2026-10-30T06:30:34.419Z"
     },
     "https://sarkariresult.com.cm/rrb-ntpc-inter-level-07-2026/": {
       "etag": null,
       "lastModified": "Wed, 23 Sep 2026 05:05:17 GMT",
-      "checkedAt": "2026-10-29T06:22:50.646Z"
+      "checkedAt": "2026-10-30T06:20:32.340Z"
     },
     "https://sarkariresult.com.cm/rrb-ntpc-graduate-level-06-2026/": {
       "etag": null,
       "lastModified": "Wed, 23 Sep 2026 05:04:20 GMT",
-      "checkedAt": "2026-10-29T06:22:53.461Z"
+      "checkedAt": "2026-10-30T06:21:58.551Z"
     },
     "https://sarkariresult.com.cm/ntpc-assistant-officer-2026/": {
       "etag": null,
@@ -1039,12 +1039,12 @@
     "https://sarkariresult.com.cm/indian-army-ssc-tech-online-form-2025-start/": {
       "etag": null,
       "lastModified": "Wed, 23 Sep 2026 05:18:25 GMT",
-      "checkedAt": "2026-10-29T06:31:37.280Z"
+      "checkedAt": "2026-10-30T06:30:35.249Z"
     },
     "https://cbcindia.gov.in/cbc/public/uploads/client-request/English-10601-11-0013-2425-676d4d392cb52-1735216441-creatives.pdf": {
       "etag": "\"88fb4-62a2b8f92d0f0\"",
       "lastModified": "Thu, 26 Dec 2024 12:34:00 GMT",
-      "checkedAt": "2026-10-29T06:31:44.659Z"
+      "checkedAt": "2026-10-30T06:30:39.027Z"
     },
     "https://sarkariresult.com.cm/ibps-hindi-officer-sep26/": {
       "etag": null,
@@ -1099,12 +1099,12 @@
     "https://sarkariresult.com.cm/hdfc-bank-po-recruitment-2025/": {
       "etag": null,
       "lastModified": "Tue, 29 Sep 2026 06:17:41 GMT",
-      "checkedAt": "2026-10-29T06:31:46.770Z"
+      "checkedAt": "2026-10-30T06:30:42.446Z"
     },
     "https://sarkariresult.com.cm/telangana-high-court-recruitment-2025/": {
       "etag": null,
       "lastModified": "Tue, 29 Sep 2026 06:17:43 GMT",
-      "checkedAt": "2026-10-29T06:31:48.086Z"
+      "checkedAt": "2026-10-30T06:30:44.360Z"
     },
     "https://tshc.gov.in/documents/NORMAL_Recruitment_2025_01_02T17_49_56.pdf": {
       "etag": null,
@@ -1134,27 +1134,27 @@
     "https://sarkariresult.com.cm/central-bank-of-india-so-online-form-2025/": {
       "etag": null,
       "lastModified": "Wed, 30 Sep 2026 06:07:12 GMT",
-      "checkedAt": "2026-10-29T06:32:25.263Z"
+      "checkedAt": "2026-10-30T06:31:20.469Z"
     },
     "https://sarkariresult.com.cm/csir-crri-scientist-online-form-2024/": {
       "etag": null,
       "lastModified": "Wed, 30 Sep 2026 06:07:14 GMT",
-      "checkedAt": "2026-10-29T06:32:26.602Z"
+      "checkedAt": "2026-10-30T06:31:21.600Z"
     },
     "https://sarkariresult.com.cm/rsmssb-paramedical-staff-online-form-2025/": {
       "etag": null,
       "lastModified": "Thu, 01 Oct 2026 06:39:27 GMT",
-      "checkedAt": "2026-10-29T06:32:28.562Z"
+      "checkedAt": "2026-10-30T06:31:23.556Z"
     },
     "https://sarkariresult.com.cm/indian-navy-102-b-tech-cadet-entry-july-2025-online-form/": {
       "etag": null,
       "lastModified": "Thu, 01 Oct 2026 06:39:29 GMT",
-      "checkedAt": "2026-10-29T06:32:30.544Z"
+      "checkedAt": "2026-10-30T06:31:25.562Z"
     },
     "https://sarkariresult.com.cm/mahatransco-various-post-recruitment-2024/": {
       "etag": null,
       "lastModified": "Thu, 01 Oct 2026 06:39:31 GMT",
-      "checkedAt": "2026-10-29T06:32:32.566Z"
+      "checkedAt": "2026-10-30T06:31:27.581Z"
     },
     "https://sarkariresult.com.cm/mpesb-group-3-sub-engineer-2026/": {
       "etag": null,
@@ -1164,7 +1164,7 @@
     "https://sarkariresult.com.cm/rrc-nwr-apprentice-2026/": {
       "etag": null,
       "lastModified": "Thu, 01 Oct 2026 11:45:46 GMT",
-      "checkedAt": "2026-10-29T06:25:01.145Z"
+      "checkedAt": "2026-10-30T06:24:10.971Z"
     },
     "https://rrcjaipur.in/storeWebFiles/1005_12061494.PDF": {
       "etag": "\"d2a118c28151dd1:0\"",
@@ -1174,12 +1174,12 @@
     "https://sarkariresult.com.cm/upsssc-regional-youth-welfare-officer-2026/": {
       "etag": null,
       "lastModified": "Thu, 01 Oct 2026 11:44:07 GMT",
-      "checkedAt": "2026-10-29T06:25:46.549Z"
+      "checkedAt": "2026-10-30T06:24:48.787Z"
     },
     "https://sarkariresult.com.cm/delhi-district-court-various-post-2026/": {
       "etag": null,
       "lastModified": "Thu, 01 Oct 2026 11:45:23 GMT",
-      "checkedAt": "2026-10-29T06:26:38.371Z"
+      "checkedAt": "2026-10-30T06:25:41.276Z"
     },
     "https://sarkariresult.com.cm/supreme-court-junior-court-assistant-2026/": {
       "etag": null,
@@ -1194,7 +1194,7 @@
     "https://sarkariresult.com.cm/upsssc-sports-directorate-2026/": {
       "etag": null,
       "lastModified": "Thu, 01 Oct 2026 11:47:02 GMT",
-      "checkedAt": "2026-10-29T06:26:29.066Z"
+      "checkedAt": "2026-10-30T06:25:32.207Z"
     },
     "https://ssc.gov.in/api/general-website/portal/Notice_01102026.pdf": {
       "etag": null,
@@ -1214,47 +1214,47 @@
     "https://sarkariresult.com.cm/csjmu-kanpur-teaching-post-2026/": {
       "etag": null,
       "lastModified": "Tue, 06 Oct 2026 05:55:46 GMT",
-      "checkedAt": "2026-10-29T06:26:42.966Z"
+      "checkedAt": "2026-10-30T06:23:30.829Z"
     },
     "https://csjmu.ac.in/wp-content/uploads/docs/2026/09/980.-Advertisement-For-Teaching-post.pdf": {
       "etag": "\"3cd3aa-65c6178de807d\"",
       "lastModified": "Sat, 26 Sep 2026 11:52:49 GMT",
-      "checkedAt": "2026-10-29T06:26:46.632Z"
+      "checkedAt": "2026-10-30T06:23:33.451Z"
     },
     "https://sarkariresult.com.cm/iocl-wr-apprentice-2026/": {
       "etag": null,
       "lastModified": "Tue, 06 Oct 2026 05:55:46 GMT",
-      "checkedAt": "2026-10-29T06:26:49.596Z"
+      "checkedAt": "2026-10-30T06:25:45.287Z"
     },
     "https://iocl.com/admin/img/Apprenticeships/Files/9a19f255f8db433b8e3b10a3bced73e1.pdf": {
       "etag": "\"1dd541f0b3e3dce\"",
       "lastModified": "Sun, 04 Oct 2026 16:40:20 GMT",
-      "checkedAt": "2026-10-29T06:26:52.386Z"
+      "checkedAt": "2026-10-30T06:25:48.560Z"
     },
     "https://sarkariresult.com.cm/railway-rrc-nwr-apprentice-recruitment-2024/": {
       "etag": null,
       "lastModified": "Tue, 06 Oct 2026 07:00:00 GMT",
-      "checkedAt": "2026-10-29T06:32:34.542Z"
+      "checkedAt": "2026-10-30T06:31:29.586Z"
     },
     "https://sssc.uk.gov.in/files/addpolice.pdf": {
       "etag": null,
       "lastModified": null,
-      "checkedAt": "2026-10-29T06:32:38.249Z"
+      "checkedAt": "2026-10-30T06:31:33.098Z"
     },
     "https://sarkariresult.com.cm/national-bank-ncbl-clerk-recruitment-2024/": {
       "etag": null,
       "lastModified": "Tue, 06 Oct 2026 07:00:06 GMT",
-      "checkedAt": "2026-10-29T06:32:41.206Z"
+      "checkedAt": "2026-10-30T06:31:36.486Z"
     },
     "https://sarkariresult.com.cm/cuh-haryana-non-teaching-online-form-2024/": {
       "etag": null,
       "lastModified": "Tue, 06 Oct 2026 06:23:24 GMT",
-      "checkedAt": "2026-10-29T06:32:42.554Z"
+      "checkedAt": "2026-10-30T06:31:37.272Z"
     },
     "https://sarkariresult.com.cm/cgpsc-state-service-exam-sse-recruitment-2024/": {
       "etag": null,
       "lastModified": "Tue, 06 Oct 2026 05:53:31 GMT",
-      "checkedAt": "2026-10-29T06:32:44.567Z"
+      "checkedAt": "2026-10-30T06:31:39.587Z"
     },
     "https://sarkariresult.com.cm/indian-coast-guard-cgept-01-2027-02-2027/": {
       "etag": null,
@@ -1264,7 +1264,7 @@
     "https://sarkariresult.com.cm/indian-army-tes-57th-2026/": {
       "etag": null,
       "lastModified": "Wed, 07 Oct 2026 06:24:43 GMT",
-      "checkedAt": "2026-10-29T06:25:51.866Z"
+      "checkedAt": "2026-10-30T06:24:54.791Z"
     },
     "https://sarkariresult.com.cm/mp-high-court-stenographer-assistant-2026/": {
       "etag": null,
@@ -1289,12 +1289,12 @@
     "https://sarkariresult.com.cm/hp-high-court-shimla-various-post-online-form-2024/": {
       "etag": null,
       "lastModified": "Thu, 08 Oct 2026 06:47:31 GMT",
-      "checkedAt": "2026-10-29T06:33:22.482Z"
+      "checkedAt": "2026-10-30T06:32:16.635Z"
     },
     "https://sarkariresult.com.cm/central-bank-of-india-specialist-officer-so-recruitment-2024/": {
       "etag": null,
       "lastModified": "Thu, 08 Oct 2026 06:47:33 GMT",
-      "checkedAt": "2026-10-12T06:38:45.078Z"
+      "checkedAt": "2026-10-30T06:32:18.072Z"
     },
     "https://sarkariresult.com.cm/nicl-ao-2026/": {
       "etag": null,
@@ -1304,17 +1304,17 @@
     "https://ssc.gov.in/api/general-website/portal/JE_Tentative_Vacancy_08102026.pdf": {
       "etag": null,
       "lastModified": null,
-      "checkedAt": "2026-10-29T06:33:28.750Z"
+      "checkedAt": "2026-10-30T06:32:33.282Z"
     },
     "https://sarkariresult.com.cm/dsssb-sweeper-chowkidar-2026/": {
       "etag": null,
       "lastModified": "Sun, 11 Oct 2026 05:53:07 GMT",
-      "checkedAt": "2026-10-29T06:25:14.997Z"
+      "checkedAt": "2026-10-30T06:24:26.362Z"
     },
     "https://sarkariresult.com.cm/rajasthan-safai-karamchari-recruitment-2024/": {
       "etag": null,
       "lastModified": "Mon, 12 Oct 2026 05:07:18 GMT",
-      "checkedAt": "2026-10-12T06:38:46.703Z"
+      "checkedAt": "2026-10-30T06:32:19.784Z"
     },
     "https://lsg.urban.rajasthan.gov.in/content/dam/raj/udh/lsgs/lsg-jaipur/Order/Order2024/November/rajkaj_1732121801548.pdf": {
       "etag": null,
@@ -1334,12 +1334,12 @@
     "https://sarkariresult.com.cm/upsssc-junior-engineer-je-mechanical-2026/": {
       "etag": null,
       "lastModified": "Tue, 13 Oct 2026 06:01:29 GMT",
-      "checkedAt": "2026-10-29T06:26:36.388Z"
+      "checkedAt": "2026-10-30T06:25:39.288Z"
     },
     "https://sarkariresult.com.cm/upsssc-junior-engineer-je-electrical-2026/": {
       "etag": null,
       "lastModified": "Tue, 13 Oct 2026 06:35:56 GMT",
-      "checkedAt": "2026-10-29T06:26:30.417Z"
+      "checkedAt": "2026-10-30T06:25:32.977Z"
     },
     "https://upanganwadibharti.in/helper-v2/uploadOrder/ordercopy1791369946.pdf": {
       "etag": "\"54b49-65d3dd1574e02\"",
@@ -1349,42 +1349,42 @@
     "https://sarkariresult.com.cm/supreme-court-spa-2026/": {
       "etag": null,
       "lastModified": "Wed, 14 Oct 2026 05:05:15 GMT",
-      "checkedAt": "2026-10-29T06:25:31.002Z"
+      "checkedAt": "2026-10-30T06:24:43.566Z"
     },
     "https://cdnbbsr.s3waas.gov.in/s3ec0490f1f4972d133619a60c30f3559e/uploads/2026/10/2026101325.pdf": {
       "etag": "\"30bfe79cde3c25907bf172be8c1c3e9e\"",
       "lastModified": "Tue, 13 Oct 2026 05:47:33 GMT",
-      "checkedAt": "2026-10-29T06:25:32.500Z"
+      "checkedAt": "2026-10-30T06:24:44.335Z"
     },
     "https://sarkariresult.com.cm/supreme-court-assistant-2026/": {
       "etag": null,
       "lastModified": "Wed, 14 Oct 2026 10:03:45 GMT",
-      "checkedAt": "2026-10-29T06:26:32.364Z"
+      "checkedAt": "2026-10-30T06:25:35.289Z"
     },
     "https://cdnbbsr.s3waas.gov.in/s3ec0490f1f4972d133619a60c30f3559e/uploads/2026/10/2026101374-1.pdf": {
       "etag": "\"ef0bc4d173f71d96bc4d463057e9007c\"",
       "lastModified": "Tue, 13 Oct 2026 10:53:50 GMT",
-      "checkedAt": "2026-10-29T06:26:34.083Z"
+      "checkedAt": "2026-10-30T06:25:36.638Z"
     },
     "https://sarkariresult.com.cm/upsssc-inter-12th-level-2026/": {
       "etag": null,
       "lastModified": "Fri, 16 Oct 2026 11:48:30 GMT",
-      "checkedAt": "2026-10-29T06:22:55.436Z"
+      "checkedAt": "2026-10-30T06:22:00.975Z"
     },
     "https://sarkariresult.com.cm/supreme-court-junior-court-attendant-2026/": {
       "etag": null,
       "lastModified": "Fri, 16 Oct 2026 11:31:50 GMT",
-      "checkedAt": "2026-10-29T06:25:47.873Z"
+      "checkedAt": "2026-10-30T06:24:50.789Z"
     },
     "https://cdnbbsr.s3waas.gov.in/s3ec0490f1f4972d133619a60c30f3559e/uploads/2026/10/2026101560.pdf": {
       "etag": "\"49557d0d02c3475a7d3d13c20e8dc659\"",
       "lastModified": "Thu, 15 Oct 2026 12:47:57 GMT",
-      "checkedAt": "2026-10-29T06:25:49.317Z"
+      "checkedAt": "2026-10-30T06:24:52.103Z"
     },
     "https://sarkariresult.com.cm/cwc-assistant-manager-junior-executive-2026/": {
       "etag": null,
       "lastModified": "Sun, 18 Oct 2026 04:44:23 GMT",
-      "checkedAt": "2026-10-29T06:25:34.930Z"
+      "checkedAt": "2026-10-30T06:24:46.784Z"
     },
     "https://sarkariresult.com.cm/sib-junior-officer-operations-2026/": {
       "etag": null,
@@ -1399,7 +1399,7 @@
     "https://sarkariresult.com.cm/bihar-bssc-field-assistant-pre-result-2026/": {
       "etag": null,
       "lastModified": "Sun, 18 Oct 2026 04:44:25 GMT",
-      "checkedAt": "2026-10-29T06:25:36.954Z"
+      "checkedAt": "2026-10-30T06:23:22.613Z"
     },
     "https://ssc.gov.in/api/general-website/portal/Final_Vacancies_08092026.pdf": {
       "etag": null,
@@ -1589,92 +1589,92 @@
     "https://upanganwadibharti.in/workernew/uploadOrder/ordercopy_1791979147_52412659.pdf": {
       "etag": "\"11a8c0-65dcba8861f34\"",
       "lastModified": "Wed, 14 Oct 2026 11:59:07 GMT",
-      "checkedAt": "2026-10-29T06:24:48.142Z"
+      "checkedAt": "2026-10-30T06:23:19.090Z"
     },
     "https://sarkariresult.com.cm/rrb-isolated-categories-2026/": {
       "etag": null,
       "lastModified": "Wed, 21 Oct 2026 11:18:05 GMT",
-      "checkedAt": "2026-10-29T06:25:22.970Z"
+      "checkedAt": "2026-10-30T06:24:35.526Z"
     },
     "https://rrcjaipur.in/storeWebFiles/1008_11718187.PDF": {
       "etag": "\"5c73b0233a61dd1:0\"",
       "lastModified": "Wed, 21 Oct 2026 08:57:02 GMT",
-      "checkedAt": "2026-10-29T06:25:04.170Z"
+      "checkedAt": "2026-10-30T06:24:14.619Z"
     },
     "https://sarkariresult.com.cm/isro-sdsc-shar-various-post-2026/": {
       "etag": null,
       "lastModified": "Wed, 21 Oct 2026 12:23:47 GMT",
-      "checkedAt": "2026-10-29T06:25:24.933Z"
+      "checkedAt": "2026-10-30T06:24:36.048Z"
     },
     "https://apps.shar.gov.in/Recruitment/css/images/Advt03_2026.pdf": {
       "etag": "W/\"978469-1792149684000\"",
       "lastModified": "Fri, 16 Oct 2026 11:21:24 GMT",
-      "checkedAt": "2026-10-29T06:25:28.596Z"
+      "checkedAt": "2026-10-30T06:24:41.049Z"
     },
     "https://sarkariresult.com.cm/railway-rrb-station-master-2026/": {
       "etag": null,
       "lastModified": "Wed, 21 Oct 2026 11:17:38 GMT",
-      "checkedAt": "2026-10-29T06:21:45.058Z"
+      "checkedAt": "2026-10-30T06:20:33.452Z"
     },
     "https://sarkariresult.com.cm/supreme-court-sci-court-master-2026/": {
       "etag": null,
       "lastModified": "Wed, 21 Oct 2026 11:17:46 GMT",
-      "checkedAt": "2026-10-29T06:24:51.144Z"
+      "checkedAt": "2026-10-30T06:24:00.960Z"
     },
     "https://cdnbbsr.s3waas.gov.in/s3ec0490f1f4972d133619a60c30f3559e/uploads/2026/10/2026101664.pdf": {
       "etag": "\"15d7a68b7923879918c4c86ed7466fc1\"",
       "lastModified": "Fri, 16 Oct 2026 06:39:38 GMT",
-      "checkedAt": "2026-10-29T06:24:52.299Z"
+      "checkedAt": "2026-10-30T06:24:02.367Z"
     },
     "https://sarkariresult.com.cm/bhel-artisan-various-trade-post-2026/": {
       "etag": null,
       "lastModified": "Fri, 23 Oct 2026 05:08:18 GMT",
-      "checkedAt": "2026-10-29T06:25:06.507Z"
+      "checkedAt": "2026-10-30T06:24:16.960Z"
     },
     "https://sarkariresult.com.cm/upessc-up-tgt-2026/": {
       "etag": null,
       "lastModified": "Fri, 23 Oct 2026 16:28:26 GMT",
-      "checkedAt": "2026-10-29T06:22:12.995Z"
+      "checkedAt": "2026-10-30T06:21:21.227Z"
     },
     "https://sarkariresult.com.cm/upessc-up-headmaster-2026/": {
       "etag": null,
       "lastModified": "Fri, 23 Oct 2026 16:24:29 GMT",
-      "checkedAt": "2026-10-29T06:24:02.669Z"
+      "checkedAt": "2026-10-30T06:22:40.346Z"
     },
     "https://sarkariresult.com.cm/upessc-up-principal-inter-level-2026/": {
       "etag": null,
       "lastModified": "Fri, 23 Oct 2026 16:16:57 GMT",
-      "checkedAt": "2026-10-29T06:23:25.564Z"
+      "checkedAt": "2026-10-30T06:22:02.985Z"
     },
     "https://ssc.gov.in/api/general-website/portal/JE_2026_City_Live_Notice_23102026.pdf": {
       "etag": null,
       "lastModified": null,
-      "checkedAt": "2026-10-29T06:33:24.750Z"
+      "checkedAt": "2026-10-30T06:32:29.286Z"
     },
     "https://sarkariresult.com.cm/nta-jee-mains-session-i-2027/": {
       "etag": null,
       "lastModified": "Sun, 25 Oct 2026 02:02:56 GMT",
-      "checkedAt": "2026-10-29T06:23:17.081Z"
+      "checkedAt": "2026-10-30T06:23:45.572Z"
     },
     "https://cdnbbsr.s3waas.gov.in/s3f8e59f4b2fe7c5705bf878bbd494ccdf/uploads/2026/10/202610241890224107.pdf": {
       "etag": "\"d83aef4122f47594b6b88c3a3a5fff66\"",
       "lastModified": "Sat, 24 Oct 2026 16:23:19 GMT",
-      "checkedAt": "2026-10-29T06:23:22.948Z"
+      "checkedAt": "2026-10-30T06:23:52.350Z"
     },
     "https://sarkariresult.com.cm/lic-hfl-apprentice-2026/": {
       "etag": null,
       "lastModified": "Sat, 24 Oct 2026 07:12:18 GMT",
-      "checkedAt": "2026-10-29T06:24:54.467Z"
+      "checkedAt": "2026-10-30T06:24:04.957Z"
     },
     "https://cdn.lichousing.com/2026/10/Apprentecis-Advertisement-Notification-Batch-10.pdf": {
       "etag": "\"9564005e8f03b070ef385b2dc9ac3025\"",
       "lastModified": "Tue, 20 Oct 2026 09:22:54 GMT",
-      "checkedAt": "2026-10-29T06:24:59.010Z"
+      "checkedAt": "2026-10-30T06:24:09.568Z"
     },
     "https://ssc.gov.in/api/general-website/portal/tentative_vacancies_24102026.pdf": {
       "etag": null,
       "lastModified": null,
-      "checkedAt": "2026-10-29T06:33:26.746Z"
+      "checkedAt": "2026-10-30T06:32:31.284Z"
     },
     "https://sarkariresult.com.cm/uppsc-ro-aro-2026-2/": {
       "etag": null,
@@ -1684,37 +1684,37 @@
     "https://sarkariresult.com.cm/uppsc-ro-aro-oct26/": {
       "etag": null,
       "lastModified": "Tue, 27 Oct 2026 05:25:44 GMT",
-      "checkedAt": "2026-10-29T06:22:51.235Z"
+      "checkedAt": "2026-10-30T06:21:57.843Z"
     },
     "https://sarkariresult.com.cm/isro-ursc-various-post-2026/": {
       "etag": null,
       "lastModified": "Tue, 27 Oct 2026 05:24:44 GMT",
-      "checkedAt": "2026-10-29T06:24:39.133Z"
+      "checkedAt": "2026-10-30T06:23:54.948Z"
     },
     "https://www.isro.gov.in/media_isro/pdf/recruitmentNotice/2026/Oct/URSClAdvt2410_24102026.pdf": {
       "etag": null,
       "lastModified": "Fri, 23 Oct 2026 13:05:03 GMT",
-      "checkedAt": "2026-10-29T06:24:42.424Z"
+      "checkedAt": "2026-10-30T06:23:58.625Z"
     },
     "https://ssc.gov.in/api/general-website/portal/Important%20notice_revised_dated_26_10_2026.pdf": {
       "etag": null,
       "lastModified": null,
-      "checkedAt": "2026-10-29T06:33:23.782Z"
+      "checkedAt": "2026-10-30T06:32:28.287Z"
     },
     "https://sarkariresult.com.cm/bihar-bpsc-auditor-2026/": {
       "etag": null,
       "lastModified": "Thu, 29 Oct 2026 06:23:05 GMT",
-      "checkedAt": "2026-10-29T06:23:05.564Z"
+      "checkedAt": "2026-10-30T06:23:36.842Z"
     },
     "https://dsssb.delhi.gov.in/sites/default/files/DSSSB/circulars-orders/final_advt_05_2026_1.pdf": {
       "etag": "\"b8230-65d66a441f3e4\"",
       "lastModified": "Fri, 09 Oct 2026 11:28:04 GMT",
-      "checkedAt": "2026-10-29T06:25:20.616Z"
+      "checkedAt": "2026-10-30T06:24:31.942Z"
     },
     "https://dsssb.delhi.gov.in/sites/default/files/DSSSB/circulars-orders/final_adv_1.pdf": {
       "etag": "\"cad5e-65cb3145f5925\"",
       "lastModified": "Wed, 30 Sep 2026 13:14:30 GMT",
-      "checkedAt": "2026-10-29T06:26:40.816Z"
+      "checkedAt": "2026-10-30T06:25:43.468Z"
     }
   },
   "candidates": {
@@ -1732,10 +1732,10 @@
       "source": "uppsc"
     },
     "https://uppsc.up.nic.in/CandidatePages/Notifications.aspx": {
-      "hash": "938919135f556ca44b268cce98fe3e60acf21914a351c5856047806d1429ee5f",
+      "hash": "65ca531027f83e006aeca3942e17cc9180e23996da021263393cdf21872f176f",
       "status": "processed",
       "extractorVersion": 4,
-      "seenAt": "2026-10-29T06:33:32.436Z",
+      "seenAt": "2026-10-30T06:32:36.874Z",
       "source": "uppsc",
       "row": {
         "postName": null,
@@ -1840,8 +1840,8 @@
         "verificationStatus": "PENDING_MANUAL"
       },
       "firstEmittedOn": "2026-10-29",
-      "lastEmittedOn": "2026-10-29",
-      "emitCount": 1
+      "lastEmittedOn": "2026-10-30",
+      "emitCount": 2
     },
     "https://uppsc.up.nic.in/PublicPages/Recruitment_Details.aspx?ID=IO": {
       "hash": "73a0c5ce3ebf76bc2733519c7a0104cb1944ab471a6202cbb5f53a464fd2ce4a",
@@ -2198,10 +2198,10 @@
       "source": "uppsc"
     },
     "https://sarkariresult.com.cm/bpsc-school-teacher-tre-4-0-2026/": {
-      "hash": "eb4b561cb28fa5ddbebab77a3b05f74de60dc7897e78082fc0f2a833bc9b2f2f",
+      "hash": "35653ec5e16db1d6d174f5dde3926df008dc72d9501737aabd984eda7c668853",
       "status": "processed",
       "extractorVersion": 4,
-      "seenAt": "2026-10-29T06:23:05.216Z",
+      "seenAt": "2026-10-30T06:20:43.281Z",
       "source": "sarkariresult",
       "row": {
         "postName": "BPSC School Teacher TRE 4.0 Online Form 2026 (33,320 Posts)",
@@ -2442,10 +2442,10 @@
       }
     },
     "https://sarkariresult.com.cm/upessc-prt-assistant-teacher-2026/": {
-      "hash": "56a3f612491c1c3355b3e074d686f15fe733d23a960e41e7748a5075aa03aea4",
+      "hash": "04b22d83a58563e96576a9722181881f9fd6b05a9acf86e038a2964bd4d93104",
       "status": "processed",
       "extractorVersion": 4,
-      "seenAt": "2026-10-29T06:22:12.506Z",
+      "seenAt": "2026-10-30T06:21:19.757Z",
       "source": "sarkariresult",
       "row": {
         "postName": "UPESSC PRT Assistant Teacher Online Form 2026 (12405 Posts) – Date Extend",
@@ -5870,14 +5870,14 @@
       "emitCount": 1
     },
     "https://sarkariresult.com.cm/up-anganwadi-bharti-2026/": {
-      "hash": "aba347b553e57230133faf7ee4287d784b326d70c7eefb00a2bf800ff81c8336",
+      "hash": "66513adcfdbd0e78436c5d13ac2c29674e910f8564c538a262492d72984cf81a",
       "status": "processed",
       "extractorVersion": 4,
-      "seenAt": "2026-10-29T06:24:48.157Z",
+      "seenAt": "2026-10-30T06:23:19.172Z",
       "source": "sarkariresult",
       "row": {
         "postName": "UP Anganwadi Bharti Online Form 2026 (Updated)",
-        "organization": "Last Date Today MPESB",
+        "organization": "Organization to verify",
         "category": "STATE_GOVT",
         "listingSection": "AUTO",
         "state": "Uttar Pradesh",
@@ -8891,10 +8891,10 @@
       }
     },
     "https://sarkariresult.com.cm/upsssc-otr-2026/": {
-      "hash": "2939e6d1dcc139eb9374921dbe7700a5782d7e5c5936130c2a2e9e1306d619d6",
+      "hash": "3a643b7665fc5e27a2ffa7dc539d70ed8b6184a2098b02d0e375bf68ec458b45",
       "status": "processed",
       "extractorVersion": 4,
-      "seenAt": "2026-10-29T06:26:55.614Z",
+      "seenAt": "2026-10-30T06:25:52.218Z",
       "source": "sarkariresult",
       "row": {
         "postName": "UPSSSC OTR One Time Registration Online Form 2026",
@@ -9013,10 +9013,10 @@
       }
     },
     "https://sarkariresult.com.cm/rssb-support-engineer-recruitment-2025/": {
-      "hash": "3104dcb89c941c5578584609c4577a41c59c7ee1665f5d9ce58adefc7349c1fe",
+      "hash": "f4d61ad1473cf6286b2b27411e77bda112f357156512686c755b19e5a2c13b09",
       "status": "processed",
       "extractorVersion": 4,
-      "seenAt": "2026-10-29T06:27:32.846Z",
+      "seenAt": "2026-10-30T06:26:29.044Z",
       "source": "sarkariresult",
       "row": {
         "postName": "RSSB Support Engineer Online Form 2025 (1050 Posts)",
@@ -9139,14 +9139,14 @@
       }
     },
     "https://sarkariresult.com.cm/up-police-100000-new-bharti-2026/": {
-      "hash": "8bbc24eb5b2ecf0a82f588ca61f04ba6cf7bcc3a2c2fdab524b50c57ae5ccb5c",
+      "hash": "2768bbdfe1e90052917a5ca3a69c921a75b603280e0db18e89077a9d9cf717b2",
       "status": "processed",
       "extractorVersion": 4,
-      "seenAt": "2026-10-29T06:27:34.113Z",
+      "seenAt": "2026-10-30T06:26:30.621Z",
       "source": "sarkariresult",
       "row": {
         "postName": "यूपी पुलिस में होगी 1 लाख नई भर्तियां, छात्रों को मिलेगा मौका",
-        "organization": "Last Date Today MPESB",
+        "organization": "Organization to verify",
         "category": "CENTRAL_GOVT",
         "listingSection": "AUTO",
         "state": null,
@@ -9252,10 +9252,10 @@
       "emitCount": 5
     },
     "https://sarkariresult.com.cm/mp-anganwadi-recruitment-2025/": {
-      "hash": "ba3242b77222af43794c9bbae51865a2a89923db57c36a01726cd824164fcf4c",
+      "hash": "6bdf809b4168a733179c82b4b6b8250e2eb69bc9f784f194c526974e191c51b0",
       "status": "processed",
       "extractorVersion": 4,
-      "seenAt": "2026-10-29T06:27:35.451Z",
+      "seenAt": "2026-10-30T06:26:31.760Z",
       "source": "sarkariresult",
       "row": {
         "postName": "MP Anganwadi Online Form 2025",
@@ -9379,14 +9379,14 @@
       }
     },
     "https://sarkariresult.com.cm/bihar-shs-ayush-medical-officer-recruitment-2025-start/": {
-      "hash": "d3ff973fd40f735f67ca3ac16e29703329915430cd1083edb20b561998b58fd4",
+      "hash": "cea5981927879003baa27b61d325bf53481ebc05106ac30492754590179ed534",
       "status": "processed",
       "extractorVersion": 4,
-      "seenAt": "2026-10-29T06:27:45.024Z",
+      "seenAt": "2026-10-30T06:26:40.347Z",
       "source": "sarkariresult",
       "row": {
         "postName": "Bihar SHS Ayush Medical Officer Online Form 2025",
-        "organization": "Last Date Today MPESB",
+        "organization": "Organization to verify",
         "category": "STATE_GOVT",
         "listingSection": "AUTO",
         "state": "Bihar",
@@ -9499,10 +9499,10 @@
       }
     },
     "https://sarkariresult.com.cm/mp-high-court-mphc-class-iv-recruitment-2025-start/": {
-      "hash": "9bf0c62b6e55575d7161dcdd4151662765014997a1dc8063cb7723fd3a521ec3",
+      "hash": "80866ffdef33c513925a90c297a03702699e27b3ae1998fbac23f49380e46780",
       "status": "processed",
       "extractorVersion": 4,
-      "seenAt": "2026-10-29T06:27:46.320Z",
+      "seenAt": "2026-10-30T06:26:41.952Z",
       "source": "sarkariresult",
       "row": {
         "postName": "MP High Court Class IV Online Form 2025 – Start",
@@ -9624,10 +9624,10 @@
       "emitCount": 1
     },
     "https://sarkariresult.com.cm/bssc-laboratory-assistant-recruitment-2025/": {
-      "hash": "a7c7bd2a2f17facc7d82f3c9ab7f509c26ecc2b222fd5eacf9c426278cf19a2b",
+      "hash": "fc90f7d23d7c96aa5e5ac49da2280f4231d29be2f2d03ba14a6a3da630d9ca0d",
       "status": "processed",
       "extractorVersion": 4,
-      "seenAt": "2026-10-29T06:28:17.818Z",
+      "seenAt": "2026-10-30T06:27:17.391Z",
       "source": "sarkariresult",
       "row": {
         "postName": "BSSC Laboratory Assistant Online Form 2025",
@@ -9745,10 +9745,10 @@
       }
     },
     "https://sarkariresult.com.cm/csir-iitr-junior-stenographer-recruitment-2025/": {
-      "hash": "22198a6c9ec29690ae318d25a4b9004989a4f944b74c70e95d8f2cf308050214",
+      "hash": "2092f062d27826bc17756b08d20270b6eb5ff648a92cafd076020286c874aa90",
       "status": "processed",
       "extractorVersion": 4,
-      "seenAt": "2026-10-29T06:28:22.123Z",
+      "seenAt": "2026-10-30T06:27:21.690Z",
       "source": "sarkariresult",
       "row": {
         "postName": "CSIR IITR Junior Stenographer Online Form 2025",
@@ -9876,10 +9876,10 @@
       }
     },
     "https://sarkariresult.com.cm/army-102-tes-54-recruitment-2025/": {
-      "hash": "9ee48b20a542db4b31dec4bcf0e1354fe01d6da545b51edfa5a7a988827df4ed",
+      "hash": "d16044b866cbcfe82994a348c29a32b585e82cc9c594fa9f63bc9e15dbdf36d4",
       "status": "processed",
       "extractorVersion": 4,
-      "seenAt": "2026-10-29T06:29:00.296Z",
+      "seenAt": "2026-10-30T06:27:59.449Z",
       "source": "sarkariresult",
       "row": {
         "postName": "Army 10+2 TES 54 Online Form 2025 – Start",
@@ -9989,10 +9989,10 @@
       }
     },
     "https://sarkariresult.com.cm/uppsc-various-post-direct-recruitment-2025/": {
-      "hash": "e0df477d68a9fb319d2e57cd8e20063db186480d9c9906ee89b61b416676c1a3",
+      "hash": "a7f504a75dc581396d7a84c156421c7c52d0f7d6066fc3493f0821ee24e1053e",
       "status": "processed",
       "extractorVersion": 4,
-      "seenAt": "2026-10-29T06:29:01.587Z",
+      "seenAt": "2026-10-30T06:28:01.166Z",
       "source": "sarkariresult",
       "row": {
         "postName": "UPPSC Various Post Direct Online Form 2025",
@@ -10115,10 +10115,10 @@
       }
     },
     "https://sarkariresult.com.cm/csir-nbri-lucknow-various-post-recruitment-2025/": {
-      "hash": "2ff32988cba35ce40529fcd639a8e776c527ae925ea315bf4d9e270b94545b46",
+      "hash": "273c7fca744cd05aa3bd89ca663beef4bfaf9eae16879676780d9b687e5bd951",
       "status": "processed",
       "extractorVersion": 4,
-      "seenAt": "2026-10-29T06:29:02.883Z",
+      "seenAt": "2026-10-30T06:28:02.195Z",
       "source": "sarkariresult",
       "row": {
         "postName": "CSIR NBRI Lucknow Various Post Online Form 2025",
@@ -10248,10 +10248,10 @@
       }
     },
     "https://sarkariresult.com.cm/kgmu-nursing-officer-recruitment-2025-start/": {
-      "hash": "528c0e9d1c4fce8c102214c0c05a00f3fe57faf2321f263b6939267ba7d72b8b",
+      "hash": "7a15da2d54d1622d008eedba663242535c40cce777acb611d891eb71a83352f7",
       "status": "processed",
       "extractorVersion": 4,
-      "seenAt": "2026-10-29T06:29:11.154Z",
+      "seenAt": "2026-10-30T06:28:07.705Z",
       "source": "sarkariresult",
       "row": {
         "postName": "KGMU Nursing Officer Online Form 2025 – Start",
@@ -10376,18 +10376,18 @@
         "verificationStatus": "PENDING_MANUAL",
         "aggregatorUrl": "https://sarkariresult.com.cm/kgmu-nursing-officer-recruitment-2025-start/",
         "officialSourceFound": true,
-        "officialFetch": "RETRY"
+        "officialFetch": "OK"
       }
     },
     "https://sarkariresult.com.cm/uiic-apprentice-recruitment-2025/": {
-      "hash": "41661c69c72dd48bbc311741c5beb3f7e42810f2dccd4a6823b6d5dc941f09ae",
+      "hash": "ca9820cd24ccb0af0ed8626121902aa46ac989c345a5325561b08db3c42193d5",
       "status": "processed",
       "extractorVersion": 4,
-      "seenAt": "2026-10-29T06:29:19.369Z",
+      "seenAt": "2026-10-30T06:28:17.701Z",
       "source": "sarkariresult",
       "row": {
         "postName": "UIIC Apprentice Online Form 2025",
-        "organization": "Last Date Today MPESB",
+        "organization": "Organization to verify",
         "category": "BANKING",
         "listingSection": "AUTO",
         "state": null,
@@ -10511,10 +10511,10 @@
       }
     },
     "https://sarkariresult.com.cm/bhu-junior-clerk-recruitment-2025-date-extend/": {
-      "hash": "922fd9d0c74406eb057264935e849cddd7c218b9f124c860165d952a253856b8",
+      "hash": "b043e145c464263142faa919d95d0627c0537378e26551678c8ede67c0cb1e52",
       "status": "processed",
       "extractorVersion": 4,
-      "seenAt": "2026-10-29T06:29:22.408Z",
+      "seenAt": "2026-10-30T06:28:21.384Z",
       "source": "sarkariresult",
       "row": {
         "postName": "BHU Junior Clerk Online Form 2025 – Date Extend",
@@ -10641,10 +10641,10 @@
       "emitCount": 1
     },
     "https://sarkariresult.com.cm/allahabad-university-teaching-recruitment-2025/": {
-      "hash": "cec3f68350e2980c9dd6774684ebce04a7c209bc66e1c9af36fae36bb0306978",
+      "hash": "2367a6fb30222d70abb0cb48fa4ee2ef44e8189767b5c9fd605fd33f918bf82d",
       "status": "processed",
       "extractorVersion": 4,
-      "seenAt": "2026-10-29T06:29:24.040Z",
+      "seenAt": "2026-10-30T06:28:21.886Z",
       "source": "sarkariresult",
       "row": {
         "postName": "Allahabad University Teaching Online Form 2025",
@@ -10774,10 +10774,10 @@
       }
     },
     "https://sarkariresult.com.cm/uksssc-assistant-accountant-and-other-post-recruitment-2025/": {
-      "hash": "32df5f4032d780a6cc18e598d6dd5c5c20ef6ab978fd2fd762651d0e95c7b884",
+      "hash": "9db115e750a1d4a6411db9bba6f7a921937a002b372edb8a28799c1e2bdf8ae2",
       "status": "processed",
       "extractorVersion": 4,
-      "seenAt": "2026-10-29T06:29:25.744Z",
+      "seenAt": "2026-10-30T06:28:24.198Z",
       "source": "sarkariresult",
       "row": {
         "postName": "UKSSSC Assistant Accountant and Other Post Online Form 2025",
@@ -11025,10 +11025,10 @@
       }
     },
     "https://sarkariresult.com.cm/mppsc-food-safety-officer-fso-recruitment-2025/": {
-      "hash": "0883b4c0d89b6a893d040b05b61463694914ef720614cc5df64d3fbfcb1957f0",
+      "hash": "10f78f164b2f2c525ad0ec04f39f850d171fae7ff245c50dc00a712f54b20238",
       "status": "processed",
       "extractorVersion": 4,
-      "seenAt": "2026-10-29T06:30:03.635Z",
+      "seenAt": "2026-10-30T06:29:01.939Z",
       "source": "sarkariresult",
       "row": {
         "postName": "MPPSC Food Safety Officer FSO Online Form 2025",
@@ -11155,10 +11155,10 @@
       }
     },
     "https://sarkariresult.com.cm/up-police-jail-warder-recruitment-2025/": {
-      "hash": "82cee145a061d826898f8f464d33e6d49c1cde7bd58bf1a270fb5924996d3aa5",
+      "hash": "e2d6937c85b45ba0b8a059912ed533a4ed793df26832b0d1629b00eedd92aa41",
       "status": "processed",
       "extractorVersion": 4,
-      "seenAt": "2026-10-29T06:30:04.888Z",
+      "seenAt": "2026-10-30T06:29:03.610Z",
       "source": "sarkariresult",
       "row": {
         "postName": "UP Police Jail Warder Online Form 2025",
@@ -11285,10 +11285,10 @@
       }
     },
     "https://sarkariresult.com.cm/ncrtc-various-post-vacancy-cancelled-notice-2025/": {
-      "hash": "d48160f28629ff0e2de2a9bb678bb97725100bec36892bb5b4511c79ba7aa518",
+      "hash": "53346ac3f23c9bf2190f2b9195359d29cb72b58318a6193e5ce7c57a1ed43be4",
       "status": "processed",
       "extractorVersion": 4,
-      "seenAt": "2026-10-29T06:30:06.227Z",
+      "seenAt": "2026-10-30T06:29:04.694Z",
       "source": "sarkariresult",
       "row": {
         "postName": "NCRTC Various Post Vacancy Cancelled Notice 2025",
@@ -11412,10 +11412,10 @@
       }
     },
     "https://sarkariresult.com.cm/uppsc-various-post-recruitment-2025/": {
-      "hash": "b1d779995039f74ba78ce9b2ea3ce8ec0fcdf36661cf221a49714068f7eaaab0",
+      "hash": "9cb6400862ee3c1cf9bd82aa5a50db6938dfc2e85f0e5635abf1e51b8654233a",
       "status": "processed",
       "extractorVersion": 4,
-      "seenAt": "2026-10-29T06:30:08.212Z",
+      "seenAt": "2026-10-30T06:29:06.698Z",
       "source": "sarkariresult",
       "row": {
         "postName": "UPPSC Various Post Online Form 2025",
@@ -11537,10 +11537,10 @@
       }
     },
     "https://sarkariresult.com.cm/allahabad-high-court-research-associates-recruitment-2025-start/": {
-      "hash": "dc2ba0e24ef5b015489f2a7d5f15f0f8fb1cb5925d8256ceefb87a009cdd81dd",
+      "hash": "79b14b79a3885d7a8adbbf88e2203c6938b5a603960a99f3a2be0feaf215d5ba",
       "status": "processed",
       "extractorVersion": 4,
-      "seenAt": "2026-10-29T06:30:10.195Z",
+      "seenAt": "2026-10-30T06:29:08.681Z",
       "source": "sarkariresult",
       "row": {
         "postName": "Allahabad High Court Research Associates Online Form 2025 – Start",
@@ -11671,10 +11671,10 @@
       "emitCount": 1
     },
     "https://sarkariresult.com.cm/rail-wheel-factory-rwf-apprentices-online-form-2025/": {
-      "hash": "f3d624a183d9e044607b650a480b9bb195acf291fced66dfed30e52fb346cb96",
+      "hash": "9d57ca8c2a1b8d7581af06a92c7bffb974c8c8a11658c62c539780d700836c34",
       "status": "processed",
       "extractorVersion": 4,
-      "seenAt": "2026-10-29T06:30:12.228Z",
+      "seenAt": "2026-10-30T06:29:10.694Z",
       "source": "sarkariresult",
       "row": {
         "postName": "Rail Wheel Factory RWF Apprentices Online Form 2025",
@@ -11793,10 +11793,10 @@
       }
     },
     "https://sarkariresult.com.cm/upsc-assistant-professor-online-form-2025/": {
-      "hash": "a6dbc49d8e3f91e7a9615a84b879a803d3ba551842478cbb65b3e1a0fee0cbbf",
+      "hash": "cad4851ac4063e847fc2e9a687f0a5089d16ec61f3d8c8cd746524c4096bafd7",
       "status": "processed",
       "extractorVersion": 4,
-      "seenAt": "2026-10-29T06:30:14.242Z",
+      "seenAt": "2026-10-30T06:29:12.685Z",
       "source": "sarkariresult",
       "row": {
         "postName": "UPSC Assistant Professor Online Form 2025",
@@ -11923,10 +11923,10 @@
       }
     },
     "https://sarkariresult.com.cm/union-bank-of-india-apprentice-recruitment-2025-date-extend/": {
-      "hash": "d14ec505c4c658f0b0e062b7a95b5196bb5ca6b5ac4c569fb87bc07296d86a32",
+      "hash": "56bae6e950bfd938c628590b75a9d4e904f40f2b79f4d0d0ffb4550c3d03f510",
       "status": "processed",
       "extractorVersion": 4,
-      "seenAt": "2026-10-29T06:30:16.246Z",
+      "seenAt": "2026-10-30T06:29:14.695Z",
       "source": "sarkariresult",
       "row": {
         "postName": "Union Bank of India Apprentice Online Form 2025 – Date Extend",
@@ -12081,10 +12081,10 @@
       "emitCount": 1
     },
     "https://sarkariresult.com.cm/madhya-pradesh-mppsc-assistant-professor-recruitment-2025/": {
-      "hash": "eeddbdd1739c0e474e95534b7145a4434857f3c257084f4ac4a0a6281304b149",
+      "hash": "694ebfffff362ca5eddc30b7f27d6f551002f6a0832c0ffb5940b28c10350029",
       "status": "processed",
       "extractorVersion": 4,
-      "seenAt": "2026-10-29T06:30:18.250Z",
+      "seenAt": "2026-10-30T06:29:16.686Z",
       "source": "sarkariresult",
       "row": {
         "postName": "MPPSC Assistant Professor Online Form 2025",
@@ -12212,10 +12212,10 @@
       }
     },
     "https://sarkariresult.com.cm/indian-overseas-bank-iob-apprentice-recruitment-2025/": {
-      "hash": "7ead46bd4b51fd6d6e8c2423137f85fc93bc71e54da16bccf1f678751c08e054",
+      "hash": "356c09ac7fd6d3a3a94c474ed99e28afaace0ccaccae78441d5470edc3823db0",
       "status": "processed",
       "extractorVersion": 4,
-      "seenAt": "2026-10-29T06:30:20.262Z",
+      "seenAt": "2026-10-30T06:29:18.688Z",
       "source": "sarkariresult",
       "row": {
         "postName": "Indian Overseas Bank IOB Apprentice Online Form 2025",
@@ -12344,14 +12344,14 @@
       }
     },
     "https://sarkariresult.com.cm/iffco-apprentice-recruitment-2025-2/": {
-      "hash": "1210ce07c34b6cc2e9c99ee200b6e2bc55beb881b3aa76cf7a0ecb48e86f7211",
+      "hash": "f3100d0f49ed09b4a7f03e38abe5cba8ab849b7c76c6e43da2f72fe247a565e0",
       "status": "processed",
       "extractorVersion": 4,
-      "seenAt": "2026-10-29T06:30:22.199Z",
+      "seenAt": "2026-10-30T06:29:20.681Z",
       "source": "sarkariresult",
       "row": {
         "postName": "IFFCO Apprentice Online Form 2025",
-        "organization": "Last Date Today MPESB",
+        "organization": "Organization to verify",
         "category": "CENTRAL_GOVT",
         "listingSection": "AUTO",
         "state": null,
@@ -12480,10 +12480,10 @@
       "emitCount": 5
     },
     "https://sarkariresult.com.cm/secl-apprentice-recruitment-2025/": {
-      "hash": "f6383dec83c1f4fe72603ecc9914f149f34ea3c17a1714d2a65492d9922bd159",
+      "hash": "5beeed1329644680bfcef22d4b40584e848ddd577b3676f1dd457fb5e9eca8f0",
       "status": "processed",
       "extractorVersion": 4,
-      "seenAt": "2026-10-29T06:30:24.263Z",
+      "seenAt": "2026-10-30T06:29:22.668Z",
       "source": "sarkariresult",
       "row": {
         "postName": "SECL Apprentice Online Form 2025",
@@ -12614,10 +12614,10 @@
       }
     },
     "https://sarkariresult.com.cm/indian-army-ncc-special-entry-scheme-58th-course-recruitment-2025/": {
-      "hash": "e03ad6dec6badcfece4e2704419d3398e84773b246eddb0253aa7b5f4ebcea71",
+      "hash": "2cb167c3165aab65ea90d2c6af7ed6880a16859497ac58ab8fcdae0bfc03b2df",
       "status": "processed",
       "extractorVersion": 4,
-      "seenAt": "2026-10-29T06:30:26.241Z",
+      "seenAt": "2026-10-30T06:29:24.685Z",
       "source": "sarkariresult",
       "row": {
         "postName": "Indian Army NCC Special Entry Scheme 58th Course Online Form 2025",
@@ -12741,14 +12741,14 @@
       }
     },
     "https://sarkariresult.com.cm/mp-rojgar-panjiyan-online-form-2025/": {
-      "hash": "c82d2fab10f37deacbef451f8188e15dece96ed59035bcca32c7166259b8fa42",
+      "hash": "158a4a377a50db093b0c260f69ee92d05e30d24dd01732dd235626f880a74efd",
       "status": "processed",
       "extractorVersion": 4,
-      "seenAt": "2026-10-29T06:30:28.215Z",
+      "seenAt": "2026-10-30T06:29:26.684Z",
       "source": "sarkariresult",
       "row": {
         "postName": "MP Rojgar Panjiyan Online Form 2025",
-        "organization": "Last Date Today MPESB",
+        "organization": "Organization to verify",
         "category": "STATE_GOVT",
         "listingSection": "AUTO",
         "state": "Madhya Pradesh",
@@ -12854,10 +12854,10 @@
       "emitCount": 5
     },
     "https://sarkariresult.com.cm/indian-navy-ssc-officer-january-recruitment-2025/": {
-      "hash": "bb1e14301345e9f854945de7d5a5b31d8d7ff55b757bf5e2d2e33ffb5c72ca17",
+      "hash": "4f811740e263620728be25bb72a9efbad9da75744933408f8fc810407568d82a",
       "status": "processed",
       "extractorVersion": 4,
-      "seenAt": "2026-10-29T06:30:30.258Z",
+      "seenAt": "2026-10-30T06:29:28.678Z",
       "source": "sarkariresult",
       "row": {
         "postName": "Indian Navy SSC Officer January Online Form 2025",
@@ -12970,14 +12970,14 @@
       }
     },
     "https://sarkariresult.com.cm/ntpc-assistant-executive-recruitment-2025/": {
-      "hash": "f86fafaa29f48fb6b83d25931605adac70972b56afba714630aded3998d6f4b5",
+      "hash": "37192cdb3596935e79cc8b9f7a9143332466f8b28c151466a18323bcfe8ee48c",
       "status": "processed",
       "extractorVersion": 4,
-      "seenAt": "2026-10-29T06:30:32.231Z",
+      "seenAt": "2026-10-30T06:29:30.707Z",
       "source": "sarkariresult",
       "row": {
         "postName": "NTPC Assistant Executive Online Form 2025",
-        "organization": "Last Date Today MPESB",
+        "organization": "Organization to verify",
         "category": "PSU",
         "listingSection": "AUTO",
         "state": null,
@@ -13100,14 +13100,14 @@
       "emitCount": 5
     },
     "https://sarkariresult.com.cm/up-aganwadi-recruitment-2024-apply-now/": {
-      "hash": "c6b5e91f931bcf2f83fbec8d6116ea1fff44b216877ef21778aa4cdb5c1ec6bf",
+      "hash": "df5a29a92c4a5d3213bd2a00e1c4d2aa3181fa9fcea67270d4d6c93df48db015",
       "status": "processed",
       "extractorVersion": 4,
-      "seenAt": "2026-10-29T06:30:37.894Z",
+      "seenAt": "2026-10-30T06:29:36.114Z",
       "source": "sarkariresult",
       "row": {
         "postName": "UP Anganwadi Online Form 2024",
-        "organization": "Last Date Today MPESB",
+        "organization": "Organization to verify",
         "category": "STATE_GOVT",
         "listingSection": "AUTO",
         "state": "Uttar Pradesh",
@@ -13213,10 +13213,10 @@
       }
     },
     "https://sarkariresult.com.cm/csir-iict-junior-secretariat-assistant-recruitment-2025/": {
-      "hash": "a7e7e59f8dd546ada2bb393028d16c4a546fb281a43fa7df18a2d8e8a13ae33b",
+      "hash": "ddaa98a327b4fda890b97180065b4ccdbebcfdac70e85b9ae8bd1b56921b99a8",
       "status": "processed",
       "extractorVersion": 4,
-      "seenAt": "2026-10-29T06:30:40.935Z",
+      "seenAt": "2026-10-30T06:29:39.605Z",
       "source": "sarkariresult",
       "row": {
         "postName": "CSIR IICT Junior Secretariat Assistant Online Form 2025",
@@ -13350,10 +13350,10 @@
       }
     },
     "https://sarkariresult.com.cm/iocl-apprentice-recruitment-2025/": {
-      "hash": "b4424f5ab7eab70d4425b806d14a9540faebb17849e96d81fbe1162b44a97ee5",
+      "hash": "42e787c20e8f39d2c82e08abd12e542104806964189629ba8b15ce2b081d4dc9",
       "status": "processed",
       "extractorVersion": 4,
-      "seenAt": "2026-10-29T06:30:42.222Z",
+      "seenAt": "2026-10-30T06:29:40.688Z",
       "source": "sarkariresult",
       "row": {
         "postName": "IOCL Apprentice Online Form 2025",
@@ -13476,10 +13476,10 @@
       }
     },
     "https://sarkariresult.com.cm/indian-air-force-airmen-group-y-recruitment-2025/": {
-      "hash": "f8a11870e7148059576d0c7f66644ff4f58bef2f25eae73f2320ce074117b314",
+      "hash": "be034a7c8abaf619136020b4d39514532385dae9e0bdfb740f1c3033d0438ef3",
       "status": "processed",
       "extractorVersion": 4,
-      "seenAt": "2026-10-29T06:31:20.115Z",
+      "seenAt": "2026-10-30T06:30:18.425Z",
       "source": "sarkariresult",
       "row": {
         "postName": "Indian Air Force Airmen Group-Y Online Form 2025",
@@ -13585,10 +13585,10 @@
       }
     },
     "https://sarkariresult.com.cm/railway-rrc-ner-gorakhpur-apprentice-recruitment-2025/": {
-      "hash": "b4c615a085d9156b33d07500638d6e13ef756f6387f40820933e10150196a56b",
+      "hash": "eeb65758d8e2caeaaea5427e98caa7d9375f1410c3b575bf026ecda145f9e590",
       "status": "processed",
       "extractorVersion": 4,
-      "seenAt": "2026-10-29T06:31:21.370Z",
+      "seenAt": "2026-10-30T06:30:20.068Z",
       "source": "sarkariresult",
       "row": {
         "postName": "Railway RRC NER Gorakhpur Apprentice Online Form 2025",
@@ -13712,10 +13712,10 @@
       }
     },
     "https://sarkariresult.com.cm/mpesb-group-4-recruitment-2025/": {
-      "hash": "e679be642aa131ee6d7e822b5c33e00e34e7ecc0b9ca454372a8a0c34e57f81d",
+      "hash": "49a4d4938da4143097c2c1bc7e24ab6d275ef0fda00a5dc8ef3a0f3cc7a7c914",
       "status": "processed",
       "extractorVersion": 4,
-      "seenAt": "2026-10-29T06:31:22.707Z",
+      "seenAt": "2026-10-30T06:30:21.140Z",
       "source": "sarkariresult",
       "row": {
         "postName": "MPESB Group 4 Online Form 2025",
@@ -13844,10 +13844,10 @@
       }
     },
     "https://sarkariresult.com.cm/bombay-high-court-clerk-recruitment-2025/": {
-      "hash": "ea827795f26082baab2c22e797955426ccf6ce8aa916edf36895f9fb82fe8ffb",
+      "hash": "33c64c3adb97223558acd3c56a20630fc2a76d49dc1ef23c956c76870be366eb",
       "status": "processed",
       "extractorVersion": 4,
-      "seenAt": "2026-10-29T06:31:24.699Z",
+      "seenAt": "2026-10-30T06:30:23.147Z",
       "source": "sarkariresult",
       "row": {
         "postName": "Bombay High Court Clerk Online Form 2025",
@@ -13980,10 +13980,10 @@
       }
     },
     "https://sarkariresult.com.cm/bhel-engineer-trainee-and-supervisor-trainee-recruitment-2025/": {
-      "hash": "6124ec03254fea85e5860492c8d3c89e2e2c4755541d4c3a1db449e8a34c6c2f",
+      "hash": "aeeef6a9e344dff7f6714765621c7fddc51d25c41037d7b2d14070c99ce1a4ba",
       "status": "processed",
       "extractorVersion": 4,
-      "seenAt": "2026-10-29T06:31:26.693Z",
+      "seenAt": "2026-10-30T06:30:25.162Z",
       "source": "sarkariresult",
       "row": {
         "postName": "BHEL Engineer Trainee and Supervisor Trainee Online Form 2025",
@@ -14116,10 +14116,10 @@
       }
     },
     "https://sarkariresult.com.cm/mazagon-dock-mdl-graduate-diploma-apprentice-recruitment-2025/": {
-      "hash": "987ae515404db99cfed117be88e36812db9cf8a2be5039e68293797cb7803894",
+      "hash": "a3d563939559880b19205ea826236d645fd7c0d057d6b624f1904460a5eef8b1",
       "status": "processed",
       "extractorVersion": 4,
-      "seenAt": "2026-10-29T06:31:32.952Z",
+      "seenAt": "2026-10-30T06:30:31.089Z",
       "source": "sarkariresult",
       "row": {
         "postName": "Mazagon Dock MDL Graduate/ Diploma Apprentice Online Form 2025",
@@ -14232,10 +14232,10 @@
       }
     },
     "https://sarkariresult.com.cm/ksssci-non-teaching-online-form-2024-apply-now/": {
-      "hash": "c41293b516ba28e0a8b2dcc07eb7ca0b2cb09e4867b5b69e7bb8d8a6cc7df33b",
+      "hash": "da142aab5c92892f94c260ff89cac369c3f523d91af9588008d5a4ade0b487b2",
       "status": "processed",
       "extractorVersion": 4,
-      "seenAt": "2026-10-29T06:31:35.952Z",
+      "seenAt": "2026-10-30T06:30:34.425Z",
       "source": "sarkariresult",
       "row": {
         "postName": "KSSSCI Non-Teaching Online Form 2025",
@@ -14365,10 +14365,10 @@
       }
     },
     "https://sarkariresult.com.cm/rrb-ntpc-inter-level-07-2026/": {
-      "hash": "c467efe53f33dcb0b7d1be14fbc8e5a7bfed5080427f9e30e5a3bd1e586b0707",
+      "hash": "3e67587e6a27cb662c3d650f2c7d592dbe97cc8066564c4ae74ce89c7cc42211",
       "status": "processed",
       "extractorVersion": 4,
-      "seenAt": "2026-10-29T06:22:50.653Z",
+      "seenAt": "2026-10-30T06:20:32.354Z",
       "source": "sarkariresult",
       "row": {
         "postName": "RRB NTPC 10+2 UG Online Form 2026 (1688 Posts)",
@@ -14490,18 +14490,18 @@
         "officialFetch": "NOT_FOUND"
       },
       "firstEmittedOn": "2026-10-15",
-      "lastEmittedOn": "2026-10-29",
-      "emitCount": 15
+      "lastEmittedOn": "2026-10-30",
+      "emitCount": 16
     },
     "https://sarkariresult.com.cm/rrb-ntpc-graduate-level-06-2026/": {
-      "hash": "e4109b29f2c975db565a78f7dd5478e558ef523afb7d5a736665869b91cfde08",
+      "hash": "c568c493c11fc84851ff46f9aceddb66fd9dc73c3d4e753b701d1f2a3bf8ee14",
       "status": "processed",
       "extractorVersion": 4,
-      "seenAt": "2026-10-29T06:22:53.467Z",
+      "seenAt": "2026-10-30T06:21:58.839Z",
       "source": "sarkariresult",
       "row": {
         "postName": "RRB NTPC Graduate Level Online Form 2026 (3548 Posts)",
-        "organization": "Last Date Today MPESB",
+        "organization": "Organization to verify",
         "category": "RAILWAY",
         "listingSection": "AUTO",
         "state": null,
@@ -15145,10 +15145,10 @@
       }
     },
     "https://sarkariresult.com.cm/indian-army-ssc-tech-online-form-2025-start/": {
-      "hash": "4e971b8b105356a444e29ad7987a58fddf5816bd04438545b916efb3091d4ab6",
+      "hash": "800eafc6001b041ded036cd5aec5a5418a2161a7ae68f3bb8f4721df9a73b959",
       "status": "processed",
       "extractorVersion": 4,
-      "seenAt": "2026-10-29T06:31:44.671Z",
+      "seenAt": "2026-10-30T06:30:39.042Z",
       "source": "sarkariresult",
       "row": {
         "postName": "Indian Army SSC Tech Online Form 2025 – Start",
@@ -15615,10 +15615,10 @@
       }
     },
     "https://sarkariresult.com.cm/hdfc-bank-po-recruitment-2025/": {
-      "hash": "3da0ecd9d86c598a581bef0515358ae3cae4e50b1507a5c8e8c0095c27764a1c",
+      "hash": "4117ff5b3916488dbea0fb5d83a39d6b07cc11c581321e5fb74086c7333f8374",
       "status": "processed",
       "extractorVersion": 4,
-      "seenAt": "2026-10-29T06:31:46.775Z",
+      "seenAt": "2026-10-30T06:30:42.453Z",
       "source": "sarkariresult",
       "row": {
         "postName": "HDFC Bank PO Online Form 2025 – Start",
@@ -15730,10 +15730,10 @@
       "emitCount": 2
     },
     "https://sarkariresult.com.cm/telangana-high-court-recruitment-2025/": {
-      "hash": "c6264744ca40c87b5eff97135c60e19209d679d1b67fa5326d08d9d7df1e6a68",
+      "hash": "f4c86eca06fc05719d2ee508f049585341142dc40a51f8cf43a4e9f7b118fc4e",
       "status": "processed",
       "extractorVersion": 4,
-      "seenAt": "2026-10-29T06:32:23.975Z",
+      "seenAt": "2026-10-30T06:31:18.836Z",
       "source": "sarkariresult",
       "row": {
         "postName": "Telangana High Court Online Form 2025",
@@ -16354,10 +16354,10 @@
       "emitCount": 1
     },
     "https://sarkariresult.com.cm/central-bank-of-india-so-online-form-2025/": {
-      "hash": "e95b747d6f92a27d420ca88c0f2e8905078298306ee31781925c9f1e674d897d",
+      "hash": "ee9ff329fa45df63a0278b21c8b865b627ebe3cdad9a9b374b8b2e2b3ef521ad",
       "status": "processed",
       "extractorVersion": 4,
-      "seenAt": "2026-10-29T06:32:25.269Z",
+      "seenAt": "2026-10-30T06:31:20.477Z",
       "source": "sarkariresult",
       "row": {
         "postName": "Central Bank of India SO Online Form 2025",
@@ -16495,10 +16495,10 @@
       "emitCount": 1
     },
     "https://sarkariresult.com.cm/csir-crri-scientist-online-form-2024/": {
-      "hash": "55362e466102f8e719bf14a6924274f3b54fb9784b216367ac823a5856be4afd",
+      "hash": "37279ab4df170069d4254b16b532f98c668930199e5ed2180126045299e10f5c",
       "status": "processed",
       "extractorVersion": 4,
-      "seenAt": "2026-10-29T06:32:26.607Z",
+      "seenAt": "2026-10-30T06:31:21.607Z",
       "source": "sarkariresult",
       "row": {
         "postName": "CSIR CRRI Scientist Online Form 2024 – Start",
@@ -16637,10 +16637,10 @@
       "emitCount": 1
     },
     "https://sarkariresult.com.cm/rsmssb-paramedical-staff-online-form-2025/": {
-      "hash": "b8b9f57f59031f4bcd6104bbf225ef7e118efdf4cf335ecea2bf180e30af6228",
+      "hash": "6d2fbb4fa6a479234c3bfe6a9d8e793cbc5db7787dc81b7349a204d103a6da1a",
       "status": "processed",
       "extractorVersion": 4,
-      "seenAt": "2026-10-29T06:32:28.567Z",
+      "seenAt": "2026-10-30T06:31:23.561Z",
       "source": "sarkariresult",
       "row": {
         "postName": "RSMSSB Paramedical Staff Online Form 2025",
@@ -16778,10 +16778,10 @@
       "emitCount": 1
     },
     "https://sarkariresult.com.cm/indian-navy-102-b-tech-cadet-entry-july-2025-online-form/": {
-      "hash": "2d72a89a0ee1a4ba202ca46ba0c450b4b3f2138ae19db9efce781e0a7a02cc82",
+      "hash": "efa8f6cceb0993e6ac7f6d801769a9d00070a09d0b08074b32b3aaed5c32623a",
       "status": "processed",
       "extractorVersion": 4,
-      "seenAt": "2026-10-29T06:32:30.548Z",
+      "seenAt": "2026-10-30T06:31:25.567Z",
       "source": "sarkariresult",
       "row": {
         "postName": "Indian Navy 10+2 -B.Tech Cadet Entry July 2025 Online Form",
@@ -16897,10 +16897,10 @@
       "emitCount": 1
     },
     "https://sarkariresult.com.cm/mahatransco-various-post-recruitment-2024/": {
-      "hash": "1eb6078d56adddc7c2c64ed8fa959933f2b7d4155f4730c8cee8119da95571c4",
+      "hash": "46e7927da3b4b72e3862d28e998fc4ad8102ca1399ac75740d14af5f15ce117c",
       "status": "processed",
       "extractorVersion": 4,
-      "seenAt": "2026-10-29T06:32:32.570Z",
+      "seenAt": "2026-10-30T06:31:27.588Z",
       "source": "sarkariresult",
       "row": {
         "postName": "MAHATRANSCO Various Post Online Form 2024",
@@ -17139,10 +17139,10 @@
       "emitCount": 1
     },
     "https://sarkariresult.com.cm/rrc-nwr-apprentice-2026/": {
-      "hash": "6456847e853736ad9c3176b9abe45fd85fa1ff134dbb3bb3e5a5fa94e544f8f7",
+      "hash": "fb8709a577ce5fa2c7025988c74fd2cbc8dce091ba130075aa2776abb961d7eb",
       "status": "processed",
       "extractorVersion": 4,
-      "seenAt": "2026-10-29T06:25:04.250Z",
+      "seenAt": "2026-10-30T06:24:14.743Z",
       "source": "sarkariresult",
       "row": {
         "postName": "Railway RRC NWR Apprentice Online Form 2026",
@@ -17263,14 +17263,14 @@
         "officialFetch": "OK"
       },
       "firstEmittedOn": "2026-10-02",
-      "lastEmittedOn": "2026-10-29",
-      "emitCount": 9
+      "lastEmittedOn": "2026-10-30",
+      "emitCount": 10
     },
     "https://sarkariresult.com.cm/upsssc-regional-youth-welfare-officer-2026/": {
-      "hash": "0b53013c6616d45ea044913b6312a555cce7f3bbf3d4503ade164aaff0d57f6e",
+      "hash": "61fb28a00e2a2cc9e8d92b607584d188a632d8e1808cb4f8a8ed4ca4dbcc4d6a",
       "status": "processed",
       "extractorVersion": 4,
-      "seenAt": "2026-10-29T06:25:46.554Z",
+      "seenAt": "2026-10-30T06:24:48.793Z",
       "source": "sarkariresult",
       "row": {
         "postName": "UPSSSC Regional Youth Welfare Officer Online Form 2026",
@@ -17403,10 +17403,10 @@
       "emitCount": 3
     },
     "https://sarkariresult.com.cm/delhi-district-court-various-post-2026/": {
-      "hash": "02942047cdbe052eeb7a70b3c6aced28ef43bac428445b224e2b2381fd53e735",
+      "hash": "1b4852b9852f9f601dd7761538c687b6e7f0a869a90488c226db36c5622bfe62",
       "status": "processed",
       "extractorVersion": 4,
-      "seenAt": "2026-10-29T06:26:42.361Z",
+      "seenAt": "2026-10-30T06:25:43.570Z",
       "source": "sarkariresult",
       "row": {
         "postName": "DSSSB Delhi District Court Various Post Online Form 2026",
@@ -17661,10 +17661,10 @@
       "emitCount": 1
     },
     "https://sarkariresult.com.cm/upsssc-sports-directorate-2026/": {
-      "hash": "68a0576c36dd97d283216e60523394b30c33ec18bdbc8e906dfa404a5e7bfda2",
+      "hash": "84ae40bb045c0a27788f4baa7d025855457753f8c2023d1d3e24592f842a6394",
       "status": "processed",
       "extractorVersion": 4,
-      "seenAt": "2026-10-29T06:26:29.071Z",
+      "seenAt": "2026-10-30T06:25:32.214Z",
       "source": "sarkariresult",
       "row": {
         "postName": "UPSSSC Sports Directorate Online Form 2026",
@@ -17797,10 +17797,10 @@
       "emitCount": 5
     },
     "https://sarkariresult.com.cm/csjmu-kanpur-teaching-post-2026/": {
-      "hash": "917036784cf8e2f68b86ef54d78f308d8b9b6e6b1ebec7222d3ed3c098be35f7",
+      "hash": "abfed428780467b169b89fd8dd0511f135cb7b0575d5d1921602158287359839",
       "status": "processed",
       "extractorVersion": 4,
-      "seenAt": "2026-10-29T06:26:46.650Z",
+      "seenAt": "2026-10-30T06:23:33.476Z",
       "source": "sarkariresult",
       "row": {
         "postName": "CSJMU Kanpur Teaching Post Online Form 2026",
@@ -17926,10 +17926,10 @@
       "emitCount": 6
     },
     "https://sarkariresult.com.cm/iocl-wr-apprentice-2026/": {
-      "hash": "704723bf906bed462b0199cf11baac5f31fac33f9f1e031e302439f63892c251",
+      "hash": "ae4b408f647f2477860a198923280db3ee323d2bbbfb7a9aeac546fbdb9e261a",
       "status": "processed",
       "extractorVersion": 4,
-      "seenAt": "2026-10-29T06:26:52.420Z",
+      "seenAt": "2026-10-30T06:25:48.609Z",
       "source": "sarkariresult",
       "row": {
         "postName": "IOCL WR Apprentice Online Form 2026",
@@ -18039,10 +18039,10 @@
       "emitCount": 6
     },
     "https://sarkariresult.com.cm/railway-rrc-nwr-apprentice-recruitment-2024/": {
-      "hash": "4236d1efa96897eabf7ffac142083b4d6a8bb88e4971e58b83b3a2089eb6cf5a",
+      "hash": "bc85d5d757d8fe8ba373b853ea2d0a77c80c634bcc85ea2e6c25e545503ac2a3",
       "status": "processed",
       "extractorVersion": 4,
-      "seenAt": "2026-10-29T06:32:38.249Z",
+      "seenAt": "2026-10-30T06:31:33.098Z",
       "source": "sarkariresult",
       "row": {
         "postName": "Railway RRC NWR Apprentice Online Form 2024 – Last Date Today",
@@ -18173,10 +18173,10 @@
       "emitCount": 6
     },
     "https://sarkariresult.com.cm/national-bank-ncbl-clerk-recruitment-2024/": {
-      "hash": "a80340ca8e5d21425ab2eb7d39a06834f34e42838569efc2ee4e2ba5ad73416e",
+      "hash": "2792554b96625e3478967eb59d87afbae7d714d9f80494bb08fb7442911d4a34",
       "status": "processed",
       "extractorVersion": 4,
-      "seenAt": "2026-10-29T06:32:41.211Z",
+      "seenAt": "2026-10-30T06:31:36.492Z",
       "source": "sarkariresult",
       "row": {
         "postName": "National Co-Operative Bank (NCBL) Clerk Online Form 2024",
@@ -18290,10 +18290,10 @@
       "emitCount": 6
     },
     "https://sarkariresult.com.cm/cuh-haryana-non-teaching-online-form-2024/": {
-      "hash": "05b80607a81a2af3246ca6823782598efafaa735c580315f4396fa85a00c8646",
+      "hash": "b5d59cc29bbdc89cdd19a2b57c4c77971e479f6f6efbe0cde5657edc99d496c0",
       "status": "processed",
       "extractorVersion": 4,
-      "seenAt": "2026-10-29T06:32:42.558Z",
+      "seenAt": "2026-10-30T06:31:37.571Z",
       "source": "sarkariresult",
       "row": {
         "postName": "CUH Haryana Non Teaching Online Form 2024",
@@ -18433,10 +18433,10 @@
       "emitCount": 6
     },
     "https://sarkariresult.com.cm/cgpsc-state-service-exam-sse-recruitment-2024/": {
-      "hash": "3c978a396ab2e81baedbe373791f1e4944f8be3d1cd1aa1d70bbda6345be8574",
+      "hash": "606309b3dddda44793e52963723c9a05c0c45d0884b39633c4571b8fc9899ab3",
       "status": "processed",
       "extractorVersion": 4,
-      "seenAt": "2026-10-29T06:33:20.241Z",
+      "seenAt": "2026-10-30T06:32:15.067Z",
       "source": "sarkariresult",
       "row": {
         "postName": "CGPSC State Service Exam SSE Pre Online Form 2024 – Start",
@@ -18661,10 +18661,10 @@
       "emitCount": 5
     },
     "https://sarkariresult.com.cm/indian-army-tes-57th-2026/": {
-      "hash": "30fcb2f24d1ea9743e349c91a980e87d056f6fa98664b4ed28536d465ee88d1a",
+      "hash": "f6cd146a79ca025a2616dd6f9730355df0e0d5be116b4205d7ada8ed5e344064",
       "status": "processed",
       "extractorVersion": 4,
-      "seenAt": "2026-10-29T06:26:27.774Z",
+      "seenAt": "2026-10-30T06:25:30.552Z",
       "source": "sarkariresult",
       "row": {
         "postName": "Indian Army TES 57th Online Form 2026",
@@ -19038,10 +19038,10 @@
       "emitCount": 4
     },
     "https://sarkariresult.com.cm/hp-high-court-shimla-various-post-online-form-2024/": {
-      "hash": "3bbaaeea59002c8370929b3863a0f90aed7faf9a470efd649124e7ed5467ebea",
+      "hash": "d1160a70059b1569da53fa7c72e57cd4a2fdd718d64d40c3f6156d94cee16f9a",
       "status": "processed",
       "extractorVersion": 4,
-      "seenAt": "2026-10-29T06:33:22.487Z",
+      "seenAt": "2026-10-30T06:32:16.643Z",
       "source": "sarkariresult",
       "row": {
         "postName": "HP High Court Shimla Various Post Online Form 2024",
@@ -19168,10 +19168,10 @@
       "emitCount": 4
     },
     "https://sarkariresult.com.cm/central-bank-of-india-specialist-officer-so-recruitment-2024/": {
-      "hash": "b3589349dc2a0ec35c332114ac425991c3e6ce51bbb7874473601faea44e75ef",
+      "hash": "1374f354b3876abe54b5eff940648e3058e2d9f87a93f0c2f129e3f85a93fb4e",
       "status": "processed",
       "extractorVersion": 4,
-      "seenAt": "2026-10-12T06:38:45.331Z",
+      "seenAt": "2026-10-30T06:32:18.079Z",
       "source": "sarkariresult",
       "row": {
         "postName": "Central Bank of India Specialist Officer (SO) Online Form 2024",
@@ -19435,10 +19435,10 @@
       "emitCount": 3
     },
     "https://sarkariresult.com.cm/dsssb-sweeper-chowkidar-2026/": {
-      "hash": "a9ee55398b7cfaae50f89dd9235ef455d61847cb78a6662e642f73e666e14a56",
+      "hash": "3456e7d9405c52e9f095e799f36c10150b0567340d9a813091f6285610d0a2fd",
       "status": "processed",
       "extractorVersion": 4,
-      "seenAt": "2026-10-29T06:25:21.898Z",
+      "seenAt": "2026-10-30T06:24:32.001Z",
       "source": "sarkariresult",
       "row": {
         "postName": "DSSSB Sweeper & Chowkidar Online Form 2026",
@@ -19563,14 +19563,14 @@
         "officialFetch": "OK"
       },
       "firstEmittedOn": "2026-10-11",
-      "lastEmittedOn": "2026-10-29",
-      "emitCount": 19
+      "lastEmittedOn": "2026-10-30",
+      "emitCount": 20
     },
     "https://sarkariresult.com.cm/rajasthan-safai-karamchari-recruitment-2024/": {
-      "hash": "110aaefe039a507725d912995117ef9af49f5f9dad9c2fb1617749344bd150ee",
+      "hash": "408103180353fa5670bfd71543a22ad70c31d856813a16dabba0ee9e59510e94",
       "status": "processed",
       "extractorVersion": 4,
-      "seenAt": "2026-10-12T06:38:51.436Z",
+      "seenAt": "2026-10-30T06:32:26.988Z",
       "source": "sarkariresult",
       "row": {
         "postName": "Rajasthan Safai Karamchari Online Form 2024",
@@ -19690,17 +19690,17 @@
         "verificationStatus": "PENDING_MANUAL",
         "aggregatorUrl": "https://sarkariresult.com.cm/rajasthan-safai-karamchari-recruitment-2024/",
         "officialSourceFound": true,
-        "officialFetch": "OK"
+        "officialFetch": "RETRY"
       },
       "firstEmittedOn": "2026-10-12",
-      "lastEmittedOn": "2026-10-12",
-      "emitCount": 1
+      "lastEmittedOn": "2026-10-30",
+      "emitCount": 2
     },
     "https://sarkariresult.com.cm/upsssc-junior-engineer-je-mechanical-2026/": {
-      "hash": "b1331e8d0935e93d4bb5326b87bf54bed7a07979ef87cb23cbfdcfe103f94816",
+      "hash": "7c7a27048e1a164a42603f81408205ef9e30c08d211840052ec96c84f65fee3f",
       "status": "processed",
       "extractorVersion": 4,
-      "seenAt": "2026-10-29T06:26:36.393Z",
+      "seenAt": "2026-10-30T06:25:39.295Z",
       "source": "sarkariresult",
       "row": {
         "postName": "UPSSSC Junior Engineer JE (Mechanical) Online Form 2026 (1156 Posts)",
@@ -19821,14 +19821,14 @@
         "officialFetch": "NOT_FOUND"
       },
       "firstEmittedOn": "2026-10-13",
-      "lastEmittedOn": "2026-10-29",
-      "emitCount": 17
+      "lastEmittedOn": "2026-10-30",
+      "emitCount": 18
     },
     "https://sarkariresult.com.cm/upsssc-junior-engineer-je-electrical-2026/": {
-      "hash": "f2de2b7adfdd3d7ea5fe9dd711e42017c40dc44ba5c5dfeb7de055e41a9b7633",
+      "hash": "2697e9628d0b5c61c791c9d7f8ae4fe8255ba6322a8c2ffbcb631fce2e273a77",
       "status": "processed",
       "extractorVersion": 4,
-      "seenAt": "2026-10-29T06:26:30.422Z",
+      "seenAt": "2026-10-30T06:25:33.275Z",
       "source": "sarkariresult",
       "row": {
         "postName": "UPSSSC Junior Engineer JE (Electrical) Online Form 2026",
@@ -19949,14 +19949,14 @@
         "officialFetch": "NOT_FOUND"
       },
       "firstEmittedOn": "2026-10-13",
-      "lastEmittedOn": "2026-10-29",
-      "emitCount": 17
+      "lastEmittedOn": "2026-10-30",
+      "emitCount": 18
     },
     "https://sarkariresult.com.cm/supreme-court-spa-2026/": {
-      "hash": "4bda97054637f8eaef17551f00b650ebe34420b71c93f26a9b3da516010f04e2",
+      "hash": "73843def6e394fe80619724d7b1d9e8e05606b42824a0423e42abc95fcbb2ed4",
       "status": "processed",
       "extractorVersion": 4,
-      "seenAt": "2026-10-29T06:25:32.523Z",
+      "seenAt": "2026-10-30T06:24:44.352Z",
       "source": "sarkariresult",
       "row": {
         "postName": "Supreme Court SPA Online Form 2026",
@@ -20075,14 +20075,14 @@
         "officialFetch": "OK"
       },
       "firstEmittedOn": "2026-10-14",
-      "lastEmittedOn": "2026-10-29",
-      "emitCount": 16
+      "lastEmittedOn": "2026-10-30",
+      "emitCount": 17
     },
     "https://sarkariresult.com.cm/supreme-court-assistant-2026/": {
-      "hash": "db4622ef42adc60a29b4907cbfbc0fada2ade419ee8ae9ee13ca885977e81090",
+      "hash": "c9f445ac00c78fb2eb0951b8c9b3bf00a1f7a4f33b5e811ddd2eef4a605aedd2",
       "status": "processed",
       "extractorVersion": 4,
-      "seenAt": "2026-10-29T06:26:34.101Z",
+      "seenAt": "2026-10-30T06:25:36.655Z",
       "source": "sarkariresult",
       "row": {
         "postName": "Supreme Court SCI Court Assistant Online Form 2026",
@@ -20201,14 +20201,14 @@
         "officialFetch": "OK"
       },
       "firstEmittedOn": "2026-10-15",
-      "lastEmittedOn": "2026-10-29",
-      "emitCount": 15
+      "lastEmittedOn": "2026-10-30",
+      "emitCount": 16
     },
     "https://sarkariresult.com.cm/upsssc-inter-12th-level-2026/": {
-      "hash": "ec9636a1ae5753f7c541a2b44c56971ddc95ef8c8971f3d1ebfb3d9b0a8fe83c",
+      "hash": "ed8da5cd5c36ce0d4bd92f86fdcf8e69b0f2bff042b168493afb4a61d0381abe",
       "status": "processed",
       "extractorVersion": 4,
-      "seenAt": "2026-10-29T06:22:55.440Z",
+      "seenAt": "2026-10-30T06:22:00.981Z",
       "source": "sarkariresult",
       "row": {
         "postName": "UPSSSC Inter (12th) Level Online Form 2026",
@@ -20329,14 +20329,14 @@
         "officialFetch": "NOT_FOUND"
       },
       "firstEmittedOn": "2026-10-17",
-      "lastEmittedOn": "2026-10-29",
-      "emitCount": 13
+      "lastEmittedOn": "2026-10-30",
+      "emitCount": 14
     },
     "https://sarkariresult.com.cm/supreme-court-junior-court-attendant-2026/": {
-      "hash": "ff919bfc23db28698953661d0fa90c1eb90d937f15eba9d51d7dc6a3d792c860",
+      "hash": "c1faca0df4bfd60c5ee292ede2a0d1914d6bd38204bc95667c7dd291c1c36bf6",
       "status": "processed",
       "extractorVersion": 4,
-      "seenAt": "2026-10-29T06:25:49.345Z",
+      "seenAt": "2026-10-30T06:24:52.122Z",
       "source": "sarkariresult",
       "row": {
         "postName": "Supreme Court Junior Court Attendant Online Form 2026",
@@ -20455,14 +20455,14 @@
         "officialFetch": "OK"
       },
       "firstEmittedOn": "2026-10-17",
-      "lastEmittedOn": "2026-10-29",
-      "emitCount": 13
+      "lastEmittedOn": "2026-10-30",
+      "emitCount": 14
     },
     "https://sarkariresult.com.cm/cwc-assistant-manager-junior-executive-2026/": {
-      "hash": "ab205531ce05fa85e3fd4f034a90e6b613d065ef9778c0d12c120b38395b500f",
+      "hash": "e3507e921525c2bcd78fe9decbc494584e83538cf101533ea21b61ec949d4ee3",
       "status": "processed",
       "extractorVersion": 4,
-      "seenAt": "2026-10-29T06:25:34.936Z",
+      "seenAt": "2026-10-30T06:24:46.791Z",
       "source": "sarkariresult",
       "row": {
         "postName": "CWC Assistant Manager & Junior Executive Online Form 2026",
@@ -20583,8 +20583,8 @@
         "officialFetch": "NOT_FOUND"
       },
       "firstEmittedOn": "2026-10-18",
-      "lastEmittedOn": "2026-10-29",
-      "emitCount": 12
+      "lastEmittedOn": "2026-10-30",
+      "emitCount": 13
     },
     "https://sarkariresult.com.cm/sib-junior-officer-operations-2026/": {
       "hash": "7fc07aa215d575b7429266eb5f404a5dc0b5b4778d3d680b6061e522831be0a6",
@@ -20704,10 +20704,10 @@
       "emitCount": 10
     },
     "https://sarkariresult.com.cm/bihar-bssc-field-assistant-pre-result-2026/": {
-      "hash": "9854256bdc43868350c188f8f5bff51626b0cc975d0d9c88ed6cae3733d0486f",
+      "hash": "c68181e95cbaa759d5cb7798d86fbef19dde4bb7b704459589013de4becdb7bb",
       "status": "processed",
       "extractorVersion": 4,
-      "seenAt": "2026-10-29T06:25:45.295Z",
+      "seenAt": "2026-10-30T06:23:29.212Z",
       "source": "sarkariresult",
       "row": {
         "postName": "BSSC Field Assistant 2025 Mains Online Form",
@@ -20833,14 +20833,14 @@
         "officialFetch": "RETRY"
       },
       "firstEmittedOn": "2026-10-18",
-      "lastEmittedOn": "2026-10-29",
-      "emitCount": 12
+      "lastEmittedOn": "2026-10-30",
+      "emitCount": 13
     },
     "https://sarkariresult.com.cm/rrb-isolated-categories-2026/": {
-      "hash": "915ea44e610f080cc8a82ccfc0d3b9c33a12331f6e5790d661ad932fa6fe3d12",
+      "hash": "4f2a6e27f7802a5b7bea54451502ba8b4695d934b737075cc1c6b41f74ec139c",
       "status": "processed",
       "extractorVersion": 4,
-      "seenAt": "2026-10-29T06:25:22.975Z",
+      "seenAt": "2026-10-30T06:24:35.532Z",
       "source": "sarkariresult",
       "row": {
         "postName": "Railway RRB Isolated Categories Online Form 2026",
@@ -20964,18 +20964,18 @@
         "officialFetch": "NOT_FOUND"
       },
       "firstEmittedOn": "2026-10-22",
-      "lastEmittedOn": "2026-10-29",
-      "emitCount": 8
+      "lastEmittedOn": "2026-10-30",
+      "emitCount": 9
     },
     "https://sarkariresult.com.cm/isro-sdsc-shar-various-post-2026/": {
-      "hash": "5645d443f0651e0caa09db1cacc18551d092959cf3d25dedabfeb5b50624fdac",
+      "hash": "4bca15139bb1e06f82743534466c28f29bf97b86565f0c75f172d2c20f5ddd47",
       "status": "processed",
       "extractorVersion": 4,
-      "seenAt": "2026-10-29T06:25:28.707Z",
+      "seenAt": "2026-10-30T06:24:41.224Z",
       "source": "sarkariresult",
       "row": {
         "postName": "ISRO SDSC SHAR Various Post Online Form 2026",
-        "organization": "Last Date Today MPESB",
+        "organization": "Organization to verify",
         "category": "PSU",
         "listingSection": "AUTO",
         "state": null,
@@ -21097,14 +21097,14 @@
         "officialFetch": "OK"
       },
       "firstEmittedOn": "2026-10-22",
-      "lastEmittedOn": "2026-10-29",
-      "emitCount": 8
+      "lastEmittedOn": "2026-10-30",
+      "emitCount": 9
     },
     "https://sarkariresult.com.cm/railway-rrb-station-master-2026/": {
-      "hash": "3245dc465b45a495d0c29785887ac99f9d02f050dfa84a24c5b81c38fe24475d",
+      "hash": "aee61ccfebf14df73bc164746edd87f19eb0abf428eccb669e2854b319a9063a",
       "status": "processed",
       "extractorVersion": 4,
-      "seenAt": "2026-10-29T06:21:45.066Z",
+      "seenAt": "2026-10-30T06:20:33.461Z",
       "source": "sarkariresult",
       "row": {
         "postName": "Railway RRB Station Master Online Form 2026",
@@ -21226,14 +21226,14 @@
         "officialFetch": "NOT_FOUND"
       },
       "firstEmittedOn": "2026-10-22",
-      "lastEmittedOn": "2026-10-29",
-      "emitCount": 8
+      "lastEmittedOn": "2026-10-30",
+      "emitCount": 9
     },
     "https://sarkariresult.com.cm/supreme-court-sci-court-master-2026/": {
-      "hash": "e58a1784813b4f211d6ea53bfd1082778fce8c77c009fa169ece575639c474e7",
+      "hash": "5ec06fa1f49b24e92e16d179f11fb93f93eee8333789993b1989d13e562eade8",
       "status": "processed",
       "extractorVersion": 4,
-      "seenAt": "2026-10-29T06:24:52.324Z",
+      "seenAt": "2026-10-30T06:24:02.401Z",
       "source": "sarkariresult",
       "row": {
         "postName": "Supreme Court SCI Court Master Online Form 2026",
@@ -21352,14 +21352,14 @@
         "officialFetch": "OK"
       },
       "firstEmittedOn": "2026-10-22",
-      "lastEmittedOn": "2026-10-29",
-      "emitCount": 8
+      "lastEmittedOn": "2026-10-30",
+      "emitCount": 9
     },
     "https://sarkariresult.com.cm/bhel-artisan-various-trade-post-2026/": {
-      "hash": "e44698a9aa859c9cff790a4fa51ca9f3dda7ffada31f2814cc9a6f5c03c646ed",
+      "hash": "4cb8b52e476e657818bf3ff90dd74ea726b5db82c072c7cea9045108e3663115",
       "status": "processed",
       "extractorVersion": 4,
-      "seenAt": "2026-10-29T06:25:14.363Z",
+      "seenAt": "2026-10-30T06:24:25.724Z",
       "source": "sarkariresult",
       "row": {
         "postName": "BHEL Artisan Various Trade Post Online Form 2026",
@@ -21482,14 +21482,14 @@
         "officialFetch": "RETRY"
       },
       "firstEmittedOn": "2026-10-23",
-      "lastEmittedOn": "2026-10-29",
-      "emitCount": 7
+      "lastEmittedOn": "2026-10-30",
+      "emitCount": 8
     },
     "https://sarkariresult.com.cm/upessc-up-tgt-2026/": {
-      "hash": "610bc9f8c61cfb20b649ffe3497fbe28d804edc12ba8cfcaf8de2333ebb6b6f5",
+      "hash": "3b4d56092625148ab9de0812539833d773649b0ca5ecfd6bbd8f627a2b8c9c5f",
       "status": "processed",
       "extractorVersion": 4,
-      "seenAt": "2026-10-29T06:22:48.986Z",
+      "seenAt": "2026-10-30T06:21:56.238Z",
       "source": "sarkariresult",
       "row": {
         "postName": "UPESSC UP TGT Online Form 2026 (17,735 Posts)",
@@ -21610,14 +21610,14 @@
         "officialFetch": "RETRY"
       },
       "firstEmittedOn": "2026-10-24",
-      "lastEmittedOn": "2026-10-29",
-      "emitCount": 6
+      "lastEmittedOn": "2026-10-30",
+      "emitCount": 7
     },
     "https://sarkariresult.com.cm/upessc-up-headmaster-2026/": {
-      "hash": "54033952fe54211db75ddebff4967194c533222d53bdc0cca5f3b1fdf028ecbd",
+      "hash": "88f2d548dabfeedc8059fd3b47c02a654bd0234a54f04f922dff859edc1f60c0",
       "status": "processed",
       "extractorVersion": 4,
-      "seenAt": "2026-10-29T06:24:37.899Z",
+      "seenAt": "2026-10-30T06:23:14.826Z",
       "source": "sarkariresult",
       "row": {
         "postName": "UPESSC UP Headmaster Online Form 2026",
@@ -21737,14 +21737,14 @@
         "officialFetch": "RETRY"
       },
       "firstEmittedOn": "2026-10-24",
-      "lastEmittedOn": "2026-10-29",
-      "emitCount": 6
+      "lastEmittedOn": "2026-10-30",
+      "emitCount": 7
     },
     "https://sarkariresult.com.cm/upessc-up-principal-inter-level-2026/": {
-      "hash": "c853b5e6d1d9a0e106490c1b6391ca818d45155803d55479884cf62de36fedb9",
+      "hash": "dbaef6cdb57adfcc5e9a846fa50aec2888a83097d66baa56b0b023cac72e8f5e",
       "status": "processed",
       "extractorVersion": 4,
-      "seenAt": "2026-10-29T06:24:01.414Z",
+      "seenAt": "2026-10-30T06:22:38.721Z",
       "source": "sarkariresult",
       "row": {
         "postName": "UPESSC UP Principal Inter Level Online Form 2026",
@@ -21864,18 +21864,18 @@
         "officialFetch": "RETRY"
       },
       "firstEmittedOn": "2026-10-24",
-      "lastEmittedOn": "2026-10-29",
-      "emitCount": 6
+      "lastEmittedOn": "2026-10-30",
+      "emitCount": 7
     },
     "https://sarkariresult.com.cm/nta-jee-mains-session-i-2027/": {
-      "hash": "69a33e6b734eaef1fac7cc5fc8b0475fae2749e397c1f3cc7952d691cde4a7fd",
+      "hash": "949f90fabbbc2d4fbd81208a6dfbf0f939526886c4b93fe70a034ee07eb32c27",
       "status": "processed",
       "extractorVersion": 4,
-      "seenAt": "2026-10-29T06:23:23.161Z",
+      "seenAt": "2026-10-30T06:23:52.597Z",
       "source": "sarkariresult",
       "row": {
         "postName": "NTA JEE Mains Session I Online Form 2027",
-        "organization": "Last Date Today MPESB",
+        "organization": "Organization to verify",
         "category": "CENTRAL_GOVT",
         "listingSection": "AUTO",
         "state": null,
@@ -22008,14 +22008,14 @@
         "officialFetch": "OK"
       },
       "firstEmittedOn": "2026-10-25",
-      "lastEmittedOn": "2026-10-29",
-      "emitCount": 5
+      "lastEmittedOn": "2026-10-30",
+      "emitCount": 6
     },
     "https://sarkariresult.com.cm/lic-hfl-apprentice-2026/": {
-      "hash": "a3ee85ebe5bae004c17df91993da6c9d9836a9ff29245571de5a04c4344bebde",
+      "hash": "65bc821f94dbce073e9c37d240e718d33895dc9aa84ba1741a0124b90cb44799",
       "status": "processed",
       "extractorVersion": 4,
-      "seenAt": "2026-10-29T06:24:59.036Z",
+      "seenAt": "2026-10-30T06:24:09.606Z",
       "source": "sarkariresult",
       "row": {
         "postName": "LIC HFL Apprentice Online Form 2026",
@@ -22137,8 +22137,8 @@
         "officialFetch": "OK"
       },
       "firstEmittedOn": "2026-10-25",
-      "lastEmittedOn": "2026-10-29",
-      "emitCount": 5
+      "lastEmittedOn": "2026-10-30",
+      "emitCount": 6
     },
     "https://sarkariresult.com.cm/uppsc-ro-aro-2026-2/": {
       "hash": "8a0b0d6a929d3ebbc47e71871a8510e5eee8bc4f89585dd339cb84758b3e63b9",
@@ -22270,10 +22270,10 @@
       "emitCount": 1
     },
     "https://sarkariresult.com.cm/uppsc-ro-aro-oct26/": {
-      "hash": "3b590178c60acab7d4240e8af86d341342e47e98f5e7039e04498832a20e71cb",
+      "hash": "06d52c1d1e691063899e83d3b9a9e807e983c85a85a41e74161bcdc85bb8a188",
       "status": "processed",
       "extractorVersion": 4,
-      "seenAt": "2026-10-29T06:22:51.446Z",
+      "seenAt": "2026-10-30T06:21:57.850Z",
       "source": "sarkariresult",
       "row": {
         "postName": "UPPSC RO / ARO Online Form 2026",
@@ -22395,18 +22395,18 @@
         "officialFetch": "NOT_FOUND"
       },
       "firstEmittedOn": "2026-10-27",
-      "lastEmittedOn": "2026-10-29",
-      "emitCount": 3
+      "lastEmittedOn": "2026-10-30",
+      "emitCount": 4
     },
     "https://sarkariresult.com.cm/isro-ursc-various-post-2026/": {
-      "hash": "41f7da401d26f585471584e078d53daa1895d2f7dec4c225b162169479f0f431",
+      "hash": "73f61ee6a7fd79ed985177721c796edc675db1a1960d21722f3c149e1e977762",
       "status": "processed",
       "extractorVersion": 4,
-      "seenAt": "2026-10-29T06:24:42.507Z",
+      "seenAt": "2026-10-30T06:23:58.750Z",
       "source": "sarkariresult",
       "row": {
         "postName": "ISRO URSC Various Post Online Form 2026",
-        "organization": "Last Date Today MPESB",
+        "organization": "Organization to verify",
         "category": "PSU",
         "listingSection": "AUTO",
         "state": null,
@@ -22521,14 +22521,14 @@
         "officialFetch": "OK"
       },
       "firstEmittedOn": "2026-10-27",
-      "lastEmittedOn": "2026-10-29",
-      "emitCount": 3
+      "lastEmittedOn": "2026-10-30",
+      "emitCount": 4
     },
     "https://sarkariresult.com.cm/bihar-bpsc-auditor-2026/": {
-      "hash": "b3815142c5a60dff1d6dc2293a54f967c0a79a0181bf45c2c1f7f9bf6b15259d",
+      "hash": "725466dc284616a559eafefcfee5d26875eba894efb08618332c49dafe11511b",
       "status": "processed",
       "extractorVersion": 4,
-      "seenAt": "2026-10-29T06:23:15.762Z",
+      "seenAt": "2026-10-30T06:23:44.927Z",
       "source": "sarkariresult",
       "row": {
         "postName": "BPSC Auditor Mains Online Form 2026",
@@ -22636,63 +22636,63 @@
         "officialFetch": "RETRY"
       },
       "firstEmittedOn": "2026-10-29",
-      "lastEmittedOn": "2026-10-29",
-      "emitCount": 1
+      "lastEmittedOn": "2026-10-30",
+      "emitCount": 2
     }
   },
   "zeroCandidateDays": 0,
-  "updatedAt": "2026-10-29T06:33:32.436Z",
+  "updatedAt": "2026-10-30T06:32:36.874Z",
   "sources": {
     "sarkariresult": {
       "consecutiveFailures": 0,
-      "lastOkOn": "2026-10-29",
+      "lastOkOn": "2026-10-30",
       "firstFailedOn": null,
       "lastError": null
     },
     "ssc": {
       "consecutiveFailures": 0,
-      "lastOkOn": "2026-10-29",
+      "lastOkOn": "2026-10-30",
       "firstFailedOn": null,
       "lastError": null
     },
     "rrb": {
-      "consecutiveFailures": 31,
+      "consecutiveFailures": 32,
       "lastOkOn": null,
       "firstFailedOn": "2026-09-29",
       "lastError": "fetch failed for https://rrbcdg.gov.in/robots.txt: Connect Timeout Error (attempted address: rrbcdg.gov.in:443, timeout: 10000ms)"
     },
     "upsc": {
-      "consecutiveFailures": 31,
+      "consecutiveFailures": 32,
       "lastOkOn": null,
       "firstFailedOn": "2026-09-29",
       "lastError": "fetch failed for https://upsc.gov.in/robots.txt: Connect Timeout Error (attempted address: upsc.gov.in:443, timeout: 10000ms)"
     },
     "uppsc": {
       "consecutiveFailures": 0,
-      "lastOkOn": "2026-10-29",
+      "lastOkOn": "2026-10-30",
       "firstFailedOn": null,
       "lastError": null
     },
     "bpsc": {
-      "consecutiveFailures": 31,
+      "consecutiveFailures": 32,
       "lastOkOn": null,
       "firstFailedOn": "2026-09-29",
       "lastError": "fetch failed for https://bpsc.bihar.gov.in/robots.txt: unable to verify the first certificate; if the root CA is installed locally, try running Node.js with --use-system-ca"
     },
     "rpsc": {
-      "consecutiveFailures": 31,
+      "consecutiveFailures": 32,
       "lastOkOn": null,
       "firstFailedOn": "2026-09-29",
       "lastError": "fetch failed for https://rpsc.rajasthan.gov.in/robots.txt: fetch failed"
     },
     "mppsc": {
-      "consecutiveFailures": 31,
+      "consecutiveFailures": 32,
       "lastOkOn": null,
       "firstFailedOn": "2026-09-29",
       "lastError": "fetch failed for https://mppsc.mp.gov.in/robots.txt: Connect Timeout Error (attempted address: mppsc.mp.gov.in:443, timeout: 10000ms)"
     },
     "ukpsc": {
-      "consecutiveFailures": 31,
+      "consecutiveFailures": 32,
       "lastOkOn": null,
       "firstFailedOn": "2026-09-29",
       "lastError": "fetch failed for https://psc.uk.gov.in/robots.txt: Connect Timeout Error (attempted address: psc.uk.gov.in:443, timeout: 10000ms)"
