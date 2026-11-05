@@ -4,17 +4,17 @@
     "https://sarkariresult.com.cm/latest-jobs/": {
       "etag": null,
       "lastModified": "Mon, 28 Sep 2026 10:34:38 GMT",
-      "checkedAt": "2026-11-04T20:35:28.124Z"
+      "checkedAt": "2026-11-05T08:38:40.576Z"
     },
     "https://ssc.gov.in/api/general-website/portal/notice-boards?page=1&limit=50&contentType=notice-boards&key=createdAt&order=DESC&isAttachment=true&language=english&attributes=id%2Cheadline%2CexamId%2CcontentType%2CredirectUrl%2CstartDate%2CendDate%2Clanguage%2CcreatedAt": {
       "etag": "W/\"4826-yBJ4wWPIer4uPr2/ehf4MCEfuDM\"",
       "lastModified": null,
-      "checkedAt": "2026-11-04T20:35:31.039Z"
+      "checkedAt": "2026-11-05T08:38:43.568Z"
     },
     "https://uppsc.up.nic.in/": {
       "etag": null,
       "lastModified": null,
-      "checkedAt": "2026-11-04T20:36:44.083Z"
+      "checkedAt": "2026-11-05T08:39:56.586Z"
     }
   },
   "notices": {
@@ -319,10 +319,10 @@
       "type": "RESULT",
       "title": "Medical Education Department U.P. (Allopathy)",
       "source": "uppsc",
-      "seenAt": "2026-11-04T20:38:04.839Z",
+      "seenAt": "2026-11-05T08:41:17.980Z",
       "firstEmittedOn": "2026-10-16",
-      "lastEmittedOn": "2026-11-04",
-      "emitCount": 39
+      "lastEmittedOn": "2026-11-05",
+      "emitCount": 40
     },
     "https://uppsc.up.nic.in/Open_PDF_DB.aspx?I4PnQ0tBagnr4uATu7lVSyJODCxSObFX": {
       "type": "RESULT",
@@ -337,10 +337,10 @@
       "type": "RESULT",
       "title": "Uttar Pradesh Ayush (Ayurveda) Department, Pro",
       "source": "uppsc",
-      "seenAt": "2026-11-04T20:38:04.839Z",
+      "seenAt": "2026-11-05T08:41:17.980Z",
       "firstEmittedOn": "2026-10-17",
-      "lastEmittedOn": "2026-11-04",
-      "emitCount": 37
+      "lastEmittedOn": "2026-11-05",
+      "emitCount": 38
     },
     "https://ssc.gov.in/api/general-website/portal/Result_writeup_typing_09092026.pdf": {
       "type": "RESULT",
@@ -409,10 +409,10 @@
       "type": "RESULT",
       "title": "Constable (GD) in Central Armed Police Forces (CAPFs) and SSF, and Rifleman (GD) in Assam Rifles Examination, 2026– Information regarding status of categories of shortlisted candidates",
       "source": "ssc",
-      "seenAt": "2026-11-04T20:38:04.838Z",
+      "seenAt": "2026-11-05T08:41:17.980Z",
       "firstEmittedOn": "2026-10-23",
-      "lastEmittedOn": "2026-11-04",
-      "emitCount": 25
+      "lastEmittedOn": "2026-11-05",
+      "emitCount": 26
     },
     "https://uppsc.up.nic.in/Open_PDF.aspx?I4PnQ0tBagmzNJIRVKnDRzTHz/jf4ZQm": {
       "type": "ADMIT_CARD",
@@ -427,86 +427,86 @@
       "type": "RESULT",
       "title": "Sub-Inspector in Delhi Police and Central Armed Police Forces Examination, 2025: Declaration of result of PET/PST to shortlist candidates for appearing in Paper-II.",
       "source": "ssc",
-      "seenAt": "2026-11-04T20:38:04.838Z",
+      "seenAt": "2026-11-05T08:41:17.980Z",
       "firstEmittedOn": "2026-10-29",
-      "lastEmittedOn": "2026-11-04",
-      "emitCount": 13
+      "lastEmittedOn": "2026-11-05",
+      "emitCount": 14
     },
     "https://uppsc.up.nic.in/Open_PDF.aspx?I4PnQ0tBagnfpuRH59X6AV1pC4l+A9gZ": {
       "type": "RESULT",
       "title": "2021, U.P. Chikitsa Shiksha (Homoeopathic) Deptt., Lecturer Homoeopathic Pharmacy, S-11/01",
       "source": "uppsc",
-      "seenAt": "2026-11-04T20:38:04.839Z",
+      "seenAt": "2026-11-05T08:41:17.980Z",
       "firstEmittedOn": "2026-10-30",
-      "lastEmittedOn": "2026-11-04",
-      "emitCount": 11
+      "lastEmittedOn": "2026-11-05",
+      "emitCount": 12
     },
     "https://uppsc.up.nic.in/Open_PDF_DB.aspx?I4PnQ0tBagmzNJIRVKnDR0yp8H0q1cBz": {
       "type": "ADMIT_CARD",
       "title": "Notice Regarding District Information Slip / Admit Card for Advt. No:- D-3/E-1/2",
       "source": "uppsc",
-      "seenAt": "2026-11-04T20:38:04.839Z",
+      "seenAt": "2026-11-05T08:41:17.980Z",
       "firstEmittedOn": "2026-11-03",
-      "lastEmittedOn": "2026-11-04",
-      "emitCount": 3
+      "lastEmittedOn": "2026-11-05",
+      "emitCount": 4
     }
   },
   "sources": {
     "sarkariresult": {
       "consecutiveFailures": 0,
-      "lastOkOn": "2026-11-04",
+      "lastOkOn": "2026-11-05",
       "firstFailedOn": null,
       "lastError": null
     },
     "ssc": {
       "consecutiveFailures": 0,
-      "lastOkOn": "2026-11-04",
+      "lastOkOn": "2026-11-05",
       "firstFailedOn": null,
       "lastError": null
     },
     "rrb": {
-      "consecutiveFailures": 76,
+      "consecutiveFailures": 77,
       "lastOkOn": null,
       "firstFailedOn": "2026-09-28",
       "lastError": "fetch failed for https://rrbcdg.gov.in/robots.txt: Connect Timeout Error (attempted address: rrbcdg.gov.in:443, timeout: 10000ms)"
     },
     "upsc": {
-      "consecutiveFailures": 76,
+      "consecutiveFailures": 77,
       "lastOkOn": null,
       "firstFailedOn": "2026-09-28",
       "lastError": "fetch failed for https://upsc.gov.in/robots.txt: Connect Timeout Error (attempted address: upsc.gov.in:443, timeout: 10000ms)"
     },
     "uppsc": {
       "consecutiveFailures": 0,
-      "lastOkOn": "2026-11-04",
+      "lastOkOn": "2026-11-05",
       "firstFailedOn": null,
       "lastError": null
     },
     "bpsc": {
-      "consecutiveFailures": 76,
+      "consecutiveFailures": 77,
       "lastOkOn": null,
       "firstFailedOn": "2026-09-28",
       "lastError": "fetch failed for https://bpsc.bihar.gov.in/robots.txt: unable to verify the first certificate; if the root CA is installed locally, try running Node.js with --use-system-ca"
     },
     "rpsc": {
-      "consecutiveFailures": 76,
+      "consecutiveFailures": 77,
       "lastOkOn": null,
       "firstFailedOn": "2026-09-28",
       "lastError": "fetch failed for https://rpsc.rajasthan.gov.in/robots.txt: fetch failed"
     },
     "mppsc": {
-      "consecutiveFailures": 76,
+      "consecutiveFailures": 77,
       "lastOkOn": null,
       "firstFailedOn": "2026-09-28",
       "lastError": "fetch failed for https://mppsc.mp.gov.in/robots.txt: Connect Timeout Error (attempted address: mppsc.mp.gov.in:443, timeout: 10000ms)"
     },
     "ukpsc": {
-      "consecutiveFailures": 76,
+      "consecutiveFailures": 77,
       "lastOkOn": null,
       "firstFailedOn": "2026-09-28",
       "lastError": "fetch failed for https://psc.uk.gov.in/robots.txt: Connect Timeout Error (attempted address: psc.uk.gov.in:443, timeout: 10000ms)"
     }
   },
   "zeroCandidateDays": 0,
-  "updatedAt": "2026-11-04T20:38:04.839Z"
+  "updatedAt": "2026-11-05T08:41:17.980Z"
 }
