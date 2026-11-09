@@ -4,17 +4,17 @@
     "https://sarkariresult.com.cm/latest-jobs/": {
       "etag": null,
       "lastModified": "Mon, 28 Sep 2026 10:34:38 GMT",
-      "checkedAt": "2026-11-09T08:45:59.008Z"
+      "checkedAt": "2026-11-09T23:11:47.366Z"
     },
     "https://ssc.gov.in/api/general-website/portal/notice-boards?page=1&limit=50&contentType=notice-boards&key=createdAt&order=DESC&isAttachment=true&language=english&attributes=id%2Cheadline%2CexamId%2CcontentType%2CredirectUrl%2CstartDate%2CendDate%2Clanguage%2CcreatedAt": {
       "etag": "W/\"18e6-JXxzWlLaZgHWKoA2RMrzqGF96q0\"",
       "lastModified": null,
-      "checkedAt": "2026-11-09T08:46:02.122Z"
+      "checkedAt": "2026-11-09T23:11:50.243Z"
     },
     "https://uppsc.up.nic.in/": {
       "etag": null,
       "lastModified": null,
-      "checkedAt": "2026-11-09T08:47:15.155Z"
+      "checkedAt": "2026-11-09T23:13:03.270Z"
     }
   },
   "notices": {
@@ -427,10 +427,10 @@
       "type": "RESULT",
       "title": "Sub-Inspector in Delhi Police and Central Armed Police Forces Examination, 2025: Declaration of result of PET/PST to shortlist candidates for appearing in Paper-II.",
       "source": "ssc",
-      "seenAt": "2026-11-09T08:48:36.029Z",
+      "seenAt": "2026-11-09T23:14:24.649Z",
       "firstEmittedOn": "2026-10-29",
       "lastEmittedOn": "2026-11-09",
-      "emitCount": 22
+      "emitCount": 23
     },
     "https://uppsc.up.nic.in/Open_PDF.aspx?I4PnQ0tBagnfpuRH59X6AV1pC4l+A9gZ": {
       "type": "RESULT",
@@ -454,10 +454,10 @@
       "type": "RESULT",
       "title": "Medical Education Department U.P. (Allopathy)/Professor Oto-Rhino-Laryngology(Ent), S-08/06",
       "source": "uppsc",
-      "seenAt": "2026-11-09T08:48:36.029Z",
+      "seenAt": "2026-11-09T23:14:24.649Z",
       "firstEmittedOn": "2026-11-05",
       "lastEmittedOn": "2026-11-09",
-      "emitCount": 8
+      "emitCount": 9
     },
     "https://uppsc.up.nic.in/Open_PDF.aspx?I4PnQ0tBagk3H4ltFfLCjrZ+1OCTmF4j": {
       "type": "RESULT",
@@ -481,37 +481,37 @@
       "type": "RESULT",
       "title": "2021, U.P. Chikitsa Shiksha (Homoeopathic) Deptt., Le",
       "source": "uppsc",
-      "seenAt": "2026-11-09T08:48:36.029Z",
+      "seenAt": "2026-11-09T23:14:24.649Z",
       "firstEmittedOn": "2026-11-06",
       "lastEmittedOn": "2026-11-09",
-      "emitCount": 6
+      "emitCount": 7
     },
     "https://uppsc.up.nic.in/Open_PDF.aspx?I4PnQ0tBagk3H4ltFfLCjiqYVUgd9FeU": {
       "type": "RESULT",
       "title": "Medical Education Department U.P. (Allopathy)/Professor Microbiology, S-08/22",
       "source": "uppsc",
-      "seenAt": "2026-11-09T08:48:36.029Z",
+      "seenAt": "2026-11-09T23:14:24.649Z",
       "firstEmittedOn": "2026-11-06",
       "lastEmittedOn": "2026-11-09",
-      "emitCount": 6
+      "emitCount": 7
     },
     "https://uppsc.up.nic.in/Open_PDF.aspx?I4PnQ0tBagk3H4ltFfLCjiahHje/L8Xc": {
       "type": "RESULT",
       "title": "Medical Education Department U.P. (Allopathy)/Professor Emergency Medicine, S-08/03",
       "source": "uppsc",
-      "seenAt": "2026-11-09T08:48:36.029Z",
+      "seenAt": "2026-11-09T23:14:24.649Z",
       "firstEmittedOn": "2026-11-06",
       "lastEmittedOn": "2026-11-09",
-      "emitCount": 6
+      "emitCount": 7
     },
     "https://uppsc.up.nic.in/Open_PDF.aspx?I4PnQ0tBagk3H4ltFfLCjn7m7xwLdrzX": {
       "type": "RESULT",
       "title": "Medical Education Department U.P. (Allopathy), Assistant Professor Microbiology, S-08/89",
       "source": "uppsc",
-      "seenAt": "2026-11-09T08:48:36.029Z",
+      "seenAt": "2026-11-09T23:14:24.649Z",
       "firstEmittedOn": "2026-11-07",
       "lastEmittedOn": "2026-11-09",
-      "emitCount": 4
+      "emitCount": 5
     }
   },
   "sources": {
@@ -528,13 +528,13 @@
       "lastError": null
     },
     "rrb": {
-      "consecutiveFailures": 85,
+      "consecutiveFailures": 86,
       "lastOkOn": null,
       "firstFailedOn": "2026-09-28",
       "lastError": "fetch failed for https://rrbcdg.gov.in/robots.txt: Connect Timeout Error (attempted address: rrbcdg.gov.in:443, timeout: 10000ms)"
     },
     "upsc": {
-      "consecutiveFailures": 85,
+      "consecutiveFailures": 86,
       "lastOkOn": null,
       "firstFailedOn": "2026-09-28",
       "lastError": "fetch failed for https://upsc.gov.in/robots.txt: Connect Timeout Error (attempted address: upsc.gov.in:443, timeout: 10000ms)"
@@ -546,30 +546,30 @@
       "lastError": null
     },
     "bpsc": {
-      "consecutiveFailures": 85,
+      "consecutiveFailures": 86,
       "lastOkOn": null,
       "firstFailedOn": "2026-09-28",
       "lastError": "fetch failed for https://bpsc.bihar.gov.in/robots.txt: unable to verify the first certificate; if the root CA is installed locally, try running Node.js with --use-system-ca"
     },
     "rpsc": {
-      "consecutiveFailures": 85,
+      "consecutiveFailures": 86,
       "lastOkOn": null,
       "firstFailedOn": "2026-09-28",
       "lastError": "fetch failed for https://rpsc.rajasthan.gov.in/robots.txt: fetch failed"
     },
     "mppsc": {
-      "consecutiveFailures": 85,
+      "consecutiveFailures": 86,
       "lastOkOn": null,
       "firstFailedOn": "2026-09-28",
       "lastError": "fetch failed for https://mppsc.mp.gov.in/robots.txt: Connect Timeout Error (attempted address: mppsc.mp.gov.in:443, timeout: 10000ms)"
     },
     "ukpsc": {
-      "consecutiveFailures": 85,
+      "consecutiveFailures": 86,
       "lastOkOn": null,
       "firstFailedOn": "2026-09-28",
       "lastError": "fetch failed for https://psc.uk.gov.in/robots.txt: Connect Timeout Error (attempted address: psc.uk.gov.in:443, timeout: 10000ms)"
     }
   },
   "zeroCandidateDays": 0,
-  "updatedAt": "2026-11-09T08:48:36.029Z"
+  "updatedAt": "2026-11-09T23:14:24.649Z"
 }
