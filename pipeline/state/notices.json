@@ -9,12 +9,12 @@
     "https://ssc.gov.in/api/general-website/portal/notice-boards?page=1&limit=50&contentType=notice-boards&key=createdAt&order=DESC&isAttachment=true&language=english&attributes=id%2Cheadline%2CexamId%2CcontentType%2CredirectUrl%2CstartDate%2CendDate%2Clanguage%2CcreatedAt": {
       "etag": "W/\"18e6-JXxzWlLaZgHWKoA2RMrzqGF96q0\"",
       "lastModified": null,
-      "checkedAt": "2026-11-10T20:38:44.551Z"
+      "checkedAt": "2026-11-11T08:30:30.343Z"
     },
     "https://uppsc.up.nic.in/": {
       "etag": null,
       "lastModified": null,
-      "checkedAt": "2026-11-10T20:39:57.544Z"
+      "checkedAt": "2026-11-11T08:31:43.366Z"
     }
   },
   "notices": {
@@ -427,10 +427,10 @@
       "type": "RESULT",
       "title": "Sub-Inspector in Delhi Police and Central Armed Police Forces Examination, 2025: Declaration of result of PET/PST to shortlist candidates for appearing in Paper-II.",
       "source": "ssc",
-      "seenAt": "2026-11-10T20:41:17.906Z",
+      "seenAt": "2026-11-11T08:33:04.361Z",
       "firstEmittedOn": "2026-10-29",
-      "lastEmittedOn": "2026-11-10",
-      "emitCount": 25
+      "lastEmittedOn": "2026-11-11",
+      "emitCount": 26
     },
     "https://uppsc.up.nic.in/Open_PDF.aspx?I4PnQ0tBagnfpuRH59X6AV1pC4l+A9gZ": {
       "type": "RESULT",
@@ -454,10 +454,10 @@
       "type": "RESULT",
       "title": "Medical Education Department U.P. (Allopathy)/Professor Oto-Rhino-Laryngology(Ent), S-08/06",
       "source": "uppsc",
-      "seenAt": "2026-11-10T20:41:17.906Z",
+      "seenAt": "2026-11-11T08:33:04.361Z",
       "firstEmittedOn": "2026-11-05",
-      "lastEmittedOn": "2026-11-10",
-      "emitCount": 11
+      "lastEmittedOn": "2026-11-11",
+      "emitCount": 12
     },
     "https://uppsc.up.nic.in/Open_PDF.aspx?I4PnQ0tBagk3H4ltFfLCjrZ+1OCTmF4j": {
       "type": "RESULT",
@@ -481,95 +481,95 @@
       "type": "RESULT",
       "title": "2021, U.P. Chikitsa Shiksha (Homoeopathic) Deptt., Le",
       "source": "uppsc",
-      "seenAt": "2026-11-10T20:41:17.906Z",
+      "seenAt": "2026-11-11T08:33:04.361Z",
       "firstEmittedOn": "2026-11-06",
-      "lastEmittedOn": "2026-11-10",
-      "emitCount": 9
+      "lastEmittedOn": "2026-11-11",
+      "emitCount": 10
     },
     "https://uppsc.up.nic.in/Open_PDF.aspx?I4PnQ0tBagk3H4ltFfLCjiqYVUgd9FeU": {
       "type": "RESULT",
       "title": "Medical Education Department U.P. (Allopathy)/Professor Microbiology, S-08/22",
       "source": "uppsc",
-      "seenAt": "2026-11-10T20:41:17.906Z",
+      "seenAt": "2026-11-11T08:33:04.361Z",
       "firstEmittedOn": "2026-11-06",
-      "lastEmittedOn": "2026-11-10",
-      "emitCount": 9
+      "lastEmittedOn": "2026-11-11",
+      "emitCount": 10
     },
     "https://uppsc.up.nic.in/Open_PDF.aspx?I4PnQ0tBagk3H4ltFfLCjiahHje/L8Xc": {
       "type": "RESULT",
       "title": "Medical Education Department U.P. (Allopathy)/Professor Emergency Medicine, S-08/03",
       "source": "uppsc",
-      "seenAt": "2026-11-10T20:41:17.906Z",
+      "seenAt": "2026-11-11T08:33:04.361Z",
       "firstEmittedOn": "2026-11-06",
-      "lastEmittedOn": "2026-11-10",
-      "emitCount": 9
+      "lastEmittedOn": "2026-11-11",
+      "emitCount": 10
     },
     "https://uppsc.up.nic.in/Open_PDF.aspx?I4PnQ0tBagk3H4ltFfLCjn7m7xwLdrzX": {
       "type": "RESULT",
       "title": "Medical Education Department U.P. (Allopathy), Assistant Professor Microbiology, S-08/89",
       "source": "uppsc",
-      "seenAt": "2026-11-10T20:41:17.906Z",
+      "seenAt": "2026-11-11T08:33:04.361Z",
       "firstEmittedOn": "2026-11-07",
-      "lastEmittedOn": "2026-11-10",
-      "emitCount": 7
+      "lastEmittedOn": "2026-11-11",
+      "emitCount": 8
     }
   },
   "sources": {
     "sarkariresult": {
-      "consecutiveFailures": 1,
+      "consecutiveFailures": 2,
       "lastOkOn": "2026-11-10",
       "firstFailedOn": "2026-11-10",
       "lastError": "fetch failed for https://sarkariresult.com.cm/robots.txt: getaddrinfo EAI_AGAIN sarkariresult.com.cm"
     },
     "ssc": {
       "consecutiveFailures": 0,
-      "lastOkOn": "2026-11-10",
+      "lastOkOn": "2026-11-11",
       "firstFailedOn": null,
       "lastError": null
     },
     "rrb": {
-      "consecutiveFailures": 88,
+      "consecutiveFailures": 89,
       "lastOkOn": null,
       "firstFailedOn": "2026-09-28",
       "lastError": "fetch failed for https://rrbcdg.gov.in/robots.txt: Connect Timeout Error (attempted address: rrbcdg.gov.in:443, timeout: 10000ms)"
     },
     "upsc": {
-      "consecutiveFailures": 88,
+      "consecutiveFailures": 89,
       "lastOkOn": null,
       "firstFailedOn": "2026-09-28",
       "lastError": "fetch failed for https://upsc.gov.in/robots.txt: Connect Timeout Error (attempted address: upsc.gov.in:443, timeout: 10000ms)"
     },
     "uppsc": {
       "consecutiveFailures": 0,
-      "lastOkOn": "2026-11-10",
+      "lastOkOn": "2026-11-11",
       "firstFailedOn": null,
       "lastError": null
     },
     "bpsc": {
-      "consecutiveFailures": 88,
+      "consecutiveFailures": 89,
       "lastOkOn": null,
       "firstFailedOn": "2026-09-28",
       "lastError": "fetch failed for https://bpsc.bihar.gov.in/robots.txt: unable to verify the first certificate; if the root CA is installed locally, try running Node.js with --use-system-ca"
     },
     "rpsc": {
-      "consecutiveFailures": 88,
+      "consecutiveFailures": 89,
       "lastOkOn": null,
       "firstFailedOn": "2026-09-28",
       "lastError": "fetch failed for https://rpsc.rajasthan.gov.in/robots.txt: fetch failed"
     },
     "mppsc": {
-      "consecutiveFailures": 88,
+      "consecutiveFailures": 89,
       "lastOkOn": null,
       "firstFailedOn": "2026-09-28",
       "lastError": "fetch failed for https://mppsc.mp.gov.in/robots.txt: Connect Timeout Error (attempted address: mppsc.mp.gov.in:443, timeout: 10000ms)"
     },
     "ukpsc": {
-      "consecutiveFailures": 88,
+      "consecutiveFailures": 89,
       "lastOkOn": null,
       "firstFailedOn": "2026-09-28",
       "lastError": "fetch failed for https://psc.uk.gov.in/robots.txt: Connect Timeout Error (attempted address: psc.uk.gov.in:443, timeout: 10000ms)"
     }
   },
   "zeroCandidateDays": 0,
-  "updatedAt": "2026-11-10T20:41:17.906Z"
+  "updatedAt": "2026-11-11T08:33:04.361Z"
 }
