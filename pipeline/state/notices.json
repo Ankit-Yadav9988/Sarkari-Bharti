@@ -4,17 +4,17 @@
     "https://sarkariresult.com.cm/latest-jobs/": {
       "etag": null,
       "lastModified": "Mon, 28 Sep 2026 10:34:38 GMT",
-      "checkedAt": "2026-11-12T08:54:11.225Z"
+      "checkedAt": "2026-11-12T21:10:53.756Z"
     },
     "https://ssc.gov.in/api/general-website/portal/notice-boards?page=1&limit=50&contentType=notice-boards&key=createdAt&order=DESC&isAttachment=true&language=english&attributes=id%2Cheadline%2CexamId%2CcontentType%2CredirectUrl%2CstartDate%2CendDate%2Clanguage%2CcreatedAt": {
       "etag": "W/\"18e6-JXxzWlLaZgHWKoA2RMrzqGF96q0\"",
       "lastModified": null,
-      "checkedAt": "2026-11-12T08:54:14.260Z"
+      "checkedAt": "2026-11-12T21:10:56.755Z"
     },
     "https://uppsc.up.nic.in/": {
       "etag": null,
       "lastModified": null,
-      "checkedAt": "2026-11-12T08:55:27.337Z"
+      "checkedAt": "2026-11-12T21:12:09.780Z"
     }
   },
   "notices": {
@@ -427,10 +427,10 @@
       "type": "RESULT",
       "title": "Sub-Inspector in Delhi Police and Central Armed Police Forces Examination, 2025: Declaration of result of PET/PST to shortlist candidates for appearing in Paper-II.",
       "source": "ssc",
-      "seenAt": "2026-11-12T08:56:48.537Z",
+      "seenAt": "2026-11-12T21:13:31.153Z",
       "firstEmittedOn": "2026-10-29",
       "lastEmittedOn": "2026-11-12",
-      "emitCount": 28
+      "emitCount": 29
     },
     "https://uppsc.up.nic.in/Open_PDF.aspx?I4PnQ0tBagnfpuRH59X6AV1pC4l+A9gZ": {
       "type": "RESULT",
@@ -481,19 +481,19 @@
       "type": "RESULT",
       "title": "2021, U.P. Chikitsa Shiksha (Homoeopathic) Deptt., Le",
       "source": "uppsc",
-      "seenAt": "2026-11-12T08:56:48.537Z",
+      "seenAt": "2026-11-12T21:13:31.153Z",
       "firstEmittedOn": "2026-11-06",
       "lastEmittedOn": "2026-11-12",
-      "emitCount": 12
+      "emitCount": 13
     },
     "https://uppsc.up.nic.in/Open_PDF.aspx?I4PnQ0tBagk3H4ltFfLCjiqYVUgd9FeU": {
       "type": "RESULT",
       "title": "Medical Education Department U.P. (Allopathy)/Professor Microbiology, S-08/22",
       "source": "uppsc",
-      "seenAt": "2026-11-12T08:56:48.537Z",
+      "seenAt": "2026-11-12T21:13:31.153Z",
       "firstEmittedOn": "2026-11-06",
       "lastEmittedOn": "2026-11-12",
-      "emitCount": 12
+      "emitCount": 13
     },
     "https://uppsc.up.nic.in/Open_PDF.aspx?I4PnQ0tBagk3H4ltFfLCjiahHje/L8Xc": {
       "type": "RESULT",
@@ -508,10 +508,37 @@
       "type": "RESULT",
       "title": "Medical Education Department U.P. (Allopathy), Assistant Professor Microbiology, S-08/89",
       "source": "uppsc",
-      "seenAt": "2026-11-12T08:56:48.537Z",
+      "seenAt": "2026-11-12T21:13:31.153Z",
       "firstEmittedOn": "2026-11-07",
       "lastEmittedOn": "2026-11-12",
-      "emitCount": 10
+      "emitCount": 11
+    },
+    "https://sarkariresult.com.cm/railway-rrb-group-d-level-1-recruitment-2026-online/": {
+      "type": "RESULT",
+      "title": "Railway RRB Group D CBT-I Result 2026 – Out",
+      "source": "sarkariresult",
+      "seenAt": "2026-11-12T21:13:31.153Z",
+      "firstEmittedOn": "2026-11-12",
+      "lastEmittedOn": "2026-11-12",
+      "emitCount": 1
+    },
+    "https://uppsc.up.nic.in/Open_PDF.aspx?I4PnQ0tBagn3Lnqaz4gdq11kR5sUy5XQ": {
+      "type": "RESULT",
+      "title": "Medical Education Department U.P. (Allopathy) /Assistant Professor Transfusion Medicine, S-08/58",
+      "source": "uppsc",
+      "seenAt": "2026-11-12T21:13:31.153Z",
+      "firstEmittedOn": "2026-11-12",
+      "lastEmittedOn": "2026-11-12",
+      "emitCount": 1
+    },
+    "https://uppsc.up.nic.in/Open_PDF.aspx?I4PnQ0tBagn3Lnqaz4gdq+6ETBjMMNz6": {
+      "type": "RESULT",
+      "title": "Medical Education Department U.P. (Allopathy) /Assistant Professor Anatomy, S-08/44",
+      "source": "uppsc",
+      "seenAt": "2026-11-12T21:13:31.153Z",
+      "firstEmittedOn": "2026-11-12",
+      "lastEmittedOn": "2026-11-12",
+      "emitCount": 1
     }
   },
   "sources": {
@@ -528,13 +555,13 @@
       "lastError": null
     },
     "rrb": {
-      "consecutiveFailures": 91,
+      "consecutiveFailures": 92,
       "lastOkOn": null,
       "firstFailedOn": "2026-09-28",
       "lastError": "fetch failed for https://rrbcdg.gov.in/robots.txt: Connect Timeout Error (attempted address: rrbcdg.gov.in:443, timeout: 10000ms)"
     },
     "upsc": {
-      "consecutiveFailures": 91,
+      "consecutiveFailures": 92,
       "lastOkOn": null,
       "firstFailedOn": "2026-09-28",
       "lastError": "fetch failed for https://upsc.gov.in/robots.txt: Connect Timeout Error (attempted address: upsc.gov.in:443, timeout: 10000ms)"
@@ -546,30 +573,30 @@
       "lastError": null
     },
     "bpsc": {
-      "consecutiveFailures": 91,
+      "consecutiveFailures": 92,
       "lastOkOn": null,
       "firstFailedOn": "2026-09-28",
       "lastError": "fetch failed for https://bpsc.bihar.gov.in/robots.txt: unable to verify the first certificate; if the root CA is installed locally, try running Node.js with --use-system-ca"
     },
     "rpsc": {
-      "consecutiveFailures": 91,
+      "consecutiveFailures": 92,
       "lastOkOn": null,
       "firstFailedOn": "2026-09-28",
       "lastError": "fetch failed for https://rpsc.rajasthan.gov.in/robots.txt: fetch failed"
     },
     "mppsc": {
-      "consecutiveFailures": 91,
+      "consecutiveFailures": 92,
       "lastOkOn": null,
       "firstFailedOn": "2026-09-28",
       "lastError": "fetch failed for https://mppsc.mp.gov.in/robots.txt: Connect Timeout Error (attempted address: mppsc.mp.gov.in:443, timeout: 10000ms)"
     },
     "ukpsc": {
-      "consecutiveFailures": 91,
+      "consecutiveFailures": 92,
       "lastOkOn": null,
       "firstFailedOn": "2026-09-28",
       "lastError": "fetch failed for https://psc.uk.gov.in/robots.txt: Connect Timeout Error (attempted address: psc.uk.gov.in:443, timeout: 10000ms)"
     }
   },
   "zeroCandidateDays": 0,
-  "updatedAt": "2026-11-12T08:56:48.537Z"
+  "updatedAt": "2026-11-12T21:13:31.153Z"
 }
