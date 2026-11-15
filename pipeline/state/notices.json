@@ -4,12 +4,12 @@
     "https://sarkariresult.com.cm/latest-jobs/": {
       "etag": null,
       "lastModified": "Mon, 28 Sep 2026 10:34:38 GMT",
-      "checkedAt": "2026-11-14T18:52:54.623Z"
+      "checkedAt": "2026-11-15T08:31:05.948Z"
     },
     "https://ssc.gov.in/api/general-website/portal/notice-boards?page=1&limit=50&contentType=notice-boards&key=createdAt&order=DESC&isAttachment=true&language=english&attributes=id%2Cheadline%2CexamId%2CcontentType%2CredirectUrl%2CstartDate%2CendDate%2Clanguage%2CcreatedAt": {
       "etag": "W/\"18f9-ZUZLpDjlG7sIDz1H9XAWPyDlze0\"",
       "lastModified": null,
-      "checkedAt": "2026-11-14T18:52:57.381Z"
+      "checkedAt": "2026-11-15T08:31:08.977Z"
     },
     "https://uppsc.up.nic.in/": {
       "etag": null,
@@ -427,10 +427,10 @@
       "type": "RESULT",
       "title": "Sub-Inspector in Delhi Police and Central Armed Police Forces Examination, 2025: Declaration of result of PET/PST to shortlist candidates for appearing in Paper-II.",
       "source": "ssc",
-      "seenAt": "2026-11-14T18:55:30.735Z",
+      "seenAt": "2026-11-15T08:33:43.809Z",
       "firstEmittedOn": "2026-10-29",
-      "lastEmittedOn": "2026-11-14",
-      "emitCount": 33
+      "lastEmittedOn": "2026-11-15",
+      "emitCount": 34
     },
     "https://uppsc.up.nic.in/Open_PDF.aspx?I4PnQ0tBagnfpuRH59X6AV1pC4l+A9gZ": {
       "type": "RESULT",
@@ -571,59 +571,59 @@
   "sources": {
     "sarkariresult": {
       "consecutiveFailures": 0,
-      "lastOkOn": "2026-11-14",
+      "lastOkOn": "2026-11-15",
       "firstFailedOn": null,
       "lastError": null
     },
     "ssc": {
       "consecutiveFailures": 0,
-      "lastOkOn": "2026-11-14",
+      "lastOkOn": "2026-11-15",
       "firstFailedOn": null,
       "lastError": null
     },
     "rrb": {
-      "consecutiveFailures": 96,
+      "consecutiveFailures": 97,
       "lastOkOn": null,
       "firstFailedOn": "2026-09-28",
       "lastError": "fetch failed for https://rrbcdg.gov.in/robots.txt: Connect Timeout Error (attempted address: rrbcdg.gov.in:443, timeout: 10000ms)"
     },
     "upsc": {
-      "consecutiveFailures": 96,
+      "consecutiveFailures": 97,
       "lastOkOn": null,
       "firstFailedOn": "2026-09-28",
       "lastError": "fetch failed for https://upsc.gov.in/robots.txt: Connect Timeout Error (attempted address: upsc.gov.in:443, timeout: 10000ms)"
     },
     "uppsc": {
-      "consecutiveFailures": 0,
+      "consecutiveFailures": 1,
       "lastOkOn": "2026-11-14",
-      "firstFailedOn": null,
-      "lastError": null
+      "firstFailedOn": "2026-11-15",
+      "lastError": "Cannot check robots.txt for https://uppsc.up.nic.in: HTTP 503"
     },
     "bpsc": {
-      "consecutiveFailures": 96,
+      "consecutiveFailures": 97,
       "lastOkOn": null,
       "firstFailedOn": "2026-09-28",
       "lastError": "fetch failed for https://bpsc.bihar.gov.in/robots.txt: unable to verify the first certificate; if the root CA is installed locally, try running Node.js with --use-system-ca"
     },
     "rpsc": {
-      "consecutiveFailures": 96,
+      "consecutiveFailures": 97,
       "lastOkOn": null,
       "firstFailedOn": "2026-09-28",
       "lastError": "fetch failed for https://rpsc.rajasthan.gov.in/robots.txt: fetch failed"
     },
     "mppsc": {
-      "consecutiveFailures": 96,
+      "consecutiveFailures": 97,
       "lastOkOn": null,
       "firstFailedOn": "2026-09-28",
       "lastError": "fetch failed for https://mppsc.mp.gov.in/robots.txt: Connect Timeout Error (attempted address: mppsc.mp.gov.in:443, timeout: 10000ms)"
     },
     "ukpsc": {
-      "consecutiveFailures": 96,
+      "consecutiveFailures": 97,
       "lastOkOn": null,
       "firstFailedOn": "2026-09-28",
       "lastError": "fetch failed for https://psc.uk.gov.in/robots.txt: Connect Timeout Error (attempted address: psc.uk.gov.in:443, timeout: 10000ms)"
     }
   },
   "zeroCandidateDays": 0,
-  "updatedAt": "2026-11-14T18:55:30.735Z"
+  "updatedAt": "2026-11-15T08:33:43.809Z"
 }
