@@ -4,17 +4,22 @@
     "https://sarkariresult.com.cm/latest-jobs/": {
       "etag": null,
       "lastModified": "Mon, 28 Sep 2026 10:34:38 GMT",
-      "checkedAt": "2026-11-16T08:41:21.755Z"
+      "checkedAt": "2026-11-16T23:04:08.211Z"
     },
     "https://ssc.gov.in/api/general-website/portal/notice-boards?page=1&limit=50&contentType=notice-boards&key=createdAt&order=DESC&isAttachment=true&language=english&attributes=id%2Cheadline%2CexamId%2CcontentType%2CredirectUrl%2CstartDate%2CendDate%2Clanguage%2CcreatedAt": {
-      "etag": "W/\"18f9-ZUZLpDjlG7sIDz1H9XAWPyDlze0\"",
+      "etag": "W/\"18b3-7RywtIR22Qu6XbQ20CcBIBQONl4\"",
       "lastModified": null,
-      "checkedAt": "2026-11-16T08:41:25.428Z"
+      "checkedAt": "2026-11-16T23:04:10.670Z"
     },
     "https://uppsc.up.nic.in/": {
       "etag": null,
       "lastModified": null,
-      "checkedAt": "2026-11-16T08:42:38.539Z"
+      "checkedAt": "2026-11-16T23:05:23.737Z"
+    },
+    "https://bpsc.bihar.gov.in/advertisement/": {
+      "etag": "\"9dc6511e18500a505bc2c7aff6a4ad40\"",
+      "lastModified": "Mon, 16 Nov 2026 23:05:27 GMT",
+      "checkedAt": "2026-11-16T23:05:27.615Z"
     }
   },
   "notices": {
@@ -427,10 +432,10 @@
       "type": "RESULT",
       "title": "Sub-Inspector in Delhi Police and Central Armed Police Forces Examination, 2025: Declaration of result of PET/PST to shortlist candidates for appearing in Paper-II.",
       "source": "ssc",
-      "seenAt": "2026-11-16T08:43:59.138Z",
+      "seenAt": "2026-11-16T23:06:43.314Z",
       "firstEmittedOn": "2026-10-29",
       "lastEmittedOn": "2026-11-16",
-      "emitCount": 36
+      "emitCount": 37
     },
     "https://uppsc.up.nic.in/Open_PDF.aspx?I4PnQ0tBagnfpuRH59X6AV1pC4l+A9gZ": {
       "type": "RESULT",
@@ -481,10 +486,10 @@
       "type": "RESULT",
       "title": "2021, U.P. Chikitsa Shiksha (Homoeopathic) Deptt., Le",
       "source": "uppsc",
-      "seenAt": "2026-11-16T08:43:59.138Z",
+      "seenAt": "2026-11-16T23:06:43.314Z",
       "firstEmittedOn": "2026-11-06",
       "lastEmittedOn": "2026-11-16",
-      "emitCount": 19
+      "emitCount": 20
     },
     "https://uppsc.up.nic.in/Open_PDF.aspx?I4PnQ0tBagk3H4ltFfLCjiqYVUgd9FeU": {
       "type": "RESULT",
@@ -544,28 +549,46 @@
       "type": "RESULT",
       "title": "Medical Education Department U.P. (Allopathy)/Assistant Professor Transfusion Medicine, S-08/118",
       "source": "uppsc",
-      "seenAt": "2026-11-16T08:43:59.138Z",
+      "seenAt": "2026-11-16T23:06:43.314Z",
       "firstEmittedOn": "2026-11-13",
       "lastEmittedOn": "2026-11-16",
-      "emitCount": 5
+      "emitCount": 6
     },
     "https://uppsc.up.nic.in/Open_PDF.aspx?I4PnQ0tBagn3Lnqaz4gdq1AZ1QP/oV/E": {
       "type": "RESULT",
       "title": "Medical Education Department U.P. (Allopathy)/Assistant Professor Cardiology, S-08/54",
       "source": "uppsc",
-      "seenAt": "2026-11-16T08:43:59.138Z",
+      "seenAt": "2026-11-16T23:06:43.314Z",
       "firstEmittedOn": "2026-11-13",
       "lastEmittedOn": "2026-11-16",
-      "emitCount": 5
+      "emitCount": 6
     },
     "https://uppsc.up.nic.in/Open_PDF.aspx?I4PnQ0tBagn3Lnqaz4gdqx9TZEVjD3pj": {
       "type": "RESULT",
       "title": "Medical Education Department U.P. (Allopathy)/Assistant Professor Emergency Medicine, S-08/43",
       "source": "uppsc",
-      "seenAt": "2026-11-16T08:43:59.138Z",
+      "seenAt": "2026-11-16T23:06:43.314Z",
       "firstEmittedOn": "2026-11-13",
       "lastEmittedOn": "2026-11-16",
-      "emitCount": 5
+      "emitCount": 6
+    },
+    "https://uppsc.up.nic.in/Open_PDF.aspx?I4PnQ0tBagn3Lnqaz4gdq8R3/HLrIFDx": {
+      "type": "RESULT",
+      "title": "Medical Education Department U.P. (Allopathy) /Assistant Professor Microbiology, S-08/128",
+      "source": "uppsc",
+      "seenAt": "2026-11-16T23:06:43.314Z",
+      "firstEmittedOn": "2026-11-16",
+      "lastEmittedOn": "2026-11-16",
+      "emitCount": 1
+    },
+    "https://bpsc.bihar.gov.in/marks-sheet/": {
+      "type": "RESULT",
+      "title": "Marksheet",
+      "source": "bpsc",
+      "seenAt": "2026-11-16T23:06:43.314Z",
+      "firstEmittedOn": "2026-11-16",
+      "lastEmittedOn": "2026-11-16",
+      "emitCount": 1
     }
   },
   "sources": {
@@ -582,13 +605,13 @@
       "lastError": null
     },
     "rrb": {
-      "consecutiveFailures": 99,
+      "consecutiveFailures": 100,
       "lastOkOn": null,
       "firstFailedOn": "2026-09-28",
       "lastError": "fetch failed for https://rrbcdg.gov.in/robots.txt: Connect Timeout Error (attempted address: rrbcdg.gov.in:443, timeout: 10000ms)"
     },
     "upsc": {
-      "consecutiveFailures": 99,
+      "consecutiveFailures": 100,
       "lastOkOn": null,
       "firstFailedOn": "2026-09-28",
       "lastError": "fetch failed for https://upsc.gov.in/robots.txt: Connect Timeout Error (attempted address: upsc.gov.in:443, timeout: 10000ms)"
@@ -600,30 +623,30 @@
       "lastError": null
     },
     "bpsc": {
-      "consecutiveFailures": 99,
-      "lastOkOn": null,
-      "firstFailedOn": "2026-09-28",
-      "lastError": "fetch failed for https://bpsc.bihar.gov.in/robots.txt: unable to verify the first certificate; if the root CA is installed locally, try running Node.js with --use-system-ca"
+      "consecutiveFailures": 0,
+      "lastOkOn": "2026-11-16",
+      "firstFailedOn": null,
+      "lastError": null
     },
     "rpsc": {
-      "consecutiveFailures": 99,
+      "consecutiveFailures": 100,
       "lastOkOn": null,
       "firstFailedOn": "2026-09-28",
       "lastError": "fetch failed for https://rpsc.rajasthan.gov.in/robots.txt: fetch failed"
     },
     "mppsc": {
-      "consecutiveFailures": 99,
+      "consecutiveFailures": 100,
       "lastOkOn": null,
       "firstFailedOn": "2026-09-28",
       "lastError": "fetch failed for https://mppsc.mp.gov.in/robots.txt: Connect Timeout Error (attempted address: mppsc.mp.gov.in:443, timeout: 10000ms)"
     },
     "ukpsc": {
-      "consecutiveFailures": 99,
+      "consecutiveFailures": 100,
       "lastOkOn": null,
       "firstFailedOn": "2026-09-28",
       "lastError": "fetch failed for https://psc.uk.gov.in/robots.txt: Connect Timeout Error (attempted address: psc.uk.gov.in:443, timeout: 10000ms)"
     }
   },
   "zeroCandidateDays": 0,
-  "updatedAt": "2026-11-16T08:43:59.138Z"
+  "updatedAt": "2026-11-16T23:06:43.314Z"
 }
