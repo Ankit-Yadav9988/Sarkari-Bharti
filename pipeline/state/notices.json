@@ -4,22 +4,22 @@
     "https://sarkariresult.com.cm/latest-jobs/": {
       "etag": null,
       "lastModified": "Mon, 28 Sep 2026 10:34:38 GMT",
-      "checkedAt": "2026-11-17T09:48:20.086Z"
+      "checkedAt": "2026-11-17T21:56:26.335Z"
     },
     "https://ssc.gov.in/api/general-website/portal/notice-boards?page=1&limit=50&contentType=notice-boards&key=createdAt&order=DESC&isAttachment=true&language=english&attributes=id%2Cheadline%2CexamId%2CcontentType%2CredirectUrl%2CstartDate%2CendDate%2Clanguage%2CcreatedAt": {
-      "etag": "W/\"18b3-7RywtIR22Qu6XbQ20CcBIBQONl4\"",
+      "etag": "W/\"1855-T2yzFpptBrPF63bknoF0ojjPx00\"",
       "lastModified": null,
-      "checkedAt": "2026-11-17T09:48:23.805Z"
+      "checkedAt": "2026-11-17T21:56:29.128Z"
     },
     "https://uppsc.up.nic.in/": {
       "etag": null,
       "lastModified": null,
-      "checkedAt": "2026-11-17T09:49:36.849Z"
+      "checkedAt": "2026-11-17T21:57:42.134Z"
     },
     "https://bpsc.bihar.gov.in/advertisement/": {
-      "etag": "\"9dc6511e18500a505bc2c7aff6a4ad40\"",
-      "lastModified": "Tue, 17 Nov 2026 09:49:40 GMT",
-      "checkedAt": "2026-11-17T09:49:40.725Z"
+      "etag": "\"3dce0761f274a419637dc2e6063c1d47\"",
+      "lastModified": "Tue, 17 Nov 2026 21:57:45 GMT",
+      "checkedAt": "2026-11-17T21:57:46.103Z"
     }
   },
   "notices": {
@@ -486,10 +486,10 @@
       "type": "RESULT",
       "title": "2021, U.P. Chikitsa Shiksha (Homoeopathic) Deptt., Le",
       "source": "uppsc",
-      "seenAt": "2026-11-17T09:50:55.899Z",
+      "seenAt": "2026-11-17T21:59:01.273Z",
       "firstEmittedOn": "2026-11-06",
       "lastEmittedOn": "2026-11-17",
-      "emitCount": 21
+      "emitCount": 22
     },
     "https://uppsc.up.nic.in/Open_PDF.aspx?I4PnQ0tBagk3H4ltFfLCjiqYVUgd9FeU": {
       "type": "RESULT",
@@ -549,10 +549,10 @@
       "type": "RESULT",
       "title": "Medical Education Department U.P. (Allopathy)/Assistant Professor Transfusion Medicine, S-08/118",
       "source": "uppsc",
-      "seenAt": "2026-11-17T09:50:55.899Z",
+      "seenAt": "2026-11-17T21:59:01.273Z",
       "firstEmittedOn": "2026-11-13",
       "lastEmittedOn": "2026-11-17",
-      "emitCount": 7
+      "emitCount": 8
     },
     "https://uppsc.up.nic.in/Open_PDF.aspx?I4PnQ0tBagn3Lnqaz4gdq1AZ1QP/oV/E": {
       "type": "RESULT",
@@ -576,19 +576,28 @@
       "type": "RESULT",
       "title": "Medical Education Department U.P. (Allopathy) /Assistant Professor Microbiology, S-08/128",
       "source": "uppsc",
-      "seenAt": "2026-11-17T09:50:55.899Z",
+      "seenAt": "2026-11-17T21:59:01.273Z",
       "firstEmittedOn": "2026-11-16",
       "lastEmittedOn": "2026-11-17",
-      "emitCount": 2
+      "emitCount": 3
     },
     "https://bpsc.bihar.gov.in/marks-sheet/": {
       "type": "RESULT",
       "title": "Marksheet",
       "source": "bpsc",
-      "seenAt": "2026-11-17T09:50:55.899Z",
+      "seenAt": "2026-11-17T21:59:01.273Z",
       "firstEmittedOn": "2026-11-16",
       "lastEmittedOn": "2026-11-17",
-      "emitCount": 2
+      "emitCount": 3
+    },
+    "https://uppsc.up.nic.in/Open_PDF.aspx?I4PnQ0tBagn3Lnqaz4gdq1b9+dbHbD9+": {
+      "type": "RESULT",
+      "title": "List of Selected Candidates in Medical Education Department U.P. (Allopathy), Assistant Professor Oto-Rhino-Laryngology (Ent)",
+      "source": "uppsc",
+      "seenAt": "2026-11-17T21:59:01.273Z",
+      "firstEmittedOn": "2026-11-17",
+      "lastEmittedOn": "2026-11-17",
+      "emitCount": 1
     }
   },
   "sources": {
@@ -605,13 +614,13 @@
       "lastError": null
     },
     "rrb": {
-      "consecutiveFailures": 101,
+      "consecutiveFailures": 102,
       "lastOkOn": null,
       "firstFailedOn": "2026-09-28",
       "lastError": "fetch failed for https://rrbcdg.gov.in/robots.txt: Connect Timeout Error (attempted address: rrbcdg.gov.in:443, timeout: 10000ms)"
     },
     "upsc": {
-      "consecutiveFailures": 101,
+      "consecutiveFailures": 102,
       "lastOkOn": null,
       "firstFailedOn": "2026-09-28",
       "lastError": "fetch failed for https://upsc.gov.in/robots.txt: Connect Timeout Error (attempted address: upsc.gov.in:443, timeout: 10000ms)"
@@ -629,24 +638,24 @@
       "lastError": null
     },
     "rpsc": {
-      "consecutiveFailures": 101,
+      "consecutiveFailures": 102,
       "lastOkOn": null,
       "firstFailedOn": "2026-09-28",
       "lastError": "fetch failed for https://rpsc.rajasthan.gov.in/robots.txt: fetch failed"
     },
     "mppsc": {
-      "consecutiveFailures": 101,
+      "consecutiveFailures": 102,
       "lastOkOn": null,
       "firstFailedOn": "2026-09-28",
       "lastError": "fetch failed for https://mppsc.mp.gov.in/robots.txt: Connect Timeout Error (attempted address: mppsc.mp.gov.in:443, timeout: 10000ms)"
     },
     "ukpsc": {
-      "consecutiveFailures": 101,
+      "consecutiveFailures": 102,
       "lastOkOn": null,
       "firstFailedOn": "2026-09-28",
       "lastError": "fetch failed for https://psc.uk.gov.in/robots.txt: Connect Timeout Error (attempted address: psc.uk.gov.in:443, timeout: 10000ms)"
     }
   },
   "zeroCandidateDays": 0,
-  "updatedAt": "2026-11-17T09:50:55.899Z"
+  "updatedAt": "2026-11-17T21:59:01.273Z"
 }
