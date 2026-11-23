@@ -4,27 +4,27 @@
     "https://sarkariresult.com.cm/latest-jobs/": {
       "etag": null,
       "lastModified": "Mon, 28 Sep 2026 10:34:38 GMT",
-      "checkedAt": "2026-11-22T20:29:54.125Z"
+      "checkedAt": "2026-11-23T09:54:17.209Z"
     },
     "https://ssc.gov.in/api/general-website/portal/notice-boards?page=1&limit=50&contentType=notice-boards&key=createdAt&order=DESC&isAttachment=true&language=english&attributes=id%2Cheadline%2CexamId%2CcontentType%2CredirectUrl%2CstartDate%2CendDate%2Clanguage%2CcreatedAt": {
       "etag": "W/\"190d-9DQQMVxMXRxRCl6oA+zTZeYLV00\"",
       "lastModified": null,
-      "checkedAt": "2026-11-22T20:29:57.056Z"
+      "checkedAt": "2026-11-23T09:54:20.257Z"
     },
     "https://uppsc.up.nic.in/": {
       "etag": null,
       "lastModified": null,
-      "checkedAt": "2026-11-22T20:30:43.612Z"
+      "checkedAt": "2026-11-23T09:55:06.957Z"
     },
     "https://bpsc.bihar.gov.in/advertisement/": {
       "etag": "\"e29e2eef94c345b200c9e45f85976504\"",
-      "lastModified": "Sun, 22 Nov 2026 20:30:48 GMT",
-      "checkedAt": "2026-11-22T20:30:48.179Z"
+      "lastModified": "Mon, 23 Nov 2026 09:55:10 GMT",
+      "checkedAt": "2026-11-23T09:55:10.892Z"
     },
     "https://upsc.gov.in/recruitment/recruitment-advertisement": {
-      "etag": "\"1761eeeibnb1fvb\"",
+      "etag": "\"ihf2tzqwru1g1d\"",
       "lastModified": null,
-      "checkedAt": "2026-11-22T20:30:40.006Z"
+      "checkedAt": "2026-11-23T09:55:03.491Z"
     }
   },
   "notices": {
@@ -491,10 +491,10 @@
       "type": "RESULT",
       "title": "2021, U.P. Chikitsa Shiksha (Homoeopathic) Deptt., Le",
       "source": "uppsc",
-      "seenAt": "2026-11-22T20:32:03.359Z",
+      "seenAt": "2026-11-23T09:56:26.230Z",
       "firstEmittedOn": "2026-11-06",
-      "lastEmittedOn": "2026-11-22",
-      "emitCount": 32
+      "lastEmittedOn": "2026-11-23",
+      "emitCount": 33
     },
     "https://uppsc.up.nic.in/Open_PDF.aspx?I4PnQ0tBagk3H4ltFfLCjiqYVUgd9FeU": {
       "type": "RESULT",
@@ -590,95 +590,95 @@
       "type": "RESULT",
       "title": "Marksheet",
       "source": "bpsc",
-      "seenAt": "2026-11-22T20:32:03.360Z",
+      "seenAt": "2026-11-23T09:56:26.230Z",
       "firstEmittedOn": "2026-11-16",
-      "lastEmittedOn": "2026-11-22",
-      "emitCount": 13
+      "lastEmittedOn": "2026-11-23",
+      "emitCount": 14
     },
     "https://uppsc.up.nic.in/Open_PDF.aspx?I4PnQ0tBagn3Lnqaz4gdq1b9+dbHbD9+": {
       "type": "RESULT",
       "title": "List of Selected Candidates in Medical Education Department U.P. (Allopathy), Assistant Professor Oto-Rhino-Laryngology (Ent)",
       "source": "uppsc",
-      "seenAt": "2026-11-22T20:32:03.359Z",
+      "seenAt": "2026-11-23T09:56:26.230Z",
       "firstEmittedOn": "2026-11-17",
-      "lastEmittedOn": "2026-11-22",
-      "emitCount": 11
+      "lastEmittedOn": "2026-11-23",
+      "emitCount": 12
     },
     "https://uppsc.up.nic.in/Open_PDF_DB.aspx?I4PnQ0tBagn3Lnqaz4gdq6pNygydf5ja": {
       "type": "RESULT",
       "title": "Medical Education Department U.P. (Allopathy)/A",
       "source": "uppsc",
-      "seenAt": "2026-11-22T20:32:03.359Z",
+      "seenAt": "2026-11-23T09:56:26.230Z",
       "firstEmittedOn": "2026-11-20",
-      "lastEmittedOn": "2026-11-22",
-      "emitCount": 5
+      "lastEmittedOn": "2026-11-23",
+      "emitCount": 6
     },
     "https://uppsc.up.nic.in/Open_PDF.aspx?I4PnQ0tBagldjThZjoT+Rhool75tMDUI": {
       "type": "RESULT",
       "title": "Medical Education Department U.P. (Allopathy) / Professor General Surgery, S-08/11",
       "source": "uppsc",
-      "seenAt": "2026-11-22T20:32:03.359Z",
+      "seenAt": "2026-11-23T09:56:26.230Z",
       "firstEmittedOn": "2026-11-20",
-      "lastEmittedOn": "2026-11-22",
-      "emitCount": 5
+      "lastEmittedOn": "2026-11-23",
+      "emitCount": 6
     }
   },
   "sources": {
     "sarkariresult": {
       "consecutiveFailures": 0,
-      "lastOkOn": "2026-11-22",
+      "lastOkOn": "2026-11-23",
       "firstFailedOn": null,
       "lastError": null
     },
     "ssc": {
       "consecutiveFailures": 0,
-      "lastOkOn": "2026-11-22",
+      "lastOkOn": "2026-11-23",
       "firstFailedOn": null,
       "lastError": null
     },
     "rrb": {
-      "consecutiveFailures": 112,
+      "consecutiveFailures": 113,
       "lastOkOn": null,
       "firstFailedOn": "2026-09-28",
       "lastError": "fetch failed for https://rrbcdg.gov.in/robots.txt: Connect Timeout Error (attempted address: rrbcdg.gov.in:443, timeout: 10000ms)"
     },
     "upsc": {
-      "consecutiveFailures": 112,
+      "consecutiveFailures": 113,
       "lastOkOn": null,
       "firstFailedOn": "2026-09-28",
       "lastError": "HTTP 404 for https://upsc.gov.in/recruitment/recruitment-advertisement"
     },
     "uppsc": {
       "consecutiveFailures": 0,
-      "lastOkOn": "2026-11-22",
+      "lastOkOn": "2026-11-23",
       "firstFailedOn": null,
       "lastError": null
     },
     "bpsc": {
       "consecutiveFailures": 0,
-      "lastOkOn": "2026-11-22",
+      "lastOkOn": "2026-11-23",
       "firstFailedOn": null,
       "lastError": null
     },
     "rpsc": {
-      "consecutiveFailures": 112,
+      "consecutiveFailures": 113,
       "lastOkOn": null,
       "firstFailedOn": "2026-09-28",
       "lastError": "fetch failed for https://rpsc.rajasthan.gov.in/robots.txt: fetch failed"
     },
     "mppsc": {
-      "consecutiveFailures": 112,
+      "consecutiveFailures": 113,
       "lastOkOn": null,
       "firstFailedOn": "2026-09-28",
       "lastError": "fetch failed for https://mppsc.mp.gov.in/robots.txt: Connect Timeout Error (attempted address: mppsc.mp.gov.in:443, timeout: 10000ms)"
     },
     "ukpsc": {
-      "consecutiveFailures": 112,
+      "consecutiveFailures": 113,
       "lastOkOn": null,
       "firstFailedOn": "2026-09-28",
       "lastError": "fetch failed for https://psc.uk.gov.in/robots.txt: Connect Timeout Error (attempted address: psc.uk.gov.in:443, timeout: 10000ms)"
     }
   },
   "zeroCandidateDays": 0,
-  "updatedAt": "2026-11-22T20:32:03.360Z"
+  "updatedAt": "2026-11-23T09:56:26.230Z"
 }
