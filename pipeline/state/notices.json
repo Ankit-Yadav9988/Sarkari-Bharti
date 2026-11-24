@@ -4,27 +4,27 @@
     "https://sarkariresult.com.cm/latest-jobs/": {
       "etag": null,
       "lastModified": "Mon, 28 Sep 2026 10:34:38 GMT",
-      "checkedAt": "2026-11-24T11:42:22.347Z"
+      "checkedAt": "2026-11-24T23:18:14.896Z"
     },
     "https://ssc.gov.in/api/general-website/portal/notice-boards?page=1&limit=50&contentType=notice-boards&key=createdAt&order=DESC&isAttachment=true&language=english&attributes=id%2Cheadline%2CexamId%2CcontentType%2CredirectUrl%2CstartDate%2CendDate%2Clanguage%2CcreatedAt": {
       "etag": "W/\"1963-0+bm3rVg6LvnzuEkVqyk6dKh6MI\"",
       "lastModified": null,
-      "checkedAt": "2026-11-24T11:42:24.801Z"
+      "checkedAt": "2026-11-24T23:18:17.927Z"
     },
     "https://uppsc.up.nic.in/": {
       "etag": null,
       "lastModified": null,
-      "checkedAt": "2026-11-24T11:43:11.683Z"
+      "checkedAt": "2026-11-24T23:19:04.458Z"
     },
     "https://bpsc.bihar.gov.in/advertisement/": {
-      "etag": "\"c3f3f948ebf82206214a40183a4fe06f\"",
-      "lastModified": "Tue, 24 Nov 2026 11:43:15 GMT",
-      "checkedAt": "2026-11-24T11:43:15.561Z"
+      "etag": "\"ebd34d9fe0d323f5cec1c9ea5fa8d9b5\"",
+      "lastModified": "Tue, 24 Nov 2026 23:19:08 GMT",
+      "checkedAt": "2026-11-24T23:19:08.343Z"
     },
     "https://upsc.gov.in/recruitment/recruitment-advertisement": {
-      "etag": "\"16q8kvf3dvh1g2c\"",
+      "etag": "\"nu25xoxaf41g3l\"",
       "lastModified": null,
-      "checkedAt": "2026-11-24T11:43:09.316Z"
+      "checkedAt": "2026-11-24T23:19:01.083Z"
     }
   },
   "notices": {
@@ -491,10 +491,10 @@
       "type": "RESULT",
       "title": "2021, U.P. Chikitsa Shiksha (Homoeopathic) Deptt., Le",
       "source": "uppsc",
-      "seenAt": "2026-11-24T11:44:31.218Z",
+      "seenAt": "2026-11-24T23:20:23.496Z",
       "firstEmittedOn": "2026-11-06",
       "lastEmittedOn": "2026-11-24",
-      "emitCount": 35
+      "emitCount": 36
     },
     "https://uppsc.up.nic.in/Open_PDF.aspx?I4PnQ0tBagk3H4ltFfLCjiqYVUgd9FeU": {
       "type": "RESULT",
@@ -590,37 +590,37 @@
       "type": "RESULT",
       "title": "Marksheet",
       "source": "bpsc",
-      "seenAt": "2026-11-24T11:44:31.218Z",
+      "seenAt": "2026-11-24T23:20:23.496Z",
       "firstEmittedOn": "2026-11-16",
       "lastEmittedOn": "2026-11-24",
-      "emitCount": 16
+      "emitCount": 17
     },
     "https://uppsc.up.nic.in/Open_PDF.aspx?I4PnQ0tBagn3Lnqaz4gdq1b9+dbHbD9+": {
       "type": "RESULT",
       "title": "List of Selected Candidates in Medical Education Department U.P. (Allopathy), Assistant Professor Oto-Rhino-Laryngology (Ent)",
       "source": "uppsc",
-      "seenAt": "2026-11-24T11:44:31.218Z",
+      "seenAt": "2026-11-24T23:20:23.496Z",
       "firstEmittedOn": "2026-11-17",
       "lastEmittedOn": "2026-11-24",
-      "emitCount": 14
+      "emitCount": 15
     },
     "https://uppsc.up.nic.in/Open_PDF_DB.aspx?I4PnQ0tBagn3Lnqaz4gdq6pNygydf5ja": {
       "type": "RESULT",
       "title": "Medical Education Department U.P. (Allopathy)/A",
       "source": "uppsc",
-      "seenAt": "2026-11-24T11:44:31.218Z",
+      "seenAt": "2026-11-24T23:20:23.496Z",
       "firstEmittedOn": "2026-11-20",
       "lastEmittedOn": "2026-11-24",
-      "emitCount": 8
+      "emitCount": 9
     },
     "https://uppsc.up.nic.in/Open_PDF.aspx?I4PnQ0tBagldjThZjoT+Rhool75tMDUI": {
       "type": "RESULT",
       "title": "Medical Education Department U.P. (Allopathy) / Professor General Surgery, S-08/11",
       "source": "uppsc",
-      "seenAt": "2026-11-24T11:44:31.218Z",
+      "seenAt": "2026-11-24T23:20:23.496Z",
       "firstEmittedOn": "2026-11-20",
       "lastEmittedOn": "2026-11-24",
-      "emitCount": 8
+      "emitCount": 9
     }
   },
   "sources": {
@@ -637,13 +637,13 @@
       "lastError": null
     },
     "rrb": {
-      "consecutiveFailures": 115,
+      "consecutiveFailures": 116,
       "lastOkOn": null,
       "firstFailedOn": "2026-09-28",
       "lastError": "fetch failed for https://rrbcdg.gov.in/robots.txt: Connect Timeout Error (attempted address: rrbcdg.gov.in:443, timeout: 10000ms)"
     },
     "upsc": {
-      "consecutiveFailures": 115,
+      "consecutiveFailures": 116,
       "lastOkOn": null,
       "firstFailedOn": "2026-09-28",
       "lastError": "HTTP 404 for https://upsc.gov.in/recruitment/recruitment-advertisement"
@@ -661,24 +661,24 @@
       "lastError": null
     },
     "rpsc": {
-      "consecutiveFailures": 115,
+      "consecutiveFailures": 116,
       "lastOkOn": null,
       "firstFailedOn": "2026-09-28",
       "lastError": "fetch failed for https://rpsc.rajasthan.gov.in/robots.txt: fetch failed"
     },
     "mppsc": {
-      "consecutiveFailures": 115,
+      "consecutiveFailures": 116,
       "lastOkOn": null,
       "firstFailedOn": "2026-09-28",
       "lastError": "fetch failed for https://mppsc.mp.gov.in/robots.txt: Connect Timeout Error (attempted address: mppsc.mp.gov.in:443, timeout: 10000ms)"
     },
     "ukpsc": {
-      "consecutiveFailures": 115,
+      "consecutiveFailures": 116,
       "lastOkOn": null,
       "firstFailedOn": "2026-09-28",
       "lastError": "fetch failed for https://psc.uk.gov.in/robots.txt: Connect Timeout Error (attempted address: psc.uk.gov.in:443, timeout: 10000ms)"
     }
   },
   "zeroCandidateDays": 0,
-  "updatedAt": "2026-11-24T11:44:31.218Z"
+  "updatedAt": "2026-11-24T23:20:23.496Z"
 }
