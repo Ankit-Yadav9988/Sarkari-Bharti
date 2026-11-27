@@ -4,27 +4,27 @@
     "https://sarkariresult.com.cm/latest-jobs/": {
       "etag": null,
       "lastModified": "Mon, 28 Sep 2026 10:34:38 GMT",
-      "checkedAt": "2026-11-27T10:12:28.278Z"
+      "checkedAt": "2026-11-27T22:23:56.249Z"
     },
     "https://ssc.gov.in/api/general-website/portal/notice-boards?page=1&limit=50&contentType=notice-boards&key=createdAt&order=DESC&isAttachment=true&language=english&attributes=id%2Cheadline%2CexamId%2CcontentType%2CredirectUrl%2CstartDate%2CendDate%2Clanguage%2CcreatedAt": {
-      "etag": "W/\"19b3-8Q2SPPSzrTYbXb9L6k3r+asw6ZQ\"",
+      "etag": "W/\"194d-51Jd6hhgIS9P7iKOyBv+0+IIzX4\"",
       "lastModified": null,
-      "checkedAt": "2026-11-27T10:12:30.737Z"
+      "checkedAt": "2026-11-27T22:23:59.206Z"
     },
     "https://uppsc.up.nic.in/": {
       "etag": null,
       "lastModified": null,
-      "checkedAt": "2026-11-27T10:13:24.968Z"
+      "checkedAt": "2026-11-27T22:24:45.754Z"
     },
     "https://bpsc.bihar.gov.in/advertisement/": {
-      "etag": "\"ca28062ebd23f3cf6f70f5a57f068ec3\"",
-      "lastModified": "Fri, 27 Nov 2026 10:13:27 GMT",
-      "checkedAt": "2026-11-27T10:13:27.825Z"
+      "etag": "\"0c70db2de583585c411e83ba02d53b7b\"",
+      "lastModified": "Fri, 27 Nov 2026 22:24:49 GMT",
+      "checkedAt": "2026-11-27T22:24:49.674Z"
     },
     "https://upsc.gov.in/recruitment/recruitment-advertisement": {
-      "etag": "\"189odipgunr1g1k\"",
+      "etag": "\"fg8egdqrxk1gg4\"",
       "lastModified": null,
-      "checkedAt": "2026-11-27T10:13:13.904Z"
+      "checkedAt": "2026-11-27T22:24:43.035Z"
     }
   },
   "notices": {
@@ -491,10 +491,10 @@
       "type": "RESULT",
       "title": "2021, U.P. Chikitsa Shiksha (Homoeopathic) Deptt., Le",
       "source": "uppsc",
-      "seenAt": "2026-11-27T10:14:43.040Z",
+      "seenAt": "2026-11-27T22:26:04.924Z",
       "firstEmittedOn": "2026-11-06",
       "lastEmittedOn": "2026-11-27",
-      "emitCount": 41
+      "emitCount": 42
     },
     "https://uppsc.up.nic.in/Open_PDF.aspx?I4PnQ0tBagk3H4ltFfLCjiqYVUgd9FeU": {
       "type": "RESULT",
@@ -590,10 +590,10 @@
       "type": "RESULT",
       "title": "Marksheet",
       "source": "bpsc",
-      "seenAt": "2026-11-27T10:14:43.040Z",
+      "seenAt": "2026-11-27T22:26:04.924Z",
       "firstEmittedOn": "2026-11-16",
       "lastEmittedOn": "2026-11-27",
-      "emitCount": 21
+      "emitCount": 22
     },
     "https://uppsc.up.nic.in/Open_PDF.aspx?I4PnQ0tBagn3Lnqaz4gdq1b9+dbHbD9+": {
       "type": "RESULT",
@@ -608,10 +608,10 @@
       "type": "RESULT",
       "title": "Medical Education Department U.P. (Allopathy)/A",
       "source": "uppsc",
-      "seenAt": "2026-11-27T10:14:43.040Z",
+      "seenAt": "2026-11-27T22:26:04.924Z",
       "firstEmittedOn": "2026-11-20",
       "lastEmittedOn": "2026-11-27",
-      "emitCount": 14
+      "emitCount": 15
     },
     "https://uppsc.up.nic.in/Open_PDF.aspx?I4PnQ0tBagldjThZjoT+Rhool75tMDUI": {
       "type": "RESULT",
@@ -626,37 +626,37 @@
       "type": "RESULT",
       "title": "List of Selected Candidates in Medical Education Departm",
       "source": "uppsc",
-      "seenAt": "2026-11-27T10:14:43.040Z",
+      "seenAt": "2026-11-27T22:26:04.924Z",
       "firstEmittedOn": "2026-11-26",
       "lastEmittedOn": "2026-11-27",
-      "emitCount": 2
+      "emitCount": 3
     },
     "https://uppsc.up.nic.in/Open_PDF.aspx?I4PnQ0tBagldjThZjoT+RtDGhuRgiyAL": {
       "type": "RESULT",
       "title": "Advt. No:-D-5/E-1/2025, Planning Department Uttar Pradesh / Joint Director (Evaluation), S-02/06",
       "source": "uppsc",
-      "seenAt": "2026-11-27T10:14:43.040Z",
+      "seenAt": "2026-11-27T22:26:04.924Z",
       "firstEmittedOn": "2026-11-26",
       "lastEmittedOn": "2026-11-27",
-      "emitCount": 2
+      "emitCount": 3
     },
     "https://uppsc.up.nic.in/Open_PDF.aspx?I4PnQ0tBagldjThZjoT+Rl+QyhCPiGTx": {
       "type": "RESULT",
       "title": "Advt. No:-D-1/E-1/2026, Medical Education Department U.P. (Allopathy) / Assistant Professor Tuberculosis and Respiratory Medicine /Pulmonar",
       "source": "uppsc",
-      "seenAt": "2026-11-27T10:14:43.040Z",
+      "seenAt": "2026-11-27T22:26:04.924Z",
       "firstEmittedOn": "2026-11-26",
       "lastEmittedOn": "2026-11-27",
-      "emitCount": 2
+      "emitCount": 3
     },
     "https://uppsc.up.nic.in/Open_PDF.aspx?I4PnQ0tBagldjThZjoT+RiaMqghqkqTy": {
       "type": "RESULT",
       "title": "Advt. No:-D-1/E-1/2026, Medical Education Department U.P. (Allopathy) / Professor Anesthesiology, S-08/31",
       "source": "uppsc",
-      "seenAt": "2026-11-27T10:14:43.040Z",
+      "seenAt": "2026-11-27T22:26:04.924Z",
       "firstEmittedOn": "2026-11-26",
       "lastEmittedOn": "2026-11-27",
-      "emitCount": 2
+      "emitCount": 3
     },
     "https://uppsc.up.nic.in/Open_PDF.aspx?I4PnQ0tBagldjThZjoT+RsdXEkJcxzNO": {
       "type": "RESULT",
@@ -671,10 +671,19 @@
       "type": "ADMIT_CARD",
       "title": "Notice Regarding District Information Slip / Admit Card for Combined State / Upper Subordinate Services (Pcs) (Gen./Spl.) (Pre",
       "source": "uppsc",
-      "seenAt": "2026-11-27T10:14:43.040Z",
+      "seenAt": "2026-11-27T22:26:04.924Z",
       "firstEmittedOn": "2026-11-26",
       "lastEmittedOn": "2026-11-27",
-      "emitCount": 2
+      "emitCount": 3
+    },
+    "https://uppsc.up.nic.in/Open_PDF.aspx?I4PnQ0tBagldjThZjoT+Rq4bXywJdNOO": {
+      "type": "RESULT",
+      "title": "Advt. No:-D-1/E-1/2026, Medical Education Department U.P. (Allopathy) / Professor Anesthesiology, S-08/05",
+      "source": "uppsc",
+      "seenAt": "2026-11-27T22:26:04.924Z",
+      "firstEmittedOn": "2026-11-27",
+      "lastEmittedOn": "2026-11-27",
+      "emitCount": 1
     }
   },
   "sources": {
@@ -691,13 +700,13 @@
       "lastError": null
     },
     "rrb": {
-      "consecutiveFailures": 121,
+      "consecutiveFailures": 122,
       "lastOkOn": null,
       "firstFailedOn": "2026-09-28",
       "lastError": "fetch failed for https://rrbcdg.gov.in/robots.txt: Connect Timeout Error (attempted address: rrbcdg.gov.in:443, timeout: 10000ms)"
     },
     "upsc": {
-      "consecutiveFailures": 121,
+      "consecutiveFailures": 122,
       "lastOkOn": null,
       "firstFailedOn": "2026-09-28",
       "lastError": "HTTP 404 for https://upsc.gov.in/recruitment/recruitment-advertisement"
@@ -715,24 +724,24 @@
       "lastError": null
     },
     "rpsc": {
-      "consecutiveFailures": 121,
+      "consecutiveFailures": 122,
       "lastOkOn": null,
       "firstFailedOn": "2026-09-28",
       "lastError": "fetch failed for https://rpsc.rajasthan.gov.in/robots.txt: fetch failed"
     },
     "mppsc": {
-      "consecutiveFailures": 121,
+      "consecutiveFailures": 122,
       "lastOkOn": null,
       "firstFailedOn": "2026-09-28",
       "lastError": "fetch failed for https://mppsc.mp.gov.in/robots.txt: Connect Timeout Error (attempted address: mppsc.mp.gov.in:443, timeout: 10000ms)"
     },
     "ukpsc": {
-      "consecutiveFailures": 121,
+      "consecutiveFailures": 122,
       "lastOkOn": null,
       "firstFailedOn": "2026-09-28",
       "lastError": "fetch failed for https://psc.uk.gov.in/robots.txt: Connect Timeout Error (attempted address: psc.uk.gov.in:443, timeout: 10000ms)"
     }
   },
   "zeroCandidateDays": 0,
-  "updatedAt": "2026-11-27T10:14:43.040Z"
+  "updatedAt": "2026-11-27T22:26:04.924Z"
 }
